@@ -1,0 +1,22 @@
+[
+  {
+    "style": "default",
+    "rows": [
+      [
+        {
+          "name": "name"
+        },
+        {
+          "name": "type"
+        }
+      ],
+      [
+        {
+          "name": "description"
+        },
+        false
+      ]
+    ],
+    "label": "Overview"
+  }
+]

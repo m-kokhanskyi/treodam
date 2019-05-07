@@ -16,6 +16,12 @@
     },
     "description": {
       "default": "Digital asset management. User-friendly mechanism of assets managing."
-    }
+    },
+    "tags": [
+      "manage",
+      "usability",
+      "files",
+      "attachments"
+    ]
   }
 }

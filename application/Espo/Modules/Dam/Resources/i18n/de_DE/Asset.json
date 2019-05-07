@@ -1,0 +1,14 @@
+{
+  "fields": {
+    "name": "Name",
+    "type": "Typ"
+  },
+  "labels": {
+    "Create Asset": "Asset erstellen"
+  },
+  "options": {
+    "type": {
+      "Image": "Bild"
+    }
+  }
+}

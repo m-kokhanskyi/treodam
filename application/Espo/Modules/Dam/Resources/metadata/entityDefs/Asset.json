@@ -16,7 +16,7 @@
     },
     "file": {
       "type": "file",
-      "required": true,
+      "required": false,
       "sourceList": []
     },
     "alt": {
@@ -34,12 +34,12 @@
     },
     "fileImage": {
       "type": "image",
-      "required": true,
+      "required": false,
       "previewSize": "small"
     },
     "linkImage": {
       "type": "url",
-      "required": true
+      "required": false
     },
     "createdAt": {
       "type": "datetime",

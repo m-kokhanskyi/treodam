@@ -7,8 +7,33 @@
   "iconClass": "fas fa-archive",
   "dynamicLogic": {
     "fields": {
+      "file": {
+        "required": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "File"
+            }
+          ]
+        }
+      },
       "fileImage": {
         "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "Image"
+            },
+            {
+              "type": "equals",
+              "attribute": "typeImage",
+              "value": "File"
+            }
+          ]
+        },
+        "required": {
           "conditionGroup": [
             {
               "type": "equals",
@@ -25,6 +50,20 @@
       },
       "linkImage": {
         "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "Image"
+            },
+            {
+              "type": "equals",
+              "attribute": "typeImage",
+              "value": "Link"
+            }
+          ]
+        },
+        "required": {
           "conditionGroup": [
             {
               "type": "equals",

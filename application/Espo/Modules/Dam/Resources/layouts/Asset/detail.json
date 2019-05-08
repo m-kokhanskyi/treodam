@@ -1,6 +1,5 @@
 [
   {
-    "style": "default",
     "rows": [
       [
         {
@@ -9,14 +8,64 @@
         {
           "name": "type"
         }
+      ]
+    ],
+    "style": "default",
+    "label": "Overview"
+  },
+  {
+    "rows": [
+      [
+        {
+          "name": "file"
+        }
+      ]
+    ],
+    "style": "default",
+    "label": "File Overview",
+    "dynamicLogicVisible": {
+      "conditionGroup": [
+        {
+          "type": "equals",
+          "attribute": "type",
+          "value": "File"
+        }
+      ]
+    }
+  },
+  {
+    "rows": [
+      [
+        {
+          "name": "typeImage"
+        },
+        {
+          "name": "alt"
+        }
       ],
       [
         {
-          "name": "description"
+          "name": "fileImage"
+        },
+        false
+      ],
+      [
+        {
+          "name": "linkImage"
         },
         false
       ]
     ],
-    "label": "Overview"
+    "style": "default",
+    "label": "Image Overview",
+    "dynamicLogicVisible": {
+      "conditionGroup": [
+        {
+          "type": "equals",
+          "attribute": "type",
+          "value": "Image"
+        }
+      ]
+    }
   }
 ]

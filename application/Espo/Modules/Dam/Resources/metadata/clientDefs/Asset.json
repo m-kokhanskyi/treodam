@@ -4,5 +4,41 @@
     "onlyMy"
   ],
   "color": null,
-  "iconClass": "fas fa-archive"
+  "iconClass": "fas fa-archive",
+  "dynamicLogic": {
+    "fields": {
+      "fileImage": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "Image"
+            },
+            {
+              "type": "equals",
+              "attribute": "typeImage",
+              "value": "File"
+            }
+          ]
+        }
+      },
+      "linkImage": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "Image"
+            },
+            {
+              "type": "equals",
+              "attribute": "typeImage",
+              "value": "Link"
+            }
+          ]
+        }
+      }
+    }
+  }
 }

@@ -1,7 +1,12 @@
 {
   "fields": {
     "name": "Name",
-    "type": "Type"
+    "type": "Type",
+    "file": "File",
+    "alt": "Alt",
+    "typeImage": "Type of image asset",
+    "fileImage": "Image",
+    "linkImage": "Link"
   },
   "labels": {
     "Create Asset": "Create Asset"

@@ -1,6 +1,6 @@
 {
   "fields": {
-    "name": "Name",
+    "name": "Code",
     "type": "Type",
     "file": "File",
     "alt": "Alt",
@@ -13,7 +13,16 @@
   },
   "options": {
     "type": {
+      "File": "File",
       "Image": "Image"
+    },
+    "typeImage": {
+      "File": "File",
+      "Link": "Link"
     }
+  },
+  "exceptions": {
+    "Code is invalid": "Code is invalid. Code should be unique. Only letters, numbers and char \"_\" expected.",
+    "Such asset is already exists": "Such asset is already exists"
   }
 }

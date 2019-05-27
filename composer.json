@@ -12,7 +12,7 @@
   "extra": {
     "treoId": "Dam",
     "name": {
-      "default": "Dam"
+      "default": "DAM"
     },
     "description": {
       "default": "Digital asset management. User-friendly mechanism of assets managing."

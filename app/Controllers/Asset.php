@@ -20,19 +20,15 @@
 
 declare(strict_types=1);
 
-namespace Espo\Modules\Dam\Entities;
+namespace Dam\Controllers;
 
-use Espo\Core\Templates\Entities\Base;
+use Espo\Core\Templates\Controllers\Base;
 
 /**
  * Class Asset
  *
- * @author r.ratsun@treolabs.com
+ * @author r.ratsun <r.ratsun@treolabs.com>
  */
 class Asset extends Base
 {
-    /**
-     * @var string
-     */
-    protected $entityType = "Asset";
 }

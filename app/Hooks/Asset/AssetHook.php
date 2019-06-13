@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-namespace Espo\Modules\Dam\Hooks\Asset;
+namespace Dam\Hooks\Asset;
 
 use Espo\Core\Hooks\Base;
 use Espo\ORM\Entity;

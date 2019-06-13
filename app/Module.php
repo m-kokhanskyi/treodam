@@ -20,15 +20,22 @@
 
 declare(strict_types=1);
 
-namespace Espo\Modules\Dam\Controllers;
+namespace Dam;
 
-use Espo\Core\Templates\Controllers\Base;
+use Treo\Core\ModuleManager\AbstractModule;
 
 /**
- * Class Asset
+ * Class Module
  *
  * @author r.ratsun <r.ratsun@treolabs.com>
  */
-class Asset extends Base
+class Module extends AbstractModule
 {
+    /**
+     * @inheritdoc
+     */
+    public static function getLoadOrder(): int
+    {
+        return 5130;
+    }
 }

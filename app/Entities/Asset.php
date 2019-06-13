@@ -20,9 +20,9 @@
 
 declare(strict_types=1);
 
-namespace Espo\Modules\Dam\Services;
+namespace Dam\Entities;
 
-use Espo\Core\Templates\Services\Base;
+use Espo\Core\Templates\Entities\Base;
 
 /**
  * Class Asset
@@ -31,4 +31,8 @@ use Espo\Core\Templates\Services\Base;
  */
 class Asset extends Base
 {
+    /**
+     * @var string
+     */
+    protected $entityType = "Asset";
 }

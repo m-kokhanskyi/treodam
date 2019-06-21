@@ -1,0 +1,6 @@
+{
+  "implementationClassNameMap": {
+    "DAMStorage": "\\Espo\\Modules\\Dam\\Core\\FileStorage\\DAMStorage"
+  },
+  "folderDepth" : 3
+}

@@ -1,0 +1,4 @@
+{
+  "DAMFileManager"    : "\\Espo\\Modules\\Dam\\Core\\Loaders\\DAMFileManagerLoader",
+  "DAMFilePathBuilder": "\\Espo\\Modules\\Dam\\Core\\Loaders\\DAMFilePathBuilderLoader"
+}

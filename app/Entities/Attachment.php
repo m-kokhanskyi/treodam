@@ -17,32 +17,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 declare(strict_types=1);
 
-namespace Espo\Modules\Dam\Repositories;
-
+namespace Dam\Entities;
 
 /**
- * Class Asset
+ * Class Attachment
  *
- * @author r.ratsun@treolabs.com
+ * @package Dam\Entities
  */
-class Attachment extends \Espo\Repositories\Attachment
+class Attachment extends \Espo\Entities\Attachment
 {
     /**
-     * @return mixed
+     * @var string
      */
-    protected function getFileStorageManager()
-    {
-        return $this->getInjection('fileStorageManager');
-    }
+    protected $entityType = "Attachment";
 
     /**
-     * Init method
+     * @return string
      */
-    protected function init()
+    public function _getStorage()
     {
-        parent::init();
-        $this->addDependency('fileStorageManager');
+        return "DAMStorage";
     }
 }

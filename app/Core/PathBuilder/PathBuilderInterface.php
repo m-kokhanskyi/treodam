@@ -20,22 +20,17 @@
 
 declare(strict_types=1);
 
-namespace Espo\Modules\Dam\Entities;
+namespace Dam\Core\PathBuilder;
 
 /**
- * Class Asset
+ * Interface PathBuilderInterface
  *
- * @author r.ratsun@treolabs.com
+ * @package Espo\Modules\Dam\Core\PathBuilder
  */
-class Attachment extends \Espo\Entities\Attachment
+interface PathBuilderInterface
 {
     /**
-     * @var string
+     * @return string
      */
-    protected $entityType = "Attachment";
-
-    public function _getStorage()
-    {
-        return "DAMStorage";
-    }
+    public function createPath(): string;
 }

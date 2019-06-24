@@ -1,0 +1,4 @@
+{
+  "DAMFileManager"    : "Dam\\Core\\Loaders\\DAMFileManagerLoader",
+  "DAMFilePathBuilder": "Dam\\Core\\Loaders\\DAMFilePathBuilderLoader"
+}

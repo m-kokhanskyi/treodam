@@ -1,0 +1,6 @@
+{
+  "implementationClassNameMap": {
+    "DAMStorage": "\\Dam\\Core\\FileStorage\\DAMStorage"
+  },
+  "folderDepth" : 3
+}

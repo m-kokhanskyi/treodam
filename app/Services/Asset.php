@@ -20,22 +20,10 @@
 
 declare(strict_types=1);
 
-namespace Dam;
+namespace Dam\Services;
 
-use Treo\Core\ModuleManager\AbstractModule;
+use \Espo\Core\Templates\Services\Base;
 
-/**
- * Class Module
- *
- * @author r.ratsun <r.ratsun@treolabs.com>
- */
-class Module extends AbstractModule
+class Asset extends Base
 {
-    /**
-     * @inheritdoc
-     */
-    public static function getLoadOrder(): int
-    {
-        return 5121;
-    }
 }

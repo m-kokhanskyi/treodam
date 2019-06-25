@@ -20,22 +20,16 @@
 
 declare(strict_types=1);
 
-namespace Dam;
+namespace Dam\Entities;
 
-use Treo\Core\ModuleManager\AbstractModule;
+use \Espo\Core\Templates\Entities\Base;
 
 /**
- * Class Module
+ * Class Asset
  *
- * @author r.ratsun <r.ratsun@treolabs.com>
+ * @package Dam\Entities
  */
-class Module extends AbstractModule
+class Asset extends Base
 {
-    /**
-     * @inheritdoc
-     */
-    public static function getLoadOrder(): int
-    {
-        return 5121;
-    }
+    protected $entityType = "Asset";
 }

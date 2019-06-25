@@ -1,0 +1,88 @@
+{
+    "controller": "controllers/record",
+    "boolFilterList": [
+        "onlyMy"
+    ],
+    "iconClass": "fas fa-archive",
+    "dynamicLogic": {
+        "fields": {
+            "height": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "width": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "colorSpace": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "colorDepth": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "orientation": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "file": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "notEquals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "image": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

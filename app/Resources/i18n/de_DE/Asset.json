@@ -1,25 +1,6 @@
 {
-  "fields": {
-    "name": "Code",
-    "type": "Typ",
-    "file": "Datei",
-    "alt": "Alt",
-    "typeImage": "Art des Image-Assets",
-    "fileImage": "Bild",
-    "linkImage": "Verknüpfung"
-  },
   "labels": {
     "Create Asset": "Asset erstellen"
-  },
-  "options": {
-    "type": {
-      "File": "Datei",
-      "Image": "Bild"
-    },
-    "typeImage": {
-      "File": "Datei",
-      "Link": "Verknüpfung"
-    }
   },
   "exceptions": {
     "Code is invalid": "Code ist ungültig. Der Code sollte eindeutig sein. Es werden nur Buchstaben, Zahlen und Zeichen \"_\" erwartet.",

@@ -1,0 +1,140 @@
+[
+    {
+        "rows": [
+            [
+                {
+                    "name": "name"
+                },
+                {
+                    "name": "code"
+                }
+            ],
+            [
+                {
+                    "name": "private"
+                },
+                false
+            ],
+            [
+                {
+                    "name": "type"
+                },
+                {
+                    "name": "assetType"
+                }
+            ]
+        ],
+        "style": "default",
+        "label": "Overview"
+    },
+    {
+        "rows": [
+            [
+                {
+                    "name": "image"
+                },
+                false
+            ]
+        ],
+        "style": "default",
+        "dynamicLogicVisible": {
+            "conditionGroup": [
+                {
+                    "type": "equals",
+                    "attribute": "type",
+                    "value": "Image"
+                }
+            ]
+        },
+        "customLabel": "Upload image"
+    },
+    {
+        "rows": [
+            [
+                {
+                    "name": "file"
+                },
+                false
+            ]
+        ],
+        "style": "default",
+        "dynamicLogicVisible": {
+            "conditionGroup": [
+                {
+                    "type": "notEquals",
+                    "attribute": "type",
+                    "value": "Image"
+                }
+            ]
+        },
+        "customLabel": "Upload file"
+    },
+    {
+        "rows": [
+            [
+                {
+                    "name": "size"
+                },
+                {
+                    "name": "fileType"
+                }
+            ]
+        ],
+        "style": "default",
+        "dynamicLogicVisible": {
+            "conditionGroup": [
+                {
+                    "type": "notEquals",
+                    "attribute": "type",
+                    "value": "Image"
+                },
+                {
+                    "type": "isNotEmpty",
+                    "attribute": "id"
+                }
+            ]
+        },
+        "customLabel": "File info"
+    },
+    {
+        "rows": [
+            [
+                {
+                    "name": "width"
+                },
+                {
+                    "name": "height"
+                }
+            ],
+            [
+                {
+                    "name": "colorDepth"
+                },
+                {
+                    "name": "colorSpace"
+                }
+            ],
+            [
+                {
+                    "name": "orientation",
+                    "fullWidth": true
+                }
+            ]
+        ],
+        "style": "default",
+        "dynamicLogicVisible": {
+            "conditionGroup": [
+                {
+                    "type": "equals",
+                    "attribute": "type",
+                    "value": "Image"
+                },
+                {
+                    "type": "isNotEmpty",
+                    "attribute": "id"
+                }
+            ]
+        },
+        "customLabel": "Image info"
+    }
+]

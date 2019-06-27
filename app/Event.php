@@ -36,6 +36,7 @@ class Event extends AbstractEvent
      */
     protected $searchEntities = [
         'Asset',
+        'Asset Category'
     ];
 
     /**
@@ -43,6 +44,7 @@ class Event extends AbstractEvent
      */
     protected $menuItems = [
         'Asset',
+        'Asset Category'
     ];
 
     /**

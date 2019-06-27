@@ -1,5 +1,4 @@
-<?php
-/**
+/*
  * Dam
  * Free Extension
  * Copyright (c) TreoLabs GmbH
@@ -18,17 +17,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-declare(strict_types=1);
+Espo.define('dam:views/asset_category/fields/category-parent', 'treo-core:views/fields/filtered-link',
+    Dep => Dep.extend({
 
-namespace Dam\Controllers;
+        selectBoolFilterList:  ['onlyActive', 'notEntity', 'notChildCategory'],
 
-use \Espo\Core\Templates\Controllers\Base;
+        boolFilterData: {
+            notEntity() {
+                return this.model.id || this.model.get('ids') || [];
+            },
+            notChildCategory() {
+                return this.model.id;
+            }
+        },
 
-/**
- * Class Asset
- *
- * @package Dam\Controllers
- */
-class Asset extends Base
-{
-}
+    })
+);

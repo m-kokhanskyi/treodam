@@ -22,13 +22,8 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
-use Espo\Core\Templates\Services\Base;
+use \Espo\Core\Templates\Services\Base;
 
-/**
- * Class Asset
- *
- * @author r.ratsun@treolabs.com
- */
 class Asset extends Base
 {
 }

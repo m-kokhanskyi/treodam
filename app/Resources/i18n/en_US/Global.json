@@ -1,8 +1,8 @@
 {
-  "scopeNames": {
-    "Asset": "Asset"
-  },
-  "scopeNamesPlural": {
-    "Asset": "Assets"
-  }
+    "scopeNames": {
+        "Asset": "Asset"
+    },
+    "scopeNamesPlural": {
+        "Asset": "Assets"
+    }
 }

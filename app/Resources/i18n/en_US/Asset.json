@@ -1,28 +1,33 @@
 {
-  "fields": {
-    "name": "Code",
-    "type": "Type",
-    "file": "File",
-    "alt": "Alt",
-    "typeImage": "Type of image asset",
-    "fileImage": "Image",
-    "linkImage": "Link"
-  },
-  "labels": {
-    "Create Asset": "Create Asset"
-  },
-  "options": {
-    "type": {
-      "File": "File",
-      "Image": "Image"
+    "fields": {
+        "private": "Private",
+        "name": "Name",
+        "code": "Code",
+        "type": "Type",
+        "assetType": "Asset Type",
+        "fileType": "File type",
+        "size": "Size",
+        "height": "Height",
+        "width": "Width",
+        "colorSpace": "Color Space",
+        "colorDepth": "Color Depth",
+        "orientation": "Orientation",
+        "image": "Image",
+        "file": "File"
     },
-    "typeImage": {
-      "File": "File",
-      "Link": "Link"
+    "links": [],
+    "labels": {
+        "Create Asset": "Create Asset"
+    },
+    "options": {
+        "type": {
+            "File": "File",
+            "PDF": "PDF",
+            "Image": "Image"
+        },
+        "assetType": {
+            "master": "master",
+            "variation": "variation"
+        }
     }
-  },
-  "exceptions": {
-    "Code is invalid": "Code is invalid. Code should be unique. Only letters, numbers and char \"_\" expected.",
-    "Such asset is already exists": "Such asset is already exists"
-  }
 }

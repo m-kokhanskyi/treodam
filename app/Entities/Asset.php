@@ -22,17 +22,14 @@ declare(strict_types=1);
 
 namespace Dam\Entities;
 
-use Espo\Core\Templates\Entities\Base;
+use \Espo\Core\Templates\Entities\Base;
 
 /**
  * Class Asset
  *
- * @author r.ratsun@treolabs.com
+ * @package Dam\Entities
  */
 class Asset extends Base
 {
-    /**
-     * @var string
-     */
     protected $entityType = "Asset";
 }

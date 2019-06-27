@@ -22,12 +22,12 @@ declare(strict_types=1);
 
 namespace Dam\Controllers;
 
-use Espo\Core\Templates\Controllers\Base;
+use \Espo\Core\Templates\Controllers\Base;
 
 /**
  * Class Asset
  *
- * @author r.ratsun <r.ratsun@treolabs.com>
+ * @package Dam\Controllers
  */
 class Asset extends Base
 {

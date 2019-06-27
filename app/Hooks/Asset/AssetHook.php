@@ -60,7 +60,7 @@ class AssetHook extends Base
         // prepare result
         $result = false;
 
-        if (!empty($entity->get('name')) && preg_match('/^[a-z0-9_]*$/', $entity->get('name'))) {
+        if (!empty($entity->get('code')) && preg_match('/^[a-z0-9_]*$/', $entity->get('code'))) {
             $result = true;
         }
 
@@ -77,7 +77,7 @@ class AssetHook extends Base
         $count = $this
             ->getEntityManager()
             ->getRepository('Asset')
-            ->where(['id!=' => $entity->get('id'), 'name' => $entity->get('name')])
+            ->where(['id!=' => $entity->get('id'), 'name' => $entity->get('code')])
             ->count();
 
         return empty($count);

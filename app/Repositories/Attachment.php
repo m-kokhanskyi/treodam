@@ -21,6 +21,8 @@ declare(strict_types=1);
 
 namespace Dam\Repositories;
 
+use Espo\Core\Exceptions\NotFound;
+
 /**
  * Class Attachment
  *

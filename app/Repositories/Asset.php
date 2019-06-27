@@ -17,16 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 declare(strict_types=1);
 
 namespace Dam\Repositories;
 
-use Espo\Core\Templates\Repositories\Base;
+use \Espo\Core\Templates\Repositories\Base;
 
 /**
  * Class Asset
  *
- * @author r.ratsun@treolabs.com
+ * @package Dam\Repositories
  */
 class Asset extends Base
 {

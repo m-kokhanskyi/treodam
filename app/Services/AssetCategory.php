@@ -20,15 +20,10 @@
 
 declare(strict_types=1);
 
-namespace Dam\Controllers;
+namespace Dam\Services;
 
-use \Espo\Core\Templates\Controllers\Base;
+use \Espo\Core\Templates\Services\Base;
 
-/**
- * Class Asset
- *
- * @package Dam\Controllers
- */
-class Asset extends Base
+class AssetCategory extends Base
 {
 }

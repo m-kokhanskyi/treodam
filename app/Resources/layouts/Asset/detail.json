@@ -13,14 +13,14 @@
                 {
                     "name": "private"
                 },
-                false
+                {
+                    "name": "type"
+                }
             ],
             [
                 {
-                    "name": "type"
-                },
-                {
-                    "name": "assetType"
+                    "name": "assetType",
+                    "fullWidth": true
                 }
             ]
         ],

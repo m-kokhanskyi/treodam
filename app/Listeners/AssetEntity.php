@@ -16,10 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 declare(strict_types=1);
 
 namespace Dam\Listeners;
 
+use Espo\Core\Exceptions\BadRequest;
+use Espo\ORM\Entity;
 use Treo\Core\EventManager\Event;
 use Treo\Listeners\AbstractListener;
 
@@ -32,10 +35,37 @@ class AssetEntity extends AbstractListener
 {
     /**
      * @param Event $event
+     *
+     * @throws BadRequest
      */
     public function beforeSave(Event $event)
     {
-        $entity  = $event->getArgument('entity');
+        $entity = $event->getArgument('entity');
+
+        if ($this->changedAssetType($entity)) {
+            throw new BadRequest($this->getLanguage()->translate("Can't change asset type", 'exceptions', 'Global'));
+        }
+
+        $this->setFileInfo($entity);
+    }
+
+    /**
+     * @param Entity $entity
+     *
+     * @return bool
+     */
+    protected function changedAssetType(Entity $entity): bool
+    {
+        return $entity->isAttributeChanged('assetType');
+    }
+
+    /**
+     * @param Entity $entity
+     *
+     * @return $this
+     */
+    protected function setFileInfo(Entity $entity)
+    {
         $service = $this->getService('Attachment');
 
         if ($fileId = $this->getImageId($entity)) {
@@ -50,6 +80,22 @@ class AssetEntity extends AbstractListener
                 "colorDepth"  => $imageInfo['color_depth'] ?? null,
                 "orientation" => $imageInfo['orientation'] ?? null,
             ]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @throws BadRequest
+     */
+    public function beforeRelate(Event $event)
+    {
+        $entity = $event->getArgument('foreign');
+
+        if ($entity->get('hasChild')) {
+            throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
         }
     }
 

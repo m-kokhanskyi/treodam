@@ -1,5 +1,4 @@
-<?php
-/**
+/*
  * Dam
  * Free Extension
  * Copyright (c) TreoLabs GmbH
@@ -18,17 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-declare(strict_types=1);
+Espo.define('dam:views/asset_category/record/detail', 'views/record/detail',
+    Dep => Dep.extend({
 
-namespace Dam\Controllers;
+        setup() {
+            Dep.prototype.setup.call(this);
 
-use \Espo\Core\Templates\Controllers\Base;
+            this.listenTo(this, 'after:save', () => this.model.fetch());
+        }
+    })
+);
 
-/**
- * Class Asset
- *
- * @package Dam\Controllers
- */
-class Asset extends Base
-{
-}

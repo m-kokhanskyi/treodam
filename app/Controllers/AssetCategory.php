@@ -25,10 +25,10 @@ namespace Dam\Controllers;
 use \Espo\Core\Templates\Controllers\Base;
 
 /**
- * Class Asset
+ * Class AssetCategory
  *
  * @package Dam\Controllers
  */
-class Asset extends Base
+class AssetCategory extends Base
 {
 }

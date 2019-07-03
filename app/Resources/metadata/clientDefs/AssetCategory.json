@@ -1,0 +1,74 @@
+{
+  "controller"          : "dam:controllers/record-tree",
+  "boolFilterList"      : [
+    "onlyMy",
+    "notEntity",
+    "notAttachment",
+    "notChildCategory",
+    "onlyChildCategory",
+    "notSelectCategories"
+  ],
+  "hiddenBoolFilterList": [
+    "notEntity",
+    "notAttachment",
+    "notChildCategory",
+    "onlyChildCategory",
+    "notSelectCategories"
+  ],
+  "iconClass"           : "fas fa-layer-group",
+  "recordViews"         : {
+    "list"    : "dam:views/asset_category/record/list",
+    "listTree": "dam:views/asset_category/record/list-tree",
+    "detail"  : "dam:views/asset_category/record/detail"
+  },
+  "views"               : {
+    "list"  : "dam:views/asset_category/list",
+    "detail": "dam:views/asset_category/detail"
+  },
+  "menu"                : {
+    "listTree": {
+      "buttons": [
+        {
+          "label": "List View",
+          "link" : "#AssetCategory",
+          "acl"  : "read",
+          "style": "default"
+        }
+      ]
+    },
+    "list"    : {
+      "buttons": [
+        {
+          "label": "Tree View",
+          "link" : "#AssetCategory/listTree",
+          "acl"  : "read",
+          "style": "default"
+        }
+      ]
+    }
+  },
+  "relationshipPanels"  : {
+    "assets": {
+      "selectBoolFilterList": [
+        "onlyMaster",
+        "notSelectAssets"
+      ],
+      "view"                : "dam:views/asset_category/record/panels/assets",
+      "selectAction"        : "selectRelatedEntity"
+    }
+  },
+  "dynamicLogic"        : {
+    "panels": {
+      "assets": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "isFalse",
+              "attribute": "hasChild"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

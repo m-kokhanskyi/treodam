@@ -1,5 +1,4 @@
-<?php
-/**
+/*
  * Dam
  * Free Extension
  * Copyright (c) TreoLabs GmbH
@@ -18,17 +17,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-declare(strict_types=1);
+Espo.define('dam:controllers/record-tree', 'controllers/record-tree',
+    Dep => {
 
-namespace Dam\Controllers;
+    return Dep.extend({
 
-use \Espo\Core\Templates\Controllers\Base;
+        defaultAction: 'list',
 
-/**
- * Class Asset
- *
- * @package Dam\Controllers
- */
-class Asset extends Base
-{
-}
+        listTree: function (options) {
+            this.getCollection(function (collection) {
+                collection.url = collection.name;
+                collection.isFetched = true;
+                this.main(this.getViewName('listTree'), {
+                    scope: this.name,
+                    collection: collection
+                });
+            });
+        },
+    });
+});

@@ -20,15 +20,16 @@
 
 declare(strict_types=1);
 
-namespace Dam\Controllers;
+namespace Dam\Entities;
 
-use \Espo\Core\Templates\Controllers\Base;
+use \Espo\Core\Templates\Entities\Base;
 
 /**
- * Class Asset
+ * Class AssetCategory
  *
- * @package Dam\Controllers
+ * @package Dam\Entities
  */
-class Asset extends Base
+class AssetCategory extends Base
 {
+    protected $entityType = "AssetCategory";
 }

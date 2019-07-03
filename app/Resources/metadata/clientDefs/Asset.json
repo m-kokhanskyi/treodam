@@ -1,88 +1,127 @@
 {
-    "controller": "controllers/record",
-    "boolFilterList": [
-        "onlyMy"
-    ],
-    "iconClass": "fas fa-archive",
-    "dynamicLogic": {
-        "fields": {
-            "height": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
-                        }
-                    ]
-                }
-            },
-            "width": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
-                        }
-                    ]
-                }
-            },
-            "colorSpace": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
-                        }
-                    ]
-                }
-            },
-            "colorDepth": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
-                        }
-                    ]
-                }
-            },
-            "orientation": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
-                        }
-                    ]
-                }
-            },
-            "file": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "notEquals",
-                            "attribute": "type",
-                            "value": "Image"
-                        }
-                    ]
-                }
-            },
-            "image": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
-                        }
-                    ]
-                }
+  "controller"          : "controllers/record",
+  "boolFilterList"      : [
+    "onlyMy",
+    "onlyMaster",
+    "notSelectAssets"
+  ],
+  "hiddenBoolFilterList": [
+    "onlyMaster",
+    "notSelectAssets"
+  ],
+  "iconClass"           : "fas fa-archive",
+  "dynamicLogic"        : {
+    "fields": {
+      "height"     : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "equals",
+              "attribute": "type",
+              "value"    : "Image"
             }
+          ]
         }
+      },
+      "width"      : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "equals",
+              "attribute": "type",
+              "value"    : "Image"
+            }
+          ]
+        }
+      },
+      "colorSpace" : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "equals",
+              "attribute": "type",
+              "value"    : "Image"
+            }
+          ]
+        }
+      },
+      "colorDepth" : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "equals",
+              "attribute": "type",
+              "value"    : "Image"
+            }
+          ]
+        }
+      },
+      "orientation": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "equals",
+              "attribute": "type",
+              "value"    : "Image"
+            }
+          ]
+        }
+      },
+      "file"       : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "notEquals",
+              "attribute": "type",
+              "value"    : "Image"
+            }
+          ]
+        }
+      },
+      "image"      : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "equals",
+              "attribute": "type",
+              "value"    : "Image"
+            }
+          ]
+        }
+      },
+      "assetType"  : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "isEmpty",
+              "attribute": "id"
+            }
+          ]
+        }
+      }
+    },
+    "panels": {
+      "assetCategories": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "equals",
+              "attribute": "assetType",
+              "value"    : "master"
+            }
+          ]
+        }
+      }
     }
+  },
+  "relationshipPanels"  : {
+    "assetCategories": {
+      "selectBoolFilterList": [
+        "onlyChildCategory",
+        "notSelectCategories"
+      ],
+      "view"                : "dam:views/asset/record/panels/asset_category",
+      "selectAction"        : "selectRelatedEntity"
+    }
+  }
 }

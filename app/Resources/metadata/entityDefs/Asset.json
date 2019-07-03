@@ -1,5 +1,12 @@
 {
     "fields": {
+        "assetCategories": {
+            "type": "linkMultiple",
+            "layoutDetailDisabled": true,
+            "layoutMassUpdateDisabled": true,
+            "importDisabled": true,
+            "noLoad": true
+        },
         "name": {
             "type": "varchar",
             "required": true,
@@ -192,6 +199,14 @@
             "type": "belongsTo",
             "entity": "Attachment",
             "skipOrmDefs": true
+        },
+        "assetCategories": {
+            "type": "hasMany",
+            "relationName": "assetCategoryAsset",
+            "foreign": "assets",
+            "entity": "AssetCategory",
+            "audited": false,
+            "isCustom": true
         }
     },
     "collection": {

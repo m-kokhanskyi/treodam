@@ -17,19 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-Espo.define('dam:views/asset_category/fields/category-parent', 'treo-core:views/fields/filtered-link',
+Espo.define('dam:views/asset_category/record/list', 'pim:views/record/list',
     Dep => Dep.extend({
 
-        selectBoolFilterList:  ['onlyActive', 'notEntity', 'notChildCategory', 'notAttachment'],
-    
-        boolFilterData: {
-            notEntity() {
-                return [this.model.id, this.model.get('categoryParentId')] || this.model.get('ids') || [];
-            },
-            notChildCategory() {
-                return this.model.id;
-            }
-        },
+        setup() {
+            Dep.prototype.setup.call(this);
+
+            this.listenTo(this, 'after:save', () => {
+                this.listenToOnce(this.collection, 'sync', () => this.reRender());
+                this.collection.fetch();
+            });
+        }
 
     })
 );
+

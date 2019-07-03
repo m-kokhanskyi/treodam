@@ -1,8 +1,10 @@
 {
-    "scopeNames": {
-        "Asset": "Asset"
-    },
-    "scopeNamesPlural": {
-        "Asset": "Assets"
-    }
+  "scopeNamesPlural": {
+    "AssetCategory": "Asset Categories",
+    "Asset"        : "Assets"
+  },
+  "exceptions"      : {
+    "Code is invalid"   : "Code is invalid. Code should be unique. Only letters, numbers and char \"_\" expected.",
+    "Category has child": "Category has child category and can't be deleted"
+  }
 }

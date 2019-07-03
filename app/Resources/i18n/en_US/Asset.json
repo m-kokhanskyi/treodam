@@ -1,33 +1,8 @@
 {
     "fields": {
-        "private": "Private",
-        "name": "Name",
-        "code": "Code",
-        "type": "Type",
-        "assetType": "Asset Type",
-        "fileType": "File type",
-        "size": "Size",
-        "height": "Height",
-        "width": "Width",
-        "colorSpace": "Color Space",
-        "colorDepth": "Color Depth",
-        "orientation": "Orientation",
-        "image": "Image",
-        "file": "File"
+        "assetCategories": "Asset Categories"
     },
-    "links": [],
-    "labels": {
-        "Create Asset": "Create Asset"
-    },
-    "options": {
-        "type": {
-            "File": "File",
-            "PDF": "PDF",
-            "Image": "Image"
-        },
-        "assetType": {
-            "master": "master",
-            "variation": "variation"
-        }
+    "links": {
+        "assetCategories": "Asset Categories"
     }
 }

@@ -43,7 +43,7 @@ class Attachment extends \Espo\Services\Attachment
             throw new NotFound();
         }
 
-        $path   = $this->getRepository()->getFilePath($attachment);
+        $path   = $this->getPath($attachment);
         $result = [];
 
         if ($imageInfo = getimagesize($path)) {
@@ -65,6 +65,20 @@ class Attachment extends \Espo\Services\Attachment
         $result['size'] = filesize($path);
 
         return $result;
+    }
+
+    /**
+     * @param \Espo\Entities\Attachment $attachment
+     *
+     * @return mixed
+     */
+    private function getPath(\Espo\Entities\Attachment $attachment)
+    {
+        if ($attachment->get('sourceId')) {
+            $attachment = $this->getRepository()->where(['id' => $attachment->get('sourceId')])->findOne();
+        }
+
+        return $this->getRepository()->getFilePath($attachment);
     }
 
     /**

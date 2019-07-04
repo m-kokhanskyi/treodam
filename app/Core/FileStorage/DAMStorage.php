@@ -35,10 +35,12 @@ use Espo\Core\FileStorage\Storages\Base;
  */
 class DAMStorage extends Base
 {
+    const BASE_PATH = 'data/upload/';
+
     /**
      * @var array
      */
-    protected $dependencyList = ['DAMFileManager','DAMFilePathBuilder'];
+    protected $dependencyList = ['DAMFileManager', 'DAMFilePathBuilder'];
 
     /**
      * @return DAMFileManager
@@ -136,13 +138,13 @@ class DAMStorage extends Base
      */
     private function getFilePath(Attachment $attachment): string
     {
-        $storage  = $attachment->get('storageFilePath');
+        $storage = $attachment->get('storageFilePath');
 
         if (!$storage) {
             $storage = $this->getPathBuilder()->createPath();
             $attachment->set('storageFilePath', $storage);
         }
 
-        return "data/upload/{$storage}/" . $attachment->get('name');
+        return self::BASE_PATH . "{$storage}/" . $attachment->get('name');
     }
 }

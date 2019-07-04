@@ -21,6 +21,8 @@ declare(strict_types=1);
 
 namespace Dam\Listeners;
 
+use Dam\Entities\AssetCategory;
+use Dam\Listeners\Traits\ValidateCode;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\ORM\Entity;
 use Treo\Core\EventManager\Event;
@@ -33,6 +35,8 @@ use Treo\Listeners\AbstractListener;
  */
 class AssetEntity extends AbstractListener
 {
+    use ValidateCode;
+
     /**
      * @param Event $event
      *
@@ -42,7 +46,11 @@ class AssetEntity extends AbstractListener
     {
         $entity = $event->getArgument('entity');
 
-        if ($this->changedAssetType($entity)) {
+        if (!$this->isValidCode($entity)) {
+            throw new BadRequest($this->getLanguage()->translate('Code is invalid', 'exceptions', 'Global'));
+        }
+
+        if ($this->changedAssetType($entity) && !$entity->isNew()) {
             throw new BadRequest($this->getLanguage()->translate("Can't change asset type", 'exceptions', 'Global'));
         }
 
@@ -72,7 +80,8 @@ class AssetEntity extends AbstractListener
             $imageInfo = $service->getImageInfo($this->getImageId($entity));
 
             $entity->set([
-                "size"        => $imageInfo['size'],
+                "size"        => round($imageInfo['size'] / 1024, 1),
+                "sizeUnit"    => "kb",
                 "fileType"    => $imageInfo['extension'],
                 "width"       => $imageInfo['width'] ?? null,
                 "height"      => $imageInfo['height'] ?? null,
@@ -94,9 +103,27 @@ class AssetEntity extends AbstractListener
     {
         $entity = $event->getArgument('foreign');
 
-        if ($entity->get('hasChild')) {
+        if ($this->isLast($event, $entity)) {
             throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
         }
+    }
+
+    /**
+     * @param $entity
+     *
+     * @return bool
+     */
+    private function hasChild($entity): bool
+    {
+        if (is_string($entity)) {
+            $entity = $this->getEntityManager()->getRepository("AssetCategory")->where(['id' => $entity])->findOne();
+        }
+
+        if (!is_a($entity, AssetCategory::class)) {
+            return false;
+        }
+
+        return $entity->get('hasChild');
     }
 
     /**
@@ -117,5 +144,16 @@ class AssetEntity extends AbstractListener
         }
 
         return $id;
+    }
+
+    /**
+     * @param Event $event
+     * @param       $entity
+     *
+     * @return bool
+     */
+    private function isLast(Event $event, $entity): bool
+    {
+        return $event->getArgument('relationName') == "assetCategories" && $entity && $this->hasChild($entity);
     }
 }

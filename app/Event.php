@@ -36,7 +36,7 @@ class Event extends AbstractEvent
      */
     protected $searchEntities = [
         'Asset',
-        'AssetCategory'
+        'AssetCategory',
     ];
 
     /**
@@ -44,7 +44,7 @@ class Event extends AbstractEvent
      */
     protected $menuItems = [
         'Asset',
-        'AssetCategory'
+        'AssetCategory',
     ];
 
     /**
@@ -57,6 +57,9 @@ class Event extends AbstractEvent
 
         // add menu items
         $this->addMenuItems();
+
+        // add units
+        $this->addUnit();
     }
 
     /**
@@ -69,6 +72,29 @@ class Event extends AbstractEvent
 
         // delete menu items
         $this->deleteMenuItems();
+    }
+
+    /**
+     * Add new Unit
+     */
+    protected function addUnit(): void
+    {
+        $config         = $this->getContainer()->get('config');
+        $unitsOfMeasure = $config->get("unitsOfMeasure", []);
+        $name           = "File Size";
+
+        if (!property_exists($unitsOfMeasure, $name)) {
+            $unitsOfMeasure->{$name} = (object)[
+                'unitList'  => [
+                    'kb',
+                ],
+                'baseUnit'  => 'kb',
+                'unitRates' => (object)[],
+            ];
+
+            $config->set("unitsOfMeasure", $unitsOfMeasure);
+            $config->save();
+        }
     }
 
     /**

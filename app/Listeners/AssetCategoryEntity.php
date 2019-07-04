@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace Dam\Listeners;
 
+use Dam\Entities\Asset;
 use Dam\Listeners\Traits\ValidateCode;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\ORM\Entity;
@@ -31,7 +32,7 @@ use Treo\Listeners\AbstractListener;
 /**
  * Class AssetCategoryEntity
  *
- * @package Dam\Listeners
+ * @package Dam\Listenersя вроде с сегод
  *
  */
 class AssetCategoryEntity extends AbstractListener
@@ -113,15 +114,34 @@ class AssetCategoryEntity extends AbstractListener
     public function beforeRelate(Event $event)
     {
         $entity        = $event->getArgument('entity');
-        $foreignEntity = $event->getArgument('foreign');
+        $foreignEntity = $this->getForeignEntity($event->getArgument('foreign'), $event->getArgument('relationName'));
 
         if ($this->hasChild($entity)) {
             throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
         }
 
-        if ($foreignEntity->get('assetType') != "master") {
+        if ($foreignEntity && $foreignEntity->get('assetType') != "master") {
             throw new BadRequest($this->getLanguage()->translate("Only master asset", 'exceptions', 'Global'));
         }
+    }
+
+    /**
+     * @param        $entity
+     * @param string $relationName
+     *
+     * @return bool
+     */
+    protected function getForeignEntity($entity, string $relationName)
+    {
+        if (is_string($entity) && $relationName == 'assets') {
+            $entity = $this->getEntityManager()->getRepository('Asset')->where(['id' => $entity])->findOne();
+        }
+
+        if (is_a($entity, Asset::class)) {
+            return $entity;
+        }
+
+        return false;
     }
 
     /**

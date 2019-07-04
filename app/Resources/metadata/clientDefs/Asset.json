@@ -90,10 +90,10 @@
         }
       },
       "assetType"  : {
-        "visible": {
+        "readOnly": {
           "conditionGroup": [
             {
-              "type"     : "isEmpty",
+              "type": "isNotEmpty",
               "attribute": "id"
             }
           ]

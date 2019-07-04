@@ -84,11 +84,6 @@
         "dynamicLogicVisible": {
             "conditionGroup": [
                 {
-                    "type": "notEquals",
-                    "attribute": "type",
-                    "value": "Image"
-                },
-                {
                     "type": "isNotEmpty",
                     "attribute": "id"
                 }

@@ -21,7 +21,10 @@ declare(strict_types=1);
 
 namespace Dam\Repositories;
 
-use Espo\Core\Exceptions\NotFound;
+use Dam\Core\FileManager\DAMFileManager;
+use Dam\Core\FileStorage\DAMStorage;
+use Dam\Core\PathBuilder\DAMFilePathBuilder;
+use Espo\ORM\Entity;
 
 /**
  * Class Attachment
@@ -39,11 +42,88 @@ class Attachment extends \Espo\Repositories\Attachment
     }
 
     /**
+     * @return DAMFileManager
+     */
+    protected function getFileManager()
+    {
+        return $this->getInjection('DAMFileManager');
+    }
+
+    /**
+     * @return DAMFilePathBuilder
+     */
+    protected function getPathBuilder()
+    {
+        return $this->getInjection('DAMFilePathBuilder');
+    }
+
+    /**
      * Init method
      */
     protected function init()
     {
         parent::init();
         $this->addDependency('fileStorageManager');
+        $this->addDependency('DAMFileManager');
+        $this->addDependency('DAMFilePathBuilder');
     }
+
+    /**
+     * @param Entity $entity
+     *
+     * @return \Espo\Core\Utils\File\boolen
+     * @throws \Espo\Core\Exceptions\Error
+     */
+    public function copy(Entity $entity): string
+    {
+        $source = $this->where(["id" => $entity->get('sourceId')])->findOne();
+
+        $sourcePath = $this->getFilePath($source);
+        $destPath   = $this->getDestPath();
+
+        if ($this->getFileManager()->copy($sourcePath, (DAMStorage::BASE_PATH . $destPath), false, null, true)) {
+            return $destPath;
+        }
+
+        return '';
+    }
+
+    /**
+     * @param Entity $entity
+     * @param null   $role
+     *
+     * @return |null
+     * @throws \Espo\Core\Exceptions\Error
+     */
+    public function getCopiedAttachment(Entity $entity, $role = null)
+    {
+        $attachment = $this->get();
+
+        $attachment->set([
+            'sourceId'        => $entity->getSourceId(),
+            'name'            => $entity->get('name'),
+            'type'            => $entity->get('type'),
+            'size'            => $entity->get('size'),
+            'role'            => $entity->get('role'),
+            'storageFilePath' => $entity->get('storageFilePath'),
+        ]);
+
+        if ($role) {
+            $attachment->set('role', $role);
+        }
+
+        $this->save($attachment);
+
+        return $attachment;
+
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDestPath(): string
+    {
+        return $this->getPathBuilder()->createPath();
+    }
+
 }

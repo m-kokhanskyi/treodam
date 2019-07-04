@@ -1,5 +1,5 @@
 /*
- * Dam
+ * Pim
  * Free Extension
  * Copyright (c) TreoLabs GmbH
  *
@@ -17,18 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-Espo.define('dam:views/asset_category/record/list', 'dam:views/record/list',
+Espo.define('dam:views/record/list', 'views/record/list',
     Dep => Dep.extend({
 
         setup() {
             Dep.prototype.setup.call(this);
 
-            this.listenTo(this, 'after:save', () => {
-                this.listenToOnce(this.collection, 'sync', () => this.reRender());
-                this.collection.fetch();
-            });
+            (this.getMetadata().get(['clientDefs', this.scope, 'disabledMassActions']) || []).forEach(item => this.removeMassAction(item));
         }
-
     })
 );
 

@@ -1,0 +1,17 @@
+{
+  "image": {
+    "size"      : 1,
+    "extensions": [
+      "png",
+      "jpg"
+    ]
+  },
+  "file" : {
+    "size"      : 2,
+    "extensions": [
+      "doc",
+      "docx",
+      "txt"
+    ]
+  }
+}

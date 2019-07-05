@@ -161,7 +161,8 @@
       "previewSize"             : "small",
       "audited"                 : false,
       "tooltip"                 : false,
-      "layoutMassUpdateDisabled": true
+      "layoutMassUpdateDisabled": true,
+      "view"                    : "dam:views/fields/image"
     },
     "file"           : {
       "type"                    : "file",

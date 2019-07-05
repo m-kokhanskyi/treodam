@@ -12,6 +12,28 @@
                     "name": "code",
                     "fullWidth": true
                 }
+            ],
+            [
+                {
+                    "name": "assetType"
+                },
+                {
+                    "name": "type"
+                }
+            ],
+            [
+                {
+                    "name": "image"
+                },
+                {
+                    "name": "private"
+                }
+            ],
+            [
+                {
+                    "name": "file"
+                },
+                false
             ]
         ],
         "style": "default",

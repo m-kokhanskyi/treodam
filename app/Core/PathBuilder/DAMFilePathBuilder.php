@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Dam
  * Free Extension
@@ -22,6 +21,7 @@ declare(strict_types=1);
 
 namespace Dam\Core\PathBuilder;
 
+use Dam\Core\Utils\Random;
 use Espo\Core\Container;
 use Espo\Entities\Attachment;
 use Espo\ORM\Metadata;
@@ -36,7 +36,7 @@ class DAMFilePathBuilder implements PathBuilderInterface
     /**
      * @var Container|null
      */
-    protected $container  = null;
+    protected $container = null;
 
     /**
      * DAMFilePathBuilder constructor.
@@ -53,15 +53,12 @@ class DAMFilePathBuilder implements PathBuilderInterface
      */
     public function createPath(): string
     {
-        $md5 = md5((string)time());
+        $depth            = $this->getMeta()->get('app.fileStorage.folderDepth') ?? 3;
+        $folderNameLength = $this->getMeta()->get('app.fileStorage.folderNameLength') ?? 3;
 
-        $depth         = $this->getMeta()->get('app.fileStorage.folderDepth') ?? 3;
-        $elementLength = (int)floor(32 / $depth);
-
-        for ($i = 1; $i < $depth; $i++) {
-            $part[] = substr($md5, ($i - 1) * $elementLength, $elementLength);
+        for ($i = 0; $i < $depth; $i++) {
+            $part[] = Random::getString($folderNameLength);
         }
-        $part[] = substr($md5, ($elementLength * ($depth - 1)));
 
 
         return implode('/', $part);

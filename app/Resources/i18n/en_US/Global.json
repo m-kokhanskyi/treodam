@@ -6,5 +6,8 @@
   "exceptions"      : {
     "Code is invalid"   : "Code is invalid. Code should be unique. Only letters, numbers and char \"_\" expected.",
     "Category has child": "Category has child category and can't be deleted"
+  },
+  "messages" : {
+    "extensionsError" : "Use only next extension {list}"
   }
 }

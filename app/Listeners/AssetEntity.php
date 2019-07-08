@@ -24,6 +24,7 @@ namespace Dam\Listeners;
 use Dam\Entities\AssetCategory;
 use Dam\Listeners\Traits\ValidateCode;
 use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\Error;
 use Espo\ORM\Entity;
 use Treo\Core\EventManager\Event;
 use Treo\Listeners\AbstractListener;
@@ -39,8 +40,8 @@ class AssetEntity extends AbstractListener
 
     /**
      * @param Event $event
-     *
      * @throws BadRequest
+     * @throws Error
      */
     public function beforeSave(Event $event)
     {
@@ -52,6 +53,15 @@ class AssetEntity extends AbstractListener
 
         if ($this->changedAssetType($entity) && !$entity->isNew()) {
             throw new BadRequest($this->getLanguage()->translate("Can't change asset type", 'exceptions', 'Global'));
+        }
+
+        if ($entity->isNew() || $entity->isAttributeChanged('private')) {
+            $attachmentId = $entity->get('type') === "Image" ? $entity->get('imageId') : $entity->get('fileId');
+            $attachment = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
+
+            if (!$this->getEntityManager()->getRepository('Attachment')->moveFile($attachment, $entity->get('private'))) {
+                throw new Error("Can't move file");
+            }
         }
 
         $this->setFileInfo($entity);
@@ -80,13 +90,13 @@ class AssetEntity extends AbstractListener
             $imageInfo = $service->getImageInfo($this->getImageId($entity));
 
             $entity->set([
-                "size"        => round($imageInfo['size'] / 1024, 1),
-                "sizeUnit"    => "kb",
-                "fileType"    => $imageInfo['extension'],
-                "width"       => $imageInfo['width'] ?? null,
-                "height"      => $imageInfo['height'] ?? null,
-                "colorSpace"  => $imageInfo['color_space'] ?? null,
-                "colorDepth"  => $imageInfo['color_depth'] ?? null,
+                "size" => round($imageInfo['size'] / 1024, 1),
+                "sizeUnit" => "kb",
+                "fileType" => $imageInfo['extension'],
+                "width" => $imageInfo['width'] ?? null,
+                "height" => $imageInfo['height'] ?? null,
+                "colorSpace" => $imageInfo['color_space'] ?? null,
+                "colorDepth" => $imageInfo['color_depth'] ?? null,
                 "orientation" => $imageInfo['orientation'] ?? null,
             ]);
         }

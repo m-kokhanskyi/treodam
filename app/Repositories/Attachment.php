@@ -24,6 +24,8 @@ namespace Dam\Repositories;
 use Dam\Core\FileManager\DAMFileManager;
 use Dam\Core\FileStorage\DAMStorage;
 use Dam\Core\PathBuilder\DAMFilePathBuilder;
+use Espo\Core\Exceptions\Error;
+use Espo\Entities\Import;
 use Espo\ORM\Entity;
 
 /**
@@ -79,7 +81,7 @@ class Attachment extends \Espo\Repositories\Attachment
         $source = $this->where(["id" => $entity->get('sourceId')])->findOne();
 
         $sourcePath = $this->getFilePath($source);
-        $destPath   = $this->getDestPath();
+        $destPath = $this->getDestPath();
 
         if ($this->getFileManager()->copy($sourcePath, (DAMStorage::BASE_PATH . $destPath), false, null, true)) {
             return $destPath;
@@ -90,7 +92,26 @@ class Attachment extends \Espo\Repositories\Attachment
 
     /**
      * @param Entity $entity
-     * @param null   $role
+     * @param bool $isPrivate
+     * @return bool
+     * @throws Error
+     */
+    public function moveFile(Entity $entity, bool $isPrivate): bool
+    {
+        $file = $this->getFileStorageManager()->getLocalFilePath($entity);
+        $fileManager = $this->getFileManager();
+
+        do {
+            $path = ($isPrivate ? DAMStorage::PRIVATE_PATH : DAMStorage::PUBLIC_PATH) . $this->getPathBuilder()->createPath() . "/" . $entity->get('name');
+            $fileExist = file_exists($path);
+        } while ($fileExist);
+
+        return $fileManager->move($file, $path);
+    }
+
+    /**
+     * @param Entity $entity
+     * @param null $role
      *
      * @return |null
      * @throws \Espo\Core\Exceptions\Error
@@ -100,11 +121,11 @@ class Attachment extends \Espo\Repositories\Attachment
         $attachment = $this->get();
 
         $attachment->set([
-            'sourceId'        => $entity->getSourceId(),
-            'name'            => $entity->get('name'),
-            'type'            => $entity->get('type'),
-            'size'            => $entity->get('size'),
-            'role'            => $entity->get('role'),
+            'sourceId' => $entity->getSourceId(),
+            'name' => $entity->get('name'),
+            'type' => $entity->get('type'),
+            'size' => $entity->get('size'),
+            'role' => $entity->get('role'),
             'storageFilePath' => $entity->get('storageFilePath'),
         ]);
 

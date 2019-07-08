@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace Dam\Core\FileManager;
 
 use Espo\Core\Container;
+use Espo\Core\Exceptions\Error;
 use Treo\Core\Utils\File\Manager;
 
 /**
@@ -60,5 +61,29 @@ class DAMFileManager extends Manager
         }
 
         return false;
+    }
+
+    /**
+     * @param $oldPath
+     * @param $newPath
+     * @return bool
+     * @throws Error
+     */
+    public function move($oldPath, $newPath): bool
+    {
+        if (!file_exists($oldPath)) {
+            throw new Error("File not found");
+        }
+
+        if ($this->checkCreateFile($newPath) === false) {
+            throw new Error('Permission denied for ' . $newPath);
+        }
+
+        if (!rename($oldPath, $newPath)) {
+            return false;
+        }
+        $this->removeEmptyDirs($oldPath);
+
+        return true;
     }
 }

@@ -21,11 +21,12 @@ declare(strict_types=1);
 
 namespace Dam\Listeners;
 
-use Dam\Listeners\Traits\ValidateCode;
-use Espo\Core\Exceptions\BadRequest;
+use Dam\Entities\Asset;
+use Dam\Services\AssetVersion;
 use Espo\Core\Exceptions\InternalServerError;
 use Espo\ORM\Entity;
 use Treo\Core\EventManager\Event;
+use Treo\Core\Utils\File\Manager;
 use Treo\Listeners\AbstractListener;
 
 /**
@@ -35,12 +36,27 @@ use Treo\Listeners\AbstractListener;
  */
 class AttachmentEntity extends AbstractListener
 {
-
+    /**
+     * @param Event $event
+     * @throws InternalServerError
+     */
     public function beforeSave(Event $event)
     {
         $entity = $event->getArgument('entity');
 
-        $this->copyFile($entity);
+        if ($this->isDuplicate($entity)) {
+            $this->copyFile($entity);
+        }
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function afterRemove(Event $event)
+    {
+        $entity = $event->getArgument('entity');
+
+        $this->getEntityManager()->getRepository("Attachment")->removeThumbs($entity);
     }
 
     protected function isDuplicate(Entity $entity): bool
@@ -48,21 +64,32 @@ class AttachmentEntity extends AbstractListener
         return (!$entity->isNew() && $entity->get('sourceId'));
     }
 
+    /**
+     * @param Entity $entity
+     * @throws InternalServerError
+     */
     protected function copyFile(Entity $entity): void
     {
-        if ($this->isDuplicate($entity)) {
-            $repository = $this->getEntityManager()->getRepository($entity->getEntityType());
-            $path       = $repository->copy($entity);
+        $repository = $this->getEntityManager()->getRepository($entity->getEntityType());
+        $path = $repository->copy($entity);
 
-            if (!$path) {
-                throw new InternalServerError($this->getLanguage()->translate("Can't copy file", 'exceptions', 'Global'));
-            }
-
-            $entity->set([
-                'sourceId'        => null,
-                'storageFilePath' => $path,
-            ]);
+        if (!$path) {
+            throw new InternalServerError($this->getLanguage()->translate("Can't copy file", 'exceptions', 'Global'));
         }
+
+        $entity->set([
+            'sourceId' => null,
+            'storageFilePath' => $path,
+        ]);
     }
 
+    protected function getFileManager(): Manager
+    {
+        return $this->container->get('DAMFileManager');
+    }
+
+    private function getServiceFactory()
+    {
+        return $this->getContainer()->get('serviceFactory');
+    }
 }

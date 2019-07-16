@@ -22,8 +22,25 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
-use \Espo\Core\Templates\Services\Base;
+use Espo\Core\Templates\Services\Base;
+use Espo\ORM\Entity;
 
+/**
+ * Class Asset
+ * @package Dam\Services
+ */
 class Asset extends Base
 {
+    /**
+     * @param Entity $entity
+     * @return mixed
+     */
+    public function createVersion(Entity $entity)
+    {
+        $attachmentId = $entity->getFetched("type") === "Image" ? $entity->getFetched("imageId") : $entity->getFetched("fileId");
+
+        $attachment = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
+
+        return $this->getServiceFactory()->create("AssetVersion")->createEntity($attachment);
+    }
 }

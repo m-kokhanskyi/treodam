@@ -9,6 +9,9 @@
     "onlyMaster",
     "notSelectAssets"
   ],
+  "views": {
+    "list": "pim:views/product/list"
+  },
   "iconClass"           : "fas fa-archive",
   "dynamicLogic"        : {
     "fields": {

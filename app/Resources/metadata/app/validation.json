@@ -3,7 +3,8 @@
     "size"      : 1,
     "extensions": [
       "png",
-      "jpg"
+      "jpg",
+      "jpeg"
     ]
   },
   "file" : {

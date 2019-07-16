@@ -21,53 +21,23 @@ declare(strict_types=1);
 
 namespace Dam\Repositories;
 
-use Dam\Core\FileManager\DAMFileManager;
-use Dam\Core\FileStorage\DAMStorage;
-use Dam\Core\PathBuilder\DAMFilePathBuilder;
+use Dam\Core\FilePathBuilder;
+use Dam\Core\FileStorage\DAMUploadDir;
 use Espo\Core\Exceptions\Error;
-use Espo\Entities\Import;
-use Espo\ORM\Entity;
+use Espo\Core\ORM\Entity;
+use Treo\Core\Utils\File\Manager;
 
 /**
  * Class Attachment
  *
  * @package Dam\Repositories
  */
-class Attachment extends \Espo\Repositories\Attachment
+class Attachment extends \Treo\Repositories\Attachment
 {
-    /**
-     * @return mixed
-     */
-    protected function getFileStorageManager()
-    {
-        return $this->getInjection('fileStorageManager');
-    }
-
-    /**
-     * @return DAMFileManager
-     */
-    protected function getFileManager()
-    {
-        return $this->getInjection('DAMFileManager');
-    }
-
-    /**
-     * @return DAMFilePathBuilder
-     */
-    protected function getPathBuilder()
-    {
-        return $this->getInjection('DAMFilePathBuilder');
-    }
-
-    /**
-     * Init method
-     */
     protected function init()
     {
         parent::init();
-        $this->addDependency('fileStorageManager');
-        $this->addDependency('DAMFileManager');
-        $this->addDependency('DAMFilePathBuilder');
+        $this->addDependency("DAMFileManager");
     }
 
     /**
@@ -80,10 +50,22 @@ class Attachment extends \Espo\Repositories\Attachment
     {
         $source = $this->where(["id" => $entity->get('sourceId')])->findOne();
 
-        $sourcePath = $this->getFilePath($source);
-        $destPath = $this->getDestPath();
+        if (!$source) {
+            throw new Error("Source not found");
+        }
 
-        if ($this->getFileManager()->copy($sourcePath, (DAMStorage::BASE_PATH . $destPath), false, null, true)) {
+        $sourcePath = $this->getFilePath($source);
+        $related = $entity->get('related');
+
+        if (is_a($related, \Dam\Entities\Asset::class)) {
+            $destPath = $related->get('path');
+            $path = $related->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH;
+        } else {
+            $destPath = $this->getDestPath(FilePathBuilder::UPLOAD);
+            $path = DAMUploadDir::BASE_PATH;
+        }
+
+        if ($this->getFileManager()->copy($sourcePath, ($path . $destPath), false, null, true)) {
             return $destPath;
         }
 
@@ -92,21 +74,38 @@ class Attachment extends \Espo\Repositories\Attachment
 
     /**
      * @param Entity $entity
-     * @param bool $isPrivate
+     * @param \Dam\Entities\Asset $asset
      * @return bool
      * @throws Error
      */
-    public function moveFile(Entity $entity, bool $isPrivate): bool
+    public function moveFile(Entity $entity, \Dam\Entities\Asset $asset): bool
     {
         $file = $this->getFileStorageManager()->getLocalFilePath($entity);
         $fileManager = $this->getFileManager();
 
-        do {
-            $path = ($isPrivate ? DAMStorage::PRIVATE_PATH : DAMStorage::PUBLIC_PATH) . $this->getPathBuilder()->createPath() . "/" . $entity->get('name');
-            $fileExist = file_exists($path);
-        } while ($fileExist);
+        $path = $asset->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH;
+        $storePath = $asset->get('path');
 
-        return $fileManager->move($file, $path);
+        $path = $path . $storePath . "/" . $entity->get('name');
+
+        if ($fileManager->move($file, $path)) {
+            $entity->set('storageFilePath', $storePath);
+            return $this->save($entity) ? true : false;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @return mixed
+     */
+    public function changePrivate(\Dam\Entities\Asset $asset)
+    {
+        $sourcePath = ($asset->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->getFetched("path");
+        $distPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->get("path");
+
+        return $this->getFileManager()->folderCopy($sourcePath, $distPath);
     }
 
     /**
@@ -127,6 +126,8 @@ class Attachment extends \Espo\Repositories\Attachment
             'size' => $entity->get('size'),
             'role' => $entity->get('role'),
             'storageFilePath' => $entity->get('storageFilePath'),
+            'relatedType' => $entity->get('relatedType'),
+            'relatedId' => $entity->get('relatedId'),
         ]);
 
         if ($role) {
@@ -140,11 +141,27 @@ class Attachment extends \Espo\Repositories\Attachment
     }
 
     /**
-     * @return string
+     * @param \Espo\ORM\Entity $entity
+     * @return bool
      */
-    protected function getDestPath(): string
+    public function removeThumbs(\Espo\ORM\Entity $entity)
     {
-        return $this->getPathBuilder()->createPath();
+        foreach (DAMUploadDir::thumbsFolderList() as $path) {
+            $dirPath = $path . $entity->get('storageFilePath');
+            if (!is_dir($dirPath)) {
+                continue;
+            }
+
+            return $this->getFileManager()->removeInDir($dirPath);
+        }
+    }
+
+    /**
+     * @return Manager
+     */
+    protected function getFileManager(): Manager
+    {
+        return $this->getInjection("DAMFileManager");
     }
 
 }

@@ -1,0 +1,7 @@
+{
+    "JsTree": {
+        "path": "client/modules/dam/lib/tree.jquery.js",
+        "exportsTo": "$",
+        "exportsAs": "jsTree"
+    }
+}

@@ -1,7 +1,8 @@
 {
   "scopeNamesPlural": {
     "AssetCategory": "Asset Categories",
-    "Asset"        : "Assets"
+    "Asset"        : "Assets",
+ "AssetVersion": "AssetVersions"
   },
   "exceptions"      : {
     "Code is invalid"   : "Code is invalid. Code should be unique. Only letters, numbers and char \"_\" expected.",
@@ -9,5 +10,8 @@
   },
   "messages" : {
     "extensionsError" : "Use only next extension {list}"
-  }
+  },
+"scopeNames": {
+        "AssetVersion": "AssetVersion"
+    }
 }

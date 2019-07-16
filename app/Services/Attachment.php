@@ -71,38 +71,38 @@ class Attachment extends \Espo\Services\Attachment
     }
 
     /**
-     * @param $data
+     * @param $attachment
      *
      * @return mixed
      * @throws \Espo\Core\Exceptions\BadRequest
      * @throws \Espo\Core\Exceptions\Error
      * @throws \Espo\Core\Exceptions\Forbidden
      */
-    public function createEntity($data)
+    public function createEntity($attachment)
     {
-        if (!empty($data->file)) {
-            $arr      = explode(',', $data->file);
+        if (!empty($attachment->file)) {
+            $arr      = explode(',', $attachment->file);
             $contents = '';
             if (count($arr) > 1) {
                 $contents = $arr[1];
             }
 
             $contents       = base64_decode($contents);
-            $data->contents = $contents;
+            $attachment->contents = $contents;
 
             $relatedEntityType = null;
             $field             = null;
             $role              = 'Attachment';
-            if (isset($data->parentType)) {
-                $relatedEntityType = $data->parentType;
-            } elseif (isset($data->relatedType)) {
-                $relatedEntityType = $data->relatedType;
+            if (isset($attachment->parentType)) {
+                $relatedEntityType = $attachment->parentType;
+            } elseif (isset($attachment->relatedType)) {
+                $relatedEntityType = $attachment->relatedType;
             }
-            if (isset($data->field)) {
-                $field = $data->field;
+            if (isset($attachment->field)) {
+                $field = $attachment->field;
             }
-            if (isset($data->role)) {
-                $role = $data->role;
+            if (isset($attachment->role)) {
+                $role = $attachment->role;
             }
             if (!$relatedEntityType || !$field) {
                 throw new BadRequest("Params 'field' and 'parentType' not passed along with 'file'.");
@@ -142,7 +142,7 @@ class Attachment extends \Espo\Services\Attachment
                 }
 
                 if (isset($rules['extensions']) && is_array($rules['extensions'])) {
-                    $extension = pathinfo($data->name)['extension'] ?? null;
+                    $extension = pathinfo($attachment->name)['extension'] ?? null;
 
                     if (!in_array($extension, $rules['extensions'])) {
                         throw new Error("Use only next extension ". implode(', ', $rules['extensions']));
@@ -164,9 +164,9 @@ class Attachment extends \Espo\Services\Attachment
             }
         }
 
-        $entity = parent::createEntity($data);
+        $entity = parent::createEntity($attachment);
 
-        if (!empty($data->file)) {
+        if (!empty($attachment->file)) {
             $entity->clear('contents');
         }
 
@@ -174,11 +174,11 @@ class Attachment extends \Espo\Services\Attachment
     }
 
     /**
-     * @param \Espo\Entities\Attachment $attachment
+     * @param \Treo\Entities\Attachment $attachment
      *
      * @return mixed
      */
-    private function getPath(\Espo\Entities\Attachment $attachment)
+    private function getPath(\Treo\Entities\Attachment $attachment)
     {
         if ($attachment->get('sourceId')) {
             $attachment = $this->getRepository()->where(['id' => $attachment->get('sourceId')])->findOne();

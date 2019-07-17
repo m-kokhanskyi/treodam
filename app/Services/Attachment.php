@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
+use Dam\Core\Validation\Validator;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
@@ -34,6 +35,13 @@ use Espo\Core\Exceptions\NotFound;
  */
 class Attachment extends \Espo\Services\Attachment
 {
+    public function __construct()
+    {
+        $this->addDependency("Validator");
+
+        parent::__construct();
+    }
+
     /**
      * @param $id
      *
@@ -46,17 +54,17 @@ class Attachment extends \Espo\Services\Attachment
             throw new NotFound();
         }
 
-        $path   = $this->getPath($attachment);
+        $path = $this->getPath($attachment);
         $result = [];
 
         if ($imageInfo = getimagesize($path)) {
             $result = [
-                "width"       => $imageInfo[0],
-                "height"      => $imageInfo[1],
+                "width" => $imageInfo[0],
+                "height" => $imageInfo[1],
                 "color_space" => is_null($imageInfo['channels'] ?? null) ? null : ($imageInfo['channels'] == 3 ? "RGB" : "CMYK"),
                 "color_depth" => $imageInfo['bits'] ?? null,
                 'orientation' => $this->getPosition($imageInfo[0], $imageInfo[1]),
-                'mime'        => $imageInfo['mime'] ?? null,
+                'mime' => $imageInfo['mime'] ?? null,
             ];
         }
 
@@ -81,18 +89,18 @@ class Attachment extends \Espo\Services\Attachment
     public function createEntity($attachment)
     {
         if (!empty($attachment->file)) {
-            $arr      = explode(',', $attachment->file);
+            $arr = explode(',', $attachment->file);
             $contents = '';
             if (count($arr) > 1) {
                 $contents = $arr[1];
             }
 
-            $contents       = base64_decode($contents);
+            $contents = base64_decode($contents);
             $attachment->contents = $contents;
 
             $relatedEntityType = null;
-            $field             = null;
-            $role              = 'Attachment';
+            $field = null;
+            $role = 'Attachment';
             if (isset($attachment->parentType)) {
                 $relatedEntityType = $attachment->parentType;
             } elseif (isset($attachment->relatedType)) {
@@ -101,6 +109,13 @@ class Attachment extends \Espo\Services\Attachment
             if (isset($attachment->field)) {
                 $field = $attachment->field;
             }
+            if (!isset($attachment->asset)) {
+                throw new BadRequest("Params 'asset' must be set");
+            }
+
+            $asset = $attachment->asset;
+            $private = $asset->private ? "private" : "public";
+
             if (isset($attachment->role)) {
                 $role = $attachment->role;
             }
@@ -121,46 +136,19 @@ class Attachment extends \Espo\Services\Attachment
                 throw new Forbidden("No access to field '" . $field . "'.");
             }
 
-            $size = mb_strlen($contents, '8bit');
-
             if ($role === 'Attachment') {
                 if (!in_array($fieldType, $this->attachmentFieldTypeList)) {
                     throw new Error("Field type '{$fieldType}' is not allowed for attachment.");
                 }
 
-                $rules = $this->getMetadata()->get(['app', 'validation', $field]);
+                $validationList = $this->getMetadata()->get(['app', 'validation', 'rules', $asset->type]);
+                $globalList = $this->getMetadata()->get(['app', 'validation', 'rules', 'Global']);
 
-                $maxSize = $rules['size'] ?? false;
+                $validationList = array_merge($globalList, $validationList);
 
-                if (!$maxSize) {
-                    $maxSize = ($maxSize = $this->getMetadata()->get(['entityDefs', $relatedEntityType, 'fields', $field, 'maxFileSize'])) ? $maxSize : $this->getConfig()->get('attachmentUploadMaxSize');
+                foreach ($validationList as $type => $value) {
+                    $this->getValidator()->validate($type, $attachment, ($value[$private] ?? $value));
                 }
-                if ($maxSize) {
-                    if ($size > $maxSize * 1024 * 1024) {
-                        throw new Error("File size should not exceed {$maxSize}Mb.");
-                    }
-                }
-
-                if (isset($rules['extensions']) && is_array($rules['extensions'])) {
-                    $extension = pathinfo($attachment->name)['extension'] ?? null;
-
-                    if (!in_array($extension, $rules['extensions'])) {
-                        throw new Error("Use only next extension ". implode(', ', $rules['extensions']));
-                    }
-                }
-
-            } elseif ($role === 'Inline Attachment') {
-                if (!in_array($fieldType, $this->inlineAttachmentFieldTypeList)) {
-                    throw new Error("Field '{$field}' is not allowed to have inline attachment.");
-                }
-                $inlineAttachmentUploadMaxSize = $this->getConfig()->get('inlineAttachmentUploadMaxSize');
-                if ($inlineAttachmentUploadMaxSize) {
-                    if ($size > $inlineAttachmentUploadMaxSize * 1024 * 1024) {
-                        throw new Error("File size should not exceed {$inlineAttachmentUploadMaxSize}Mb.");
-                    }
-                }
-            } else {
-                throw new BadRequest("Not supported attachment role.");
             }
         }
 
@@ -171,6 +159,11 @@ class Attachment extends \Espo\Services\Attachment
         }
 
         return $entity;
+    }
+
+    protected function getValidator(): Validator
+    {
+        return $this->getInjection("Validator");
     }
 
     /**

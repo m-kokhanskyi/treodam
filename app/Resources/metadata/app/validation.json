@@ -1,18 +1,42 @@
 {
-  "image": {
-    "size"      : 1,
-    "extensions": [
-      "png",
-      "jpg",
-      "jpeg"
-    ]
+  "rules": {
+    "Global" : {
+      "size": {
+        "private": 2,
+        "public": 1
+      }
+    },
+    "Image": {
+      "size": {
+        "private": 3,
+        "public": 2
+      },
+      "extensions": {
+        "private": [
+          "png",
+          "jpg",
+          "jpeg"
+        ],
+        "public": [
+          "png",
+          "jpg",
+          "jpeg"
+        ]
+      }
+    },
+    "File": {
+      "extensions": {
+        "private": [
+          "docx",
+          "txt"
+        ],
+        "public": [
+          "doc",
+          "docx",
+          "txt"
+        ]
+      }
+    }
   },
-  "file" : {
-    "size"      : 2,
-    "extensions": [
-      "doc",
-      "docx",
-      "txt"
-    ]
-  }
+  "classMap" : {}
 }

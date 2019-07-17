@@ -42,8 +42,6 @@ Espo.define('dam:views/fields/file', 'views/fields/file', function (Dep) {
                 }
             }
 
-            hasError = false;
-
             if (hasError) {
                 this.showValidationMessage(msg, '.attachment-button label');
                 return;

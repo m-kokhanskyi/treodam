@@ -1,10 +1,11 @@
 {
   "rules": {
-    "Global" : {
+    "Global": {
       "size": {
         "private": 2,
         "public": 1
-      }
+      },
+      "unique": {}
     },
     "Image": {
       "size": {
@@ -38,5 +39,5 @@
       }
     }
   },
-  "classMap" : {}
+  "classMap": {}
 }

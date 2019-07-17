@@ -4,6 +4,7 @@
 namespace Dam\Core\Validation;
 
 use Treo\Core\Container;
+use Treo\Core\ORM\EntityManager;
 
 abstract class Base
 {
@@ -33,4 +34,14 @@ abstract class Base
     abstract public function validate(): bool;
 
     abstract public function onValidateFail();
+
+    protected function getEntityManager(): EntityManager
+    {
+        return $this->container->get('entityManager');
+    }
+
+    protected function getRepository(string $name)
+    {
+        return $this->getEntityManager()->getRepository($name);
+    }
 }

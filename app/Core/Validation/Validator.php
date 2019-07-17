@@ -17,6 +17,13 @@ class Validator
         $this->container = $container;
     }
 
+    /**
+     * @param string $validatorName
+     * @param $attachment
+     * @param $params
+     * @throws BadRequest
+     * @throws Error
+     */
     public function validate(string $validatorName, $attachment, $params)
     {
         $className = __NAMESPACE__ . "\\Items\\" . ucfirst($validatorName);

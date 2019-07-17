@@ -21,8 +21,6 @@ declare(strict_types=1);
 
 namespace Dam\Listeners;
 
-use Dam\Entities\Asset;
-use Dam\Services\AssetVersion;
 use Espo\Core\Exceptions\InternalServerError;
 use Espo\ORM\Entity;
 use Treo\Core\EventManager\Event;
@@ -43,6 +41,10 @@ class AttachmentEntity extends AbstractListener
     public function beforeSave(Event $event)
     {
         $entity = $event->getArgument('entity');
+
+        if ($entity->isNew()) {
+            $entity->set('hash_md5', md5($entity->get("contents")));
+        }
 
         if ($this->isDuplicate($entity)) {
             $this->copyFile($entity);

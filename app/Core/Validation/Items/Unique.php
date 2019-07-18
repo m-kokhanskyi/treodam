@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Dam\Core\Validation\Items;
-
 
 use Dam\Core\Validation\Base;
 use Dam\Repositories\Attachment;
@@ -12,6 +10,10 @@ class Unique extends Base
 {
     public function validate(): bool
     {
+        if ($this->params['skip'] ?? false) {
+            return true;
+        }
+
         $md5 = md5($this->attachment->contents);
 
         /**@var $repository Attachment* */
@@ -20,6 +22,7 @@ class Unique extends Base
                 'hash_md5' => $md5,
                 'deleted' => 0,
                 'relatedId!=' => null,
+                'createdById' => $this->getUser()->id,
             ])->count();
 
         return $count == 0;

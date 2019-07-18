@@ -22,11 +22,14 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
+use Dam\Core\FileManager;
+use Dam\Core\FileStorage\DAMUploadDir;
 use Dam\Core\Validation\Validator;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\Core\Exceptions\NotFound;
+use Treo\Core\FileStorage\Manager;
 
 /**
  * Class Attachment
@@ -38,6 +41,8 @@ class Attachment extends \Espo\Services\Attachment
     public function __construct()
     {
         $this->addDependency("Validator");
+        $this->addDependency("DAMFileManager");
+        $this->addDependency("fileStorageManager");
 
         parent::__construct();
     }
@@ -161,6 +166,70 @@ class Attachment extends \Espo\Services\Attachment
         return $entity;
     }
 
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @return mixed
+     * @throws Error
+     * @throws Forbidden
+     */
+    public function moveToAsset(\Dam\Entities\Asset $asset)
+    {
+        $attachmentId = $asset->get("type") === "Image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachment = $this->getEntity($attachmentId);
+
+        if ($attachment->get('sourceId')) {
+            return $this->copyDuplicate($asset);
+        }
+
+        $sourcePath = DAMUploadDir::BASE_PATH . $attachment->get('storageFilePath');
+        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->get('path');
+
+        if ($this->getFileManager()->moveFolder($sourcePath, $destPath)) {
+            return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment, $asset->get('path'));
+        }
+
+        return false;
+    }
+
+    public function copyDuplicate(\Dam\Entities\Asset $asset)
+    {
+        $attachmentId = $asset->get("type") === "Image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachment = $this->getEntity($attachmentId);
+
+        $sourcePath = $this->getFileStorageManager()->getLocalFilePath($attachment);
+        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->get('path');
+
+        if ($this->getFileManager()->copy($sourcePath, $destPath, false, null, true)) {
+            $attachment->set("storageFilePath", $asset->get('path'));
+            $attachment->set('sourceId', null);
+            return $this->getEntityManager()->getRepository("Attachment")->save($attachment);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @return mixed
+     * @throws Error
+     * @throws Forbidden
+     */
+    public function changeAccess(\Dam\Entities\Asset $asset)
+    {
+        $source = ($asset->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->getFetched("path");
+        $dest = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->get("path");
+
+        $attachmentId = $asset->get("type") === "Image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachment = $this->getEntity($attachmentId);
+
+        if ($this->getFileManager()->moveFolder($source, $dest)) {
+            return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment, $asset->get('path'));
+        }
+    }
+
+    /**
+     * @return Validator
+     */
     protected function getValidator(): Validator
     {
         return $this->getInjection("Validator");
@@ -207,5 +276,15 @@ class Attachment extends \Espo\Services\Attachment
     private function hasAcl($relatedEntityType): bool
     {
         return !$this->getAcl()->checkScope($relatedEntityType, 'create') && !$this->getAcl()->checkScope($relatedEntityType, 'edit');
+    }
+
+    protected function getFileManager(): FileManager
+    {
+        return $this->getInjection("DAMFileManager");
+    }
+
+    protected function getFileStorageManager(): Manager
+    {
+        return $this->getInjection("fileStorageManager");
     }
 }

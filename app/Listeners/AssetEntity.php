@@ -25,7 +25,6 @@ use Dam\Core\FilePathBuilder;
 use Dam\Entities\Asset;
 use Dam\Entities\AssetCategory;
 use Dam\Listeners\Traits\ValidateCode;
-use Dam\Repositories\Attachment;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\ORM\Entity;
@@ -65,28 +64,44 @@ class AssetEntity extends AbstractListener
             $entity->set('path', $this->setPath($entity));
         }
 
+        $attachmentService = $this->getService("Attachment");
+        $assetService = $this->getService("Asset");
+
+        //After create new asset
+        if ($entity->isNew()) {
+            $attachmentService->moveToAsset($entity);
+        }
+
+        //After upload new file|image
         if ($this->changeAttachment($entity) && !$entity->isNew()) {
-            $this->getService("Asset")->createVersion($entity);
+            $attachmentService->moveToAsset($entity);
+            $assetService->createVersion($entity);
         }
 
-        if ($entity->isNew() || $this->changeAttachmentOrPrivate($entity)) {
-            $attachmentId = $entity->get('type') === "Image" ? $entity->get('imageId') : $entity->get('fileId');
-            /**@var $repository Attachment* */
-            $repository = $this->getEntityManager()->getRepository('Attachment');
-
-            $attachment = $repository->where([
-                'id' => $attachmentId,
-                'sourceId' => null,
-            ])->findOne();
-
-            if ($attachment) {
-                if (!$repository->changePrivate($entity)) {
-                    throw new Error("Can't move folder");
-                }
-
-                $repository->removeThumbs($entity);
-            }
+        //After change private (move to other folder)
+        if (!$entity->isNew() && $entity->isAttributeChanged("private")) {
+            $attachmentService->changeAccess($entity);
         }
+
+
+//        if ($entity->isNew() || $this->changeAttachmentOrPrivate($entity)) {
+//            $attachmentId = $entity->get('type') === "Image" ? $entity->get('imageId') : $entity->get('fileId');
+//            /**@var $repository Attachment* */
+//            $repository = $this->getEntityManager()->getRepository('Attachment');
+//
+//            $attachment = $repository->where([
+//                'id' => $attachmentId,
+//                'sourceId' => null,
+//            ])->findOne();
+//
+//            if ($attachment) {
+//                if (!$repository->changePrivate($entity)) {
+//                    throw new Error("Can't move folder");
+//                }
+//
+//                $repository->removeThumbs($entity);
+//            }
+//        }
     }
 
     /**
@@ -198,7 +213,8 @@ class AssetEntity extends AbstractListener
         return $entity->isAttributeChanged('private') || $this->changeAttachment($entity);
     }
 
-    private function changeAttachment(Entity $entity) {
+    private function changeAttachment(Entity $entity)
+    {
         return $entity->isAttributeChanged('fileId') || $entity->isAttributeChanged('imageId');
     }
 

@@ -26,10 +26,10 @@ class Validator
      */
     public function validate(string $validatorName, $attachment, $params)
     {
-        $className = __NAMESPACE__ . "\\Items\\" . ucfirst($validatorName);
+        $className = $this->getMetadata()->get(['app', 'validation', 'classMap', $validatorName]);
 
         if (!class_exists($className)) {
-            $className = $this->getMetadata()->get(['app', 'validation', 'classMap', $validatorName]);
+            $className = __NAMESPACE__ . "\\Items\\" . ucfirst($validatorName);
         }
 
         if (!$className) {

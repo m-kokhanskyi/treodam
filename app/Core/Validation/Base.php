@@ -44,4 +44,9 @@ abstract class Base
     {
         return $this->getEntityManager()->getRepository($name);
     }
+
+    protected function getUser()
+    {
+        return $this->container->get('user');
+    }
 }

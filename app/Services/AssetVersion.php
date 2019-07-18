@@ -67,7 +67,7 @@ class AssetVersion extends Base
 
         if ($this->getFileManager()->copy($filePath, $destPath, false, null, true)) {
             return parent::createEntity((object)[
-                'name' => $this->createNameFromDate($asset->get('createdAt')),
+                'name' => $this->createNameFromDate($attachment->get('createdAt')),
                 'assetId' => $asset->id,
                 "fileName" => $attachment->get('name'),
             ]);

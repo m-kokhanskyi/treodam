@@ -28,7 +28,7 @@ class FileManager extends Manager
      * @return bool
      * @throws \Espo\Core\Exceptions\Error
      */
-    public function folderCopy($source, $dist)
+    public function moveFolder($source, $dist)
     {
         $res = true;
 

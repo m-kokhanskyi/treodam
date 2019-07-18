@@ -37,39 +37,7 @@ class Attachment extends \Treo\Repositories\Attachment
     protected function init()
     {
         parent::init();
-        $this->addDependency("DAMFileManager");
-    }
-
-    /**
-     * @param Entity $entity
-     *
-     * @return \Espo\Core\Utils\File\boolen
-     * @throws \Espo\Core\Exceptions\Error
-     */
-    public function copy(Entity $entity): string
-    {
-        $source = $this->where(["id" => $entity->get('sourceId')])->findOne();
-
-        if (!$source) {
-            throw new Error("Source not found");
-        }
-
-        $sourcePath = $this->getFilePath($source);
-        $related = $entity->get('related');
-
-        if (is_a($related, \Dam\Entities\Asset::class)) {
-            $destPath = $related->get('path');
-            $path = $related->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH;
-        } else {
-            $destPath = $this->getDestPath(FilePathBuilder::UPLOAD);
-            $path = DAMUploadDir::BASE_PATH;
-        }
-
-        if ($this->getFileManager()->copy($sourcePath, ($path . $destPath), false, null, true)) {
-            return $destPath;
-        }
-
-        return '';
+        $this->addDependency("FileManager");
     }
 
     /**
@@ -97,18 +65,6 @@ class Attachment extends \Treo\Repositories\Attachment
     }
 
     /**
-     * @param \Dam\Entities\Asset $asset
-     * @return mixed
-     */
-    public function changePrivate(\Dam\Entities\Asset $asset)
-    {
-        $sourcePath = ($asset->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->getFetched("path");
-        $distPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->get("path");
-
-        return $this->getFileManager()->folderCopy($sourcePath, $distPath);
-    }
-
-    /**
      * @param Entity $entity
      * @param null $role
      *
@@ -128,6 +84,7 @@ class Attachment extends \Treo\Repositories\Attachment
             'storageFilePath' => $entity->get('storageFilePath'),
             'relatedType' => $entity->get('relatedType'),
             'relatedId' => $entity->get('relatedId'),
+            'hash_md5' => $entity->get('hash_md5')
         ]);
 
         if ($role) {
@@ -157,11 +114,24 @@ class Attachment extends \Treo\Repositories\Attachment
     }
 
     /**
+     * @param Entity $entity
+     * @param string $path
+     * @return mixed
+     * @throws Error
+     */
+    public function updateStorage(Entity $entity, string $path)
+    {
+        $entity->set("storageFilePath", $path);
+
+        return $this->save($entity);
+    }
+
+    /**
      * @return Manager
      */
     protected function getFileManager(): Manager
     {
-        return $this->getInjection("DAMFileManager");
+        return $this->getInjection("FileManager");
     }
 
 }

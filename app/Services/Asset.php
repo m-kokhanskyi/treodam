@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
+use Dam\Core\FileManager;
 use Espo\Core\Templates\Services\Base;
-use Espo\ORM\Entity;
 
 /**
  * Class Asset
@@ -31,16 +31,31 @@ use Espo\ORM\Entity;
  */
 class Asset extends Base
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->addDependency("DAMFileManager");
+    }
+
     /**
-     * @param Entity $entity
+     * @param \Dam\Entities\Asset $asset
      * @return mixed
      */
-    public function createVersion(Entity $entity)
+    public function createVersion(\Dam\Entities\Asset $asset)
     {
-        $attachmentId = $entity->getFetched("type") === "Image" ? $entity->getFetched("imageId") : $entity->getFetched("fileId");
+        $attachmentId = $asset->getFetched("type") === "Image" ? $asset->getFetched("imageId") : $asset->getFetched("fileId");
 
         $attachment = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
 
         return $this->getServiceFactory()->create("AssetVersion")->createEntity($attachment);
+    }
+
+    /**
+     * @return FileManager
+     */
+    protected function getFileManager(): FileManager
+    {
+        return $this->getInjection("DAMFileManager");
     }
 }

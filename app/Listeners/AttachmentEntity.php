@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Dam\Listeners;
 
+use Dam\Entities\Attachment;
 use Espo\Core\Exceptions\InternalServerError;
-use Espo\ORM\Entity;
 use Treo\Core\EventManager\Event;
 use Treo\Core\Utils\File\Manager;
 use Treo\Listeners\AbstractListener;
@@ -40,14 +40,11 @@ class AttachmentEntity extends AbstractListener
      */
     public function beforeSave(Event $event)
     {
+        /**@var $entity Attachment**/
         $entity = $event->getArgument('entity');
 
-        if ($entity->isNew()) {
+        if ($entity->isNew() && $entity->get("contents")) {
             $entity->set('hash_md5', md5($entity->get("contents")));
-        }
-
-        if ($this->isDuplicate($entity)) {
-            $this->copyFile($entity);
         }
     }
 
@@ -61,37 +58,8 @@ class AttachmentEntity extends AbstractListener
         $this->getEntityManager()->getRepository("Attachment")->removeThumbs($entity);
     }
 
-    protected function isDuplicate(Entity $entity): bool
-    {
-        return (!$entity->isNew() && $entity->get('sourceId'));
-    }
-
-    /**
-     * @param Entity $entity
-     * @throws InternalServerError
-     */
-    protected function copyFile(Entity $entity): void
-    {
-        $repository = $this->getEntityManager()->getRepository($entity->getEntityType());
-        $path = $repository->copy($entity);
-
-        if (!$path) {
-            throw new InternalServerError($this->getLanguage()->translate("Can't copy file", 'exceptions', 'Global'));
-        }
-
-        $entity->set([
-            'sourceId' => null,
-            'storageFilePath' => $path,
-        ]);
-    }
-
     protected function getFileManager(): Manager
     {
-        return $this->container->get('DAMFileManager');
-    }
-
-    private function getServiceFactory()
-    {
-        return $this->getContainer()->get('serviceFactory');
+        return $this->container->get('FileManager');
     }
 }

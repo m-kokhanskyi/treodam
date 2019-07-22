@@ -114,14 +114,9 @@ class AssetCategoryEntity extends AbstractListener
     public function beforeRelate(Event $event)
     {
         $entity        = $event->getArgument('entity');
-        $foreignEntity = $this->getForeignEntity($event->getArgument('foreign'), $event->getArgument('relationName'));
 
         if ($this->hasChild($entity)) {
             throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
-        }
-
-        if ($foreignEntity && $foreignEntity->get('assetType') != "master") {
-            throw new BadRequest($this->getLanguage()->translate("Only master asset", 'exceptions', 'Global'));
         }
     }
 

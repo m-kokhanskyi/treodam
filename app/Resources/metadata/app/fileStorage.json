@@ -3,11 +3,11 @@
     "DAMUploadDir": "\\Dam\\Core\\FileStorage\\DAMUploadDir"
   },
   "public": {
-    "folderDepth": 2,
-    "folderNameLength": 4
+    "folderDepth": 3,
+    "folderNameLength": 2
   },
   "private": {
     "folderDepth": 3,
-    "folderNameLength": 3
+    "folderNameLength": 2
   }
 }

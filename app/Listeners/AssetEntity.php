@@ -54,10 +54,6 @@ class AssetEntity extends AbstractListener
             throw new BadRequest($this->getLanguage()->translate('Code is invalid', 'exceptions', 'Global'));
         }
 
-        if ($this->changedAssetType($entity) && !$entity->isNew()) {
-            throw new BadRequest($this->getLanguage()->translate("Can't change asset type", 'exceptions', 'Global'));
-        }
-
         $this->setFileInfo($entity);
 
         if ($entity->isNew() || $entity->isAttributeChanged("private")) {
@@ -81,37 +77,8 @@ class AssetEntity extends AbstractListener
         //After change private (move to other folder)
         if (!$entity->isNew() && $entity->isAttributeChanged("private")) {
             $attachmentService->changeAccess($entity);
+            $this->getService("AssetVariant")->rebuildPath($entity);
         }
-
-
-//        if ($entity->isNew() || $this->changeAttachmentOrPrivate($entity)) {
-//            $attachmentId = $entity->get('type') === "Image" ? $entity->get('imageId') : $entity->get('fileId');
-//            /**@var $repository Attachment* */
-//            $repository = $this->getEntityManager()->getRepository('Attachment');
-//
-//            $attachment = $repository->where([
-//                'id' => $attachmentId,
-//                'sourceId' => null,
-//            ])->findOne();
-//
-//            if ($attachment) {
-//                if (!$repository->changePrivate($entity)) {
-//                    throw new Error("Can't move folder");
-//                }
-//
-//                $repository->removeThumbs($entity);
-//            }
-//        }
-    }
-
-    /**
-     * @param Entity $entity
-     *
-     * @return bool
-     */
-    protected function changedAssetType(Entity $entity): bool
-    {
-        return $entity->isAttributeChanged('assetType');
     }
 
     /**

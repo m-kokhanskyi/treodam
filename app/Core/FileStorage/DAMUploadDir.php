@@ -2,9 +2,11 @@
 
 namespace Dam\Core\FileStorage;
 
+use Dam\Core\DAMAttachment;
 use Dam\Core\FilePathBuilder;
 use Dam\Entities\Asset;
 use Treo\Core\FileStorage\Storages\UploadDir;
+use Treo\Core\ORM\EntityManager;
 use Treo\Entities\Attachment;
 
 /**
@@ -18,6 +20,12 @@ class DAMUploadDir extends UploadDir
 
     const PRIVATE_THUMB_PATH = "data/dam/private/thumbs/";
     const PUBLIC_THUMB_PATH = "data/dam/public/thumbs/";
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->addDependency("EntityManager");
+    }
 
     /**
      * @return array
@@ -41,9 +49,12 @@ class DAMUploadDir extends UploadDir
         $storage = $attachment->get('storageFilePath');
         $related = $attachment->get('related');
 
-        if (is_a($related, Asset::class)) {
-            $path = $related->get('private') ? self::PRIVATE_PATH : self::PUBLIC_PATH;
-            $type = $related->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC;
+        if ($related) {
+            $repository = $this->getEntityManager()->getRepository($related->getEntityType());
+        }
+
+        if (isset($repository) && is_a($repository, DAMAttachment::class)) {
+            list($path, $type) = $repository->buildPath($related);
         } else {
             $type = FilePathBuilder::UPLOAD;
             $path = self::BASE_PATH;
@@ -55,5 +66,10 @@ class DAMUploadDir extends UploadDir
         }
 
         return $path . "{$storage}/" . $attachment->get('name');
+    }
+
+    protected function getEntityManager() :EntityManager
+    {
+        return $this->getInjection("EntityManager");
     }
 }

@@ -50,7 +50,6 @@
   "relationshipPanels"  : {
     "assets": {
       "selectBoolFilterList": [
-        "onlyMaster",
         "notSelectAssets"
       ],
       "view"                : "dam:views/asset_category/record/panels/assets",

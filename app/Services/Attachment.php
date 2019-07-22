@@ -114,12 +114,6 @@ class Attachment extends \Espo\Services\Attachment
             if (isset($attachment->field)) {
                 $field = $attachment->field;
             }
-            if (!isset($attachment->asset)) {
-                throw new BadRequest("Params 'asset' must be set");
-            }
-
-            $asset = $attachment->asset;
-            $private = $asset->private ? "private" : "public";
 
             if (isset($attachment->role)) {
                 $role = $attachment->role;
@@ -146,13 +140,18 @@ class Attachment extends \Espo\Services\Attachment
                     throw new Error("Field type '{$fieldType}' is not allowed for attachment.");
                 }
 
-                $validationList = $this->getMetadata()->get(['app', 'validation', 'rules', $asset->type]);
-                $globalList = $this->getMetadata()->get(['app', 'validation', 'rules', 'Global']);
+                if (isset($attachment->model)) {
+                    $asset = $attachment->model;
+                    $private = $asset->private ? "private" : "public";
 
-                $validationList = array_merge($globalList, $validationList);
+                    $validationList = $this->getMetadata()->get(['app', 'validation', 'rules', $asset->type]);
+                    $globalList = $this->getMetadata()->get(['app', 'validation', 'rules', 'Global']);
 
-                foreach ($validationList as $type => $value) {
-                    $this->getValidator()->validate($type, $attachment, ($value[$private] ?? $value));
+                    $validationList = array_merge($globalList, $validationList);
+
+                    foreach ($validationList as $type => $value) {
+                        $this->getValidator()->validate($type, $attachment, ($value[$private] ?? $value));
+                    }
                 }
             }
         }

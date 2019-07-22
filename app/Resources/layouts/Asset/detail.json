@@ -16,12 +16,6 @@
                 {
                     "name": "type"
                 }
-            ],
-            [
-                {
-                    "name": "assetType",
-                    "fullWidth": true
-                }
             ]
         ],
         "style": "default",

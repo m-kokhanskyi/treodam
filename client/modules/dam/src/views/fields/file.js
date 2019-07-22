@@ -6,14 +6,18 @@ Espo.define('dam:views/fields/file', 'views/fields/file', function (Dep) {
             let msg = '';
 
             let attributes = this.model.attributes;
-            let rules = this.getMetadata().get(['app', 'validation', 'rules', attributes.type]);
+            let rules = this.getMetadata().get(['app', 'validation', 'rules', attributes.type]) || {};
             let globalRules = this.getMetadata().get(['app', 'validation', 'rules', 'Global']);
             rules = Object.assign(rules, globalRules);
 
             let maxFileSize = 0;
-            let access = attributes.private ? "private" : "public";
+            let access = false;
 
-            if (rules && rules.size[access]) {
+            if (attributes.private !== undefined) {
+                access = attributes.private ? "private" : "public";
+            }
+
+            if (access && rules && rules.size[access]) {
                 maxFileSize = rules.size[access];
             }
 
@@ -32,7 +36,7 @@ Espo.define('dam:views/fields/file', 'views/fields/file', function (Dep) {
                     .replace('{max}', maxFileSize);
             }
 
-            if (!hasError && rules && rules.extensions[access]) {
+            if (access && !hasError && rules && rules.extensions[access]) {
                 let fileExtensions = file.name.split('.').pop();
 
                 if (rules.extensions[access].indexOf(fileExtensions) === -1) {
@@ -70,7 +74,7 @@ Espo.define('dam:views/fields/file', 'views/fields/file', function (Dep) {
                         attachment.set('relatedType', this.model.name);
                         attachment.set('file', result);
                         attachment.set('field', this.name);
-                        attachment.set('asset', this.model.attributes);
+                        attachment.set('model', attributes);
 
                         attachment.save({}, {timeout: 0}).then(function () {
                             this.isUploading = false;

@@ -1,0 +1,24 @@
+[
+    {
+        "rows": [
+            [
+                {
+                    "name": "type"
+                },
+                {
+                    "name": "image"
+                }
+            ],
+            [
+                {
+                    "name": "name"
+                },
+                {
+                    "name": "file"
+                }
+            ]
+        ],
+        "style": "default",
+        "label": ""
+    }
+]

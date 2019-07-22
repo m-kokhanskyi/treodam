@@ -1,5 +1,13 @@
 {
   "fields": {
+    "assetVariants": {
+      "type": "linkMultiple",
+      "layoutDetailDisabled": true,
+      "layoutMassUpdateDisabled": true,
+      "noLoad": true,
+      "importDisabled": true,
+      "isCustom": true
+    },
     "assetVersions": {
       "type": "linkMultiple",
       "layoutDetailDisabled": true,
@@ -96,24 +104,6 @@
       "readOnly": false,
       "tooltip": false
     },
-    "assetType": {
-      "type": "enum",
-      "required": false,
-      "fontSize": 1,
-      "options": [
-        "master",
-        "variation"
-      ],
-      "optionColors": {
-        "master": "fff",
-        "variation": "fff"
-      },
-      "default": "master",
-      "isSorted": false,
-      "audited": false,
-      "readOnly": false,
-      "tooltip": false
-    },
     "fileType": {
       "type": "varchar",
       "required": false,
@@ -190,6 +180,13 @@
     }
   },
   "links": {
+    "assetVariants": {
+      "type": "hasMany",
+      "foreign": "asset",
+      "entity": "AssetVariant",
+      "audited": false,
+      "isCustom": true
+    },
     "assetVersions": {
       "type": "hasMany",
       "foreign": "asset",

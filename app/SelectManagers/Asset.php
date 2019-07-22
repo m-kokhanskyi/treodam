@@ -32,16 +32,6 @@ class Asset extends AbstractSelectManager
     /**
      * @param $result
      */
-    protected function boolFilterOnlyMaster(&$result)
-    {
-        $result['whereClause'][] = [
-            'assetType' => "master",
-        ];
-    }
-
-    /**
-     * @param $result
-     */
     protected function boolFilterNotSelectAssets(&$result)
     {
         if ($value = $this->getBoolData('notSelectAssets')) {

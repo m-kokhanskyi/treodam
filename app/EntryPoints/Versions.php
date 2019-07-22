@@ -35,6 +35,7 @@ use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\Core\ORM\Entity;
+use Espo\Custom\Entities\VariantVersion;
 
 class Versions extends Base
 {
@@ -47,24 +48,41 @@ class Versions extends Base
      */
     public function run()
     {
-        if (!$assetId = $_GET['assetId']) {
-            throw new BadRequest("'assetId' is required");
+        if (!$entity = $_GET['entity']) {
+            throw new BadRequest("'entity' is required");
+        }
+
+        if (!$id = $_GET['id']) {
+            throw new BadRequest("'id' is required");
         }
 
         if (!$time = $_GET['time']) {
             throw new BadRequest("'time' is required");
         }
 
-        $version = $this->getEntityManager()->getRepository("AssetVersion")->where([
-            'name' => $time,
-            'assetId' => $assetId
-        ])->findOne();
+        if ($entity == "asset") {
+            $version = $this->getEntityManager()->getRepository("AssetVersion")->where([
+                'name' => $time,
+                'assetId' => $id
+            ])->findOne();
 
-        if (!$this->getAcl()->checkEntity($version->get('asset'))) {
+            $asset = $version->get('asset');
+        }
+
+        if ($entity == "assetVariant") {
+            $version = $this->getEntityManager()->getRepository("VariantVersion")->where([
+                'name' => $time,
+                'assetVariantId' => $id
+            ])->findOne();
+
+            $asset = $version->get('assetVariant')->get('asset');
+        }
+
+        if (!$this->getAcl()->checkEntity($asset)) {
             throw new Forbidden();
         }
 
-        $filePath = $this->getFilePath($version);
+        $filePath = $this->getFilePath($version, $asset);
 
         if (!file_exists($filePath)) {
             throw new Error("File not found");
@@ -74,7 +92,6 @@ class Versions extends Base
         $outputFileName = str_replace("\"", "\\\"", $outputFileName);
 
         $disposition = 'attachment';
-
 
         header('Content-Description: File Transfer');
         header("Content-Disposition: " . $disposition . ";filename=\"" . $outputFileName . "\"");
@@ -87,11 +104,17 @@ class Versions extends Base
         exit;
     }
 
-    protected function getFilePath(Entity $entity)
+    protected function getFilePath(Entity $entity, $asset)
     {
-        $asset = $entity->get('asset');
         $path = $asset->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH;
-        return $path . $asset->get('path') . '/' . $entity->get('name') . "/" . $entity->get('fileName');
+
+        if (is_a($entity, VariantVersion::class)) {
+            $assetVariant = $entity->get('assetVariant');
+
+            return $path . $asset->get('path') ."/variant/{$assetVariant->get('type')}/versions/{$entity->get('name')}/{$entity->get('fileName')}";
+        }
+
+        return $path . $asset->get('path') . '/versions/' . $entity->get('name') . "/" . $entity->get('fileName');
     }
 
 

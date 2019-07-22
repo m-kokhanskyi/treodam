@@ -1,8 +1,8 @@
 {
     "fields": {
-        "assetCategories": "Asset Categories"
+        "assetVariants1": "AssetVariants1"
     },
     "links": {
-        "assetCategories": "Asset Categories"
+        "assetVariants1": "AssetVariants1"
     }
 }

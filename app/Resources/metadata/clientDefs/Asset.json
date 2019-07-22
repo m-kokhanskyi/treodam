@@ -2,15 +2,13 @@
   "controller"          : "controllers/record",
   "boolFilterList"      : [
     "onlyMy",
-    "onlyMaster",
     "notSelectAssets"
   ],
   "hiddenBoolFilterList": [
-    "onlyMaster",
     "notSelectAssets"
   ],
   "views": {
-    "list": "pim:views/product/list"
+    "list": "dam:views/asset/list"
   },
   "iconClass"           : "fas fa-archive",
   "dynamicLogic"        : {
@@ -88,29 +86,6 @@
               "type"     : "equals",
               "attribute": "type",
               "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "assetType"  : {
-        "readOnly": {
-          "conditionGroup": [
-            {
-              "type": "isNotEmpty",
-              "attribute": "id"
-            }
-          ]
-        }
-      }
-    },
-    "panels": {
-      "assetCategories": {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "assetType",
-              "value"    : "master"
             }
           ]
         }

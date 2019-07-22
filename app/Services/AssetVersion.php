@@ -30,7 +30,7 @@ class AssetVersion extends Base
 {
     /**
      * @param $attachment
-     * @return mixedh
+     * @return mixed
      * @throws Error
      * @throws \Espo\Core\Exceptions\BadRequest
      * @throws \Espo\Core\Exceptions\Forbidden
@@ -93,7 +93,7 @@ class AssetVersion extends Base
     {
         $timeDir = $this->createNameFromDate($entity->get("createdAt"));
 
-        return $dirname . "/" . $timeDir;
+        return $dirname . "/versions/" . $timeDir;
     }
 
     /**

@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
+use Dam\Core\ConfigManager;
 use Dam\Core\FileManager;
 use Dam\Core\FileStorage\DAMUploadDir;
 use Dam\Core\Validation\Validator;
@@ -43,6 +44,7 @@ class Attachment extends \Espo\Services\Attachment
         $this->addDependency("Validator");
         $this->addDependency("DAMFileManager");
         $this->addDependency("fileStorageManager");
+        $this->addDependency("ConfigManager");
 
         parent::__construct();
     }
@@ -140,8 +142,11 @@ class Attachment extends \Espo\Services\Attachment
                     throw new Error("Field type '{$fieldType}' is not allowed for attachment.");
                 }
 
-                if (isset($attachment->model)) {
-                    $asset = $attachment->model;
+                $r = $this->getConfigManager()->get(['gallery-image', 'validations']);
+
+                if (isset($attachment->modelAttributes)) {
+
+                    $model = $attachment->model;
                     $private = $asset->private ? "private" : "public";
 
                     $validationList = $this->getMetadata()->get(['app', 'validation', 'rules', $asset->type]);
@@ -285,5 +290,10 @@ class Attachment extends \Espo\Services\Attachment
     protected function getFileStorageManager(): Manager
     {
         return $this->getInjection("fileStorageManager");
+    }
+
+    protected function getConfigManager(): ConfigManager
+    {
+        return $this->getInjection("ConfigManager");
     }
 }

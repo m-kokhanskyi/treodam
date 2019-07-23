@@ -12,6 +12,10 @@ class Extensions extends Base
 
     public function validate(): bool
     {
+        if ($this->skip()){
+            return true;
+        }
+
         return in_array(pathinfo($this->attachment->name)['extension'], $this->params);
     }
 

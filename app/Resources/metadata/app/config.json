@@ -1,0 +1,92 @@
+{
+  "types": {
+    "global": {
+      "natural": "file",
+      "validations": {
+        "size": 2,
+        "unique": {}
+      }
+    },
+    "default": {
+      "validations": {
+        "size": 1
+      }
+    },
+    "custom": {
+      "gallery-image": {
+        "validations": {
+          "size": {
+            "private": 1,
+            "public": 2
+          },
+          "extension": [
+            "png",
+            "jpeg",
+            "jpg"
+          ]
+        },
+        "variations": {
+          "low-quality": {
+            "auto": false,
+            "params": {
+              "quality": 20
+            }
+          },
+          "200x200": {
+            "params": {
+            },
+            "validations": {
+              "size": 1
+            }
+          }
+        }
+      },
+      "pdf": {
+        "preview": true,
+        "validations": {
+          "extension": [
+            "pdf"
+          ]
+        },
+        "variations" : {
+          "web" : {}
+        }
+      }
+    }
+  },
+  "variations": {
+    "low-quality": {
+      "auto": true,
+      "private": false,
+      "class": "Dam\\...",
+      "params": {
+        "quality": 25
+      },
+      "validations": {
+        "size": 1
+      }
+    },
+    "200x200": {
+      "auto": true,
+      "private": "asset",
+      "class": "Dam\\...",
+      "validations": {
+        "dimension": {
+          "minWidth": 200,
+          "minHeight": 200
+        }
+      },
+      "params": {
+        "width": 200,
+        "height": 200
+      }
+    },
+    "web": {
+      "auto": false,
+      "class": "Dam\\..."
+    }
+  },
+  "validations": {
+    "classMap": {}
+  }
+}

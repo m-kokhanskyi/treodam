@@ -1,15 +1,15 @@
 Espo.define('dam:views/fields/image', 'dam:views/fields/file', function (Dep) {
     return Dep.extend({
-        
-        type: 'image',
-        
-        showPreview: true,
-        
-        accept: ['image/*'],
-        
-        defaultType: 'image/jpeg',
-        
-        previewSize: 'small'
-        
+
+        setup() {
+            Dep.prototype.setup.call(this);
+
+            this.type = 'image';
+            this.showPreview = true;
+            this.accept = ['image/*'];
+            this.defaultType = 'image/jpeg';
+            this.previewSize = 'small'
+        }
+
     });
 });

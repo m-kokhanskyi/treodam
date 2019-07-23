@@ -49,4 +49,14 @@ abstract class Base
     {
         return $this->container->get('user');
     }
+
+    protected function skip()
+    {
+        if ($this->params['skip'] ?? false) {
+            return true;
+        }
+
+        return false;
+    }
+
 }

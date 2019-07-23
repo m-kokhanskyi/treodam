@@ -1,13 +1,5 @@
 {
   "fields": {
-    "assetVariants": {
-      "type": "linkMultiple",
-      "layoutDetailDisabled": true,
-      "layoutMassUpdateDisabled": true,
-      "noLoad": true,
-      "importDisabled": true,
-      "isCustom": true
-    },
     "assetVersions": {
       "type": "linkMultiple",
       "layoutDetailDisabled": true,
@@ -180,13 +172,6 @@
     }
   },
   "links": {
-    "assetVariants": {
-      "type": "hasMany",
-      "foreign": "asset",
-      "entity": "AssetVariant",
-      "audited": false,
-      "isCustom": true
-    },
     "assetVersions": {
       "type": "hasMany",
       "foreign": "asset",

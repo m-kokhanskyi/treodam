@@ -1,52 +1,26 @@
 Espo.define('dam:views/fields/file', 'views/fields/file', function (Dep) {
     return Dep.extend({
         uploadFile: function (file) {
-            let isCanceled = false;
-            let hasError = false;
-            let msg = '';
 
-            let attributes = this.model.attributes;
-            let rules = this.getMetadata().get(['app', 'validation', 'rules', attributes.type]) || {};
-            let globalRules = this.getMetadata().get(['app', 'validation', 'rules', 'Global']);
-            rules = Object.assign(rules, globalRules);
+            var isCanceled = false;
 
-            let maxFileSize = 0;
-            let access = false;
+            var exceedsMaxFileSize = false;
 
-            if (attributes.private !== undefined) {
-                access = attributes.private ? "private" : "public";
+            var maxFileSize = this.params.maxFileSize || 0;
+            var appMaxUploadSize = this.getHelper().getAppParam('maxUploadSize') || 0;
+            if (!maxFileSize || maxFileSize > appMaxUploadSize) {
+                maxFileSize = appMaxUploadSize;
             }
 
-            if (access && rules && rules.size[access]) {
-                maxFileSize = rules.size[access];
-            }
-
-            if (!maxFileSize) {
-                maxFileSize = this.params.maxFileSize || 0;
-                let appMaxUploadSize = this.getHelper().getAppParam('maxUploadSize') || 0;
-                if (!maxFileSize || maxFileSize > appMaxUploadSize) {
-                    maxFileSize = appMaxUploadSize;
+            if (maxFileSize) {
+                if (file.size > maxFileSize * 1024 * 1024) {
+                    exceedsMaxFileSize = true;
                 }
             }
-
-            if (maxFileSize && file.size > maxFileSize * 1024 * 1024) {
-                hasError = true;
-                msg = this.translate('fieldMaxFileSizeError', 'messages')
+            if (exceedsMaxFileSize) {
+                var msg = this.translate('fieldMaxFileSizeError', 'messages')
                     .replace('{field}', this.getLabelText())
                     .replace('{max}', maxFileSize);
-            }
-
-            if (access && !hasError && rules && rules.extensions[access]) {
-                let fileExtensions = file.name.split('.').pop();
-
-                if (rules.extensions[access].indexOf(fileExtensions) === -1) {
-                    hasError = true;
-                    msg = this.translate('extensionsError', 'messages')
-                        .replace('{list}', rules.extensions[access].join(', '));
-                }
-            }
-
-            if (hasError) {
                 this.showValidationMessage(msg, '.attachment-button label');
                 return;
             }
@@ -74,7 +48,7 @@ Espo.define('dam:views/fields/file', 'views/fields/file', function (Dep) {
                         attachment.set('relatedType', this.model.name);
                         attachment.set('file', result);
                         attachment.set('field', this.name);
-                        attachment.set('model', attributes);
+                        attachment.set('modelAttributes', this.model.attributes);
 
                         attachment.save({}, {timeout: 0}).then(function () {
                             this.isUploading = false;

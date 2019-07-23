@@ -10,7 +10,7 @@ class Unique extends Base
 {
     public function validate(): bool
     {
-        if ($this->params['skip'] ?? false) {
+        if ($this->skip()){
             return true;
         }
 

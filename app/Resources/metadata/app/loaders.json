@@ -1,5 +1,6 @@
 {
   "FilePathBuilder": "Dam\\Core\\Loaders\\FilePathBuilderLoader",
   "DAMFileManager": "Dam\\Core\\Loaders\\FileManagerLoader",
-  "Validator": "Dam\\Core\\Loaders\\ValidatorLoader"
+  "Validator": "Dam\\Core\\Loaders\\ValidatorLoader",
+  "ConfigManager" : "Dam\\Core\\Loaders\\ConfigManagerLoader"
 }

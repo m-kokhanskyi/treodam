@@ -11,6 +11,10 @@ class Size extends Base
 {
     public function validate(): bool
     {
+        if ($this->skip()){
+            return true;
+        }
+
         return ($this->params * 1024 * 1024) > mb_strlen($this->attachment->contents, '8bit');
     }
 

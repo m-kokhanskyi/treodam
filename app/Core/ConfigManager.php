@@ -15,6 +15,11 @@ class ConfigManager
         $this->config = $this->join();
     }
 
+    public static function getType($type)
+    {
+        return strtolower(str_replace(" ", '-', $type));
+    }
+
     public function get(array $path)
     {
         $item = $this->config;

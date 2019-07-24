@@ -38,7 +38,7 @@ class Asset extends Base implements DAMAttachment
     public function buildPath(Entity $entity): array
     {
         return [
-            $entity->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH,
+            ($entity->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/",
             $entity->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC
         ];
     }

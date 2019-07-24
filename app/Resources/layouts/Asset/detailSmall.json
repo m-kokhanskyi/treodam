@@ -23,14 +23,11 @@
                     "name": "image"
                 },
                 {
-                    "name": "private"
-                }
-            ],
-            [
-                {
                     "name": "file"
                 },
-                false
+                {
+                    "name": "private"
+                }
             ]
         ],
         "style": "default",

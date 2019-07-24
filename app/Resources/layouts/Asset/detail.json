@@ -3,10 +3,21 @@
         "rows": [
             [
                 {
+                    "name": "type"
+                },
+                {
+                    "name": "image"
+                },
+                {
+                    "name": "file"
+                }
+            ],
+            [
+                {
                     "name": "name"
                 },
                 {
-                    "name": "code"
+                    "name" : "nameOfFile"
                 }
             ],
             [
@@ -14,54 +25,12 @@
                     "name": "private"
                 },
                 {
-                    "name": "type"
+                    "name": "code"
                 }
             ]
         ],
         "style": "default",
         "label": "Overview"
-    },
-    {
-        "rows": [
-            [
-                {
-                    "name": "image"
-                },
-                false
-            ]
-        ],
-        "style": "default",
-        "dynamicLogicVisible": {
-            "conditionGroup": [
-                {
-                    "type": "equals",
-                    "attribute": "type",
-                    "value": "Image"
-                }
-            ]
-        },
-        "customLabel": "Upload image"
-    },
-    {
-        "rows": [
-            [
-                {
-                    "name": "file"
-                },
-                false
-            ]
-        ],
-        "style": "default",
-        "dynamicLogicVisible": {
-            "conditionGroup": [
-                {
-                    "type": "notEquals",
-                    "attribute": "type",
-                    "value": "Image"
-                }
-            ]
-        },
-        "customLabel": "Upload file"
     },
     {
         "rows": [

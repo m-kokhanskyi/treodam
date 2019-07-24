@@ -21,7 +21,6 @@ declare(strict_types=1);
 
 namespace Dam\Repositories;
 
-use Dam\Core\FilePathBuilder;
 use Dam\Core\FileStorage\DAMUploadDir;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\ORM\Entity;
@@ -133,5 +132,4 @@ class Attachment extends \Treo\Repositories\Attachment
     {
         return $this->getInjection("FileManager");
     }
-
 }

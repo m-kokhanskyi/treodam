@@ -26,13 +26,13 @@ class Validator
      */
     public function validate(string $validatorName, $attachment, $params)
     {
-        $className = $this->getMetadata()->get(['app', 'validation', 'classMap', $validatorName]);
+        $className = $this->getMetadata()->get(['app', 'config', 'validations', 'classMap', $validatorName]);
 
         if (!class_exists($className)) {
             $className = __NAMESPACE__ . "\\Items\\" . ucfirst($validatorName);
         }
 
-        if (!$className) {
+        if (!class_exists($className)) {
             throw new BadRequest("Validator with name '{$validatorName}' not found");
         }
 

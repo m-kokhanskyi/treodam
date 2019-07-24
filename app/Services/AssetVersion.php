@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
+use Dam\Core\ConfigManager;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Templates\Services\Base;
 use Treo\Core\FileStorage\Manager;
@@ -48,11 +49,8 @@ class AssetVersion extends Base
             return false;
         }
 
-        if ($asset->get('type') === 'Image') {
-            $currentAttachment = $asset->get("image");
-        } else {
-            $currentAttachment = $asset->get("file");
-        }
+        $natural = ConfigManager::getType($asset->get('type'));
+        $currentAttachment = $natural === "image" ? $asset->get('image') : $asset->get('file');
 
         if (!isset($currentAttachment) || !$currentAttachment) {
             return false;
@@ -93,7 +91,7 @@ class AssetVersion extends Base
     {
         $timeDir = $this->createNameFromDate($entity->get("createdAt"));
 
-        return $dirname . "/versions/" . $timeDir;
+        return $dirname . "/" . $timeDir;
     }
 
     /**

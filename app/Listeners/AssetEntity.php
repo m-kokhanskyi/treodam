@@ -65,12 +65,12 @@ class AssetEntity extends AbstractListener
 
         //After create new asset
         if ($entity->isNew()) {
-            $attachmentService->moveToAsset($entity);
+            $attachmentService->moveToMaster($entity);
         }
 
         //After upload new file|image
         if ($this->changeAttachment($entity) && !$entity->isNew()) {
-            $attachmentService->moveToAsset($entity);
+            $attachmentService->moveToMaster($entity);
             $assetService->createVersion($entity);
         }
 

@@ -26,7 +26,13 @@
       "type": "varchar",
       "required": true,
       "trim": true,
-      "isMultilang": true
+      "isMultilang": true,
+      "view" : "dam:views/fields/name-from-file"
+    },
+    "nameOfFile": {
+      "type": "varchar",
+      "required": true,
+      "trim": true
     },
     "description": {
       "type": "text",

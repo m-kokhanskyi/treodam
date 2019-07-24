@@ -15,8 +15,8 @@ use Treo\Entities\Attachment;
  */
 class DAMUploadDir extends UploadDir
 {
-    const PRIVATE_PATH = 'data/dam/private/files/';
-    const PUBLIC_PATH = 'data/dam/public/files/';
+    const PRIVATE_PATH = 'data/dam/private/';
+    const PUBLIC_PATH = 'data/dam/public/';
 
     const PRIVATE_THUMB_PATH = "data/dam/private/thumbs/";
     const PUBLIC_THUMB_PATH = "data/dam/public/thumbs/";

@@ -3,7 +3,6 @@
 
 namespace Dam\Core\Validation\Items;
 
-
 use Dam\Core\Validation\Base;
 use Espo\Core\Exceptions\Error;
 

@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
+use Dam\Core\ConfigManager;
 use Dam\Core\FileManager;
 use Espo\Core\Templates\Services\Base;
 
@@ -44,7 +45,9 @@ class Asset extends Base
      */
     public function createVersion(\Dam\Entities\Asset $asset)
     {
-        $attachmentId = $asset->getFetched("type") === "Image" ? $asset->getFetched("imageId") : $asset->getFetched("fileId");
+        $natural = ConfigManager::getType($asset->getFetched("type"));
+
+        $attachmentId = $natural === "image" ? $asset->getFetched("imageId") : $asset->getFetched("fileId");
 
         $attachment = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
 

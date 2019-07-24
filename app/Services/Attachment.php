@@ -142,19 +142,15 @@ class Attachment extends \Espo\Services\Attachment
                     throw new Error("Field type '{$fieldType}' is not allowed for attachment.");
                 }
 
-                $r = $this->getConfigManager()->get(['gallery-image', 'validations']);
-
                 if (isset($attachment->modelAttributes)) {
 
-                    $model = $attachment->model;
-                    $private = $asset->private ? "private" : "public";
+                    $model = $attachment->modelAttributes;
+                    $private = $model->private ? "private" : "public";
+                    $type = ConfigManager::getType($model->type);
 
-                    $validationList = $this->getMetadata()->get(['app', 'validation', 'rules', $asset->type]);
-                    $globalList = $this->getMetadata()->get(['app', 'validation', 'rules', 'Global']);
+                    $config = $this->getConfigManager()->get([$type]);
 
-                    $validationList = array_merge($globalList, $validationList);
-
-                    foreach ($validationList as $type => $value) {
+                    foreach ($config['validations'] as $type => $value) {
                         $this->getValidator()->validate($type, $attachment, ($value[$private] ?? $value));
                     }
                 }
@@ -176,9 +172,11 @@ class Attachment extends \Espo\Services\Attachment
      * @throws Error
      * @throws Forbidden
      */
-    public function moveToAsset(\Dam\Entities\Asset $asset)
+    public function moveToMaster(\Dam\Entities\Asset $asset)
     {
-        $attachmentId = $asset->get("type") === "Image" ? $asset->get("imageId") : $asset->get("fileId");
+        $natural = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "natural"]);
+
+        $attachmentId = $natural === "image" ? $asset->get("imageId") : $asset->get("fileId");
         $attachment = $this->getEntity($attachmentId);
 
         if ($attachment->get('sourceId')) {
@@ -186,7 +184,7 @@ class Attachment extends \Espo\Services\Attachment
         }
 
         $sourcePath = DAMUploadDir::BASE_PATH . $attachment->get('storageFilePath');
-        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->get('path');
+        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path');
 
         if ($this->getFileManager()->moveFolder($sourcePath, $destPath)) {
             return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment, $asset->get('path'));
@@ -197,11 +195,13 @@ class Attachment extends \Espo\Services\Attachment
 
     public function copyDuplicate(\Dam\Entities\Asset $asset)
     {
-        $attachmentId = $asset->get("type") === "Image" ? $asset->get("imageId") : $asset->get("fileId");
+        $natural = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "natural"]);
+
+        $attachmentId = $natural === "image" ? $asset->get("imageId") : $asset->get("fileId");
         $attachment = $this->getEntity($attachmentId);
 
         $sourcePath = $this->getFileStorageManager()->getLocalFilePath($attachment);
-        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->get('path');
+        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path');
 
         if ($this->getFileManager()->copy($sourcePath, $destPath, false, null, true)) {
             $attachment->set("storageFilePath", $asset->get('path'));
@@ -220,10 +220,12 @@ class Attachment extends \Espo\Services\Attachment
      */
     public function changeAccess(\Dam\Entities\Asset $asset)
     {
-        $source = ($asset->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->getFetched("path");
-        $dest = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $asset->get("path");
+        $source = ($asset->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->getFetched("path");
+        $dest = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get("path");
 
-        $attachmentId = $asset->get("type") === "Image" ? $asset->get("imageId") : $asset->get("fileId");
+        $natural = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "natural"]);
+
+        $attachmentId = $natural === "image" ? $asset->get("imageId") : $asset->get("fileId");
         $attachment = $this->getEntity($attachmentId);
 
         if ($this->getFileManager()->moveFolder($source, $dest)) {

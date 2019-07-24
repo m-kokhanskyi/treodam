@@ -48,8 +48,42 @@
             "pdf"
           ]
         },
-        "variations" : {
-          "web" : {}
+        "variations": {
+          "web": {}
+        }
+      },
+      "image": {
+        "natural": "image",
+        "validations": {
+          "size": {
+            "private": 1,
+            "public": 2
+          },
+          "unique": {
+            "skip" : true
+          },
+          "extension": [
+            "png",
+            "jpg",
+            "jpeg"
+          ]
+        }
+      },
+      "file": {
+        "natural": "file",
+        "validations": {
+          "size": {
+            "private": 1,
+            "public": 2
+          },
+          "unique": {
+            "skip": true
+          },
+          "extension": [
+            "doc",
+            "docx",
+            "html"
+          ]
         }
       }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dam\Core\FileStorage;
 
 use Dam\Core\DAMAttachment;

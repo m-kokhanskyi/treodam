@@ -21,10 +21,10 @@ declare(strict_types=1);
 
 namespace Dam\Repositories;
 
+use Dam\Core\FileManager;
 use Dam\Core\FileStorage\DAMUploadDir;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\ORM\Entity;
-use Treo\Core\Utils\File\Manager;
 
 /**
  * Class Attachment
@@ -36,7 +36,7 @@ class Attachment extends \Treo\Repositories\Attachment
     protected function init()
     {
         parent::init();
-        $this->addDependency("FileManager");
+        $this->addDependency("DAMFileManager");
     }
 
     /**
@@ -126,10 +126,40 @@ class Attachment extends \Treo\Repositories\Attachment
     }
 
     /**
-     * @return Manager
+     * @param Entity $attachment
+     * @param string $newFileName
+     * @param Entity|null $entity
+     * @return bool
+     * @throws Error
      */
-    protected function getFileManager(): Manager
+    public function renameFile(Entity $attachment, string $newFileName, Entity $entity = null): bool
     {
-        return $this->getInjection("FileManager");
+        $path = $this->buildPath($entity, $attachment);
+        $pathInfo = pathinfo($path);
+        if ($pathInfo['basename'] == $newFileName) {
+            return true;
+        }
+
+        if ($this->getFileManager()->renameFile($path, $newFileName)) {
+            $attachment->set("name", $newFileName);
+
+            return $this->save($attachment) ? true : false;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return FileManager
+     */
+    protected function getFileManager(): FileManager
+    {
+        return $this->getInjection("DAMFileManager");
+    }
+
+    private function buildPath(Entity $entity, Entity $attachment): string
+    {
+        return ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $entity->get('path') . "/" . $attachment->get('name');
+
     }
 }

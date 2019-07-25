@@ -40,6 +40,9 @@
       "lengthOfCut": 400,
       "isMultilang": true
     },
+    "metaData": {
+      "type": "text"
+    },
     "createdAt": {
       "type": "datetime",
       "readOnly": true

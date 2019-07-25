@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Dam\Services;
 
 use Dam\Core\FileManager;

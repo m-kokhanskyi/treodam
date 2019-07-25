@@ -29,7 +29,7 @@ use Dam\Core\Validation\Validator;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
-use Espo\Core\Exceptions\NotFound;
+use Espo\ORM\Entity;
 use Treo\Core\FileStorage\Manager;
 
 /**
@@ -50,17 +50,11 @@ class Attachment extends \Espo\Services\Attachment
     }
 
     /**
-     * @param $id
-     *
+     * @param $attachment
      * @return array
-     * @throws NotFound
      */
-    public function getImageInfo($id): array
+    public function getImageInfo($attachment): array
     {
-        if (!$attachment = $this->getEntityManager()->getEntity('Attachment', $id)) {
-            throw new NotFound();
-        }
-
         $path = $this->getPath($attachment);
         $result = [];
 
@@ -83,6 +77,17 @@ class Attachment extends \Espo\Services\Attachment
         $result['size'] = filesize($path);
 
         return $result;
+    }
+
+    /**
+     * @param $attachment
+     * @return array
+     */
+    public function getFileMetaData($attachment)
+    {
+        $path = $this->getPath($attachment);
+
+        return exif_read_data($path);
     }
 
     /**
@@ -231,6 +236,17 @@ class Attachment extends \Espo\Services\Attachment
         if ($this->getFileManager()->moveFolder($source, $dest)) {
             return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment, $asset->get('path'));
         }
+    }
+
+    /**
+     * @param \Dam\Entities\Attachment $attachment
+     * @param string $newName
+     * @param Entity $entity
+     * @return mixed
+     */
+    public function changeName(\Dam\Entities\Attachment $attachment, string $newName, Entity $entity = null)
+    {
+        return $this->getRepository()->renameFile($attachment, $newName, $entity);
     }
 
     /**

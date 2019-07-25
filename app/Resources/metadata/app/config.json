@@ -3,7 +3,7 @@
     "global": {
       "natural": "file",
       "validations": {
-        "size": 2,
+        "size": 5,
         "unique": {}
       }
     },
@@ -55,10 +55,6 @@
       "image": {
         "natural": "image",
         "validations": {
-          "size": {
-            "private": 1,
-            "public": 2
-          },
           "unique": {
             "skip" : true
           },

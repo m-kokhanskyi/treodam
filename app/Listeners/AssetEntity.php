@@ -54,7 +54,13 @@ class AssetEntity extends AbstractListener
             throw new BadRequest($this->getLanguage()->translate('Code is invalid', 'exceptions', 'Global'));
         }
 
-        $this->setFileInfo($entity);
+        if (!$entity->isNew() && $entity->isAttributeChanged("type")) {
+            throw new BadRequest("You can't change type");
+        }
+
+        if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
+            $this->getImageInfo($entity);
+        }
 
         if ($entity->isNew() || $entity->isAttributeChanged("private")) {
             $entity->set('path', $this->setPath($entity));
@@ -79,6 +85,11 @@ class AssetEntity extends AbstractListener
             $attachmentService->changeAccess($entity);
             $this->getService("AssetVariant")->rebuildPath($entity);
         }
+
+        //rename file
+        if ($entity->isAttributeChanged("nameOfFile")) {
+            $attachmentService->changeName($entity->get('image') ?? $entity->get('file'), $entity->get('nameOfFile'), $entity);
+        }
     }
 
     /**
@@ -86,12 +97,15 @@ class AssetEntity extends AbstractListener
      *
      * @return $this
      */
-    protected function setFileInfo(Entity $entity)
+    protected function getImageInfo(Entity $entity)
     {
         $service = $this->getService('Attachment');
 
-        if ($fileId = $this->getImageId($entity)) {
-            $imageInfo = $service->getImageInfo($this->getImageId($entity));
+        $attachment = $entity->get("image") ?? $entity->get("file");
+
+        if ($attachment) {
+            $imageInfo = $service->getImageInfo($attachment);
+            $metaData = $service->getFileMetaData($attachment);
 
             $entity->set([
                 "size" => round($imageInfo['size'] / 1024, 1),
@@ -102,6 +116,7 @@ class AssetEntity extends AbstractListener
                 "colorSpace" => $imageInfo['color_space'] ?? null,
                 "colorDepth" => $imageInfo['color_depth'] ?? null,
                 "orientation" => $imageInfo['orientation'] ?? null,
+                "metaData" => json_encode($metaData)
             ]);
         }
 
@@ -138,26 +153,6 @@ class AssetEntity extends AbstractListener
         }
 
         return $entity->get('hasChild');
-    }
-
-    /**
-     * @param $entity
-     *
-     * @return string|null
-     */
-    private function getImageId($entity): ?string
-    {
-        $type = $entity->get("type");
-
-        switch (true) {
-            case $type == "Image":
-                $id = $entity->get('imageId');
-                break;
-            default:
-                $id = $entity->get('fileId');
-        }
-
-        return $id;
     }
 
     /**

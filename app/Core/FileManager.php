@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Dam\Core;
 
+use Espo\Core\Exceptions\Error;
 use Treo\Core\Utils\File\Manager;
 
 class FileManager extends Manager
@@ -39,5 +41,27 @@ class FileManager extends Manager
         }
 
         return $res;
+    }
+
+    /**
+     * @param string $path
+     * @param string $newName
+     * @return bool
+     * @throws Error
+     */
+    public function renameFile(string $path, string $newName): bool
+    {
+        if (!file_exists($path)) {
+            throw new Error("File not found");
+        }
+
+        $pathInfo = pathinfo($path);
+        $newPath = $pathInfo['dirname'] . "/{$newName}";
+
+        if ($this->checkCreateFile($newPath) === false) {
+            throw new Error('Permission denied for ' . $newPath);
+        }
+
+        return rename($path, $newPath);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-
+declare(strict_types=1);
 namespace Dam\Core\Validation;
 
 use Espo\Core\Exceptions\BadRequest;
@@ -28,7 +28,7 @@ class Validator
     {
         $className = $this->getMetadata()->get(['app', 'config', 'validations', 'classMap', $validatorName]);
 
-        if (!class_exists($className)) {
+        if (!$className || !class_exists($className)) {
             $className = __NAMESPACE__ . "\\Items\\" . ucfirst($validatorName);
         }
 

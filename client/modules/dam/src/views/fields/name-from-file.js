@@ -51,7 +51,7 @@ Espo.define('dam:views/fields/name-from-file', 'views/fields/varchar',
 
             name = name.split('.');
             name.pop();
-            return name.join('.').replace("_", " ");
+            return name.join('.');
         }
     })
 );

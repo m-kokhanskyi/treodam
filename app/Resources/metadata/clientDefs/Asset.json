@@ -13,6 +13,16 @@
   "iconClass"           : "fas fa-archive",
   "dynamicLogic"        : {
     "fields": {
+      "type": {
+        "readOnly": {
+          "conditionGroup": [
+            {
+              "type": "isNotEmpty",
+              "attribute": "id"
+            }
+          ]
+        }
+      },
       "height"     : {
         "visible": {
           "conditionGroup": [

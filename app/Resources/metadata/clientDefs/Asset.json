@@ -1,6 +1,6 @@
 {
-  "controller"          : "controllers/record",
-  "boolFilterList"      : [
+  "controller": "dam:controllers/asset",
+  "boolFilterList": [
     "onlyMy",
     "notSelectAssets"
   ],
@@ -8,7 +8,54 @@
     "notSelectAssets"
   ],
   "views": {
-    "list": "dam:views/asset/list"
+    "list": "dam:views/asset/list",
+    "plate": "dam:views/asset/plate"
+  },
+  "recordViews": {
+    "plate": "dam:views/asset/record/plate",
+    "plateItem": "dam:views/asset/record/plate-item"
+  },
+  "menu": {
+    "list": {
+      "buttons": [
+        {
+          "acl": "read",
+          "label": "",
+          "link": "#Asset/list",
+          "style": "primary",
+          "title": "List",
+          "iconHtml": "<span class=\"fa fa-list\"></span>"
+        },
+        {
+          "acl": "read",
+          "label": "",
+          "link": "#Asset/plate",
+          "style": "default",
+          "title": "Plate",
+          "iconHtml": "<span class=\"fa fa-th\"></span>"
+        }
+      ]
+    },
+    "plate": {
+      "buttons": [
+        {
+          "acl": "read",
+          "label": "",
+          "link": "#Asset/list",
+          "style": "default",
+          "title": "List",
+          "iconHtml": "<span class=\"fa fa-list\"></span>"
+        },
+        {
+          "acl": "read",
+          "label": "",
+          "link": "#Asset/plate",
+          "style": "primary",
+          "title": "Plate",
+          "iconHtml": "<span class=\"fa fa-th\"></span>"
+        }
+      ]
+    }
   },
   "iconClass"           : "fas fa-archive",
   "dynamicLogic"        : {

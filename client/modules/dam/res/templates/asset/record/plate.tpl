@@ -1,10 +1,10 @@
 {{#if collection.models.length}}
 <div class="list">
-	<div class="row">
+	<div>
 		<div class="col-xs-12 plate">
 			<div class="row">
 				{{#each rowList}}
-					<div class="col-xs-6 col-sm-3 item-container" data-id="{{./this}}">
+					<div class="col-xs-6 col-sm-4 col-md-3 item-container" data-id="{{./this}}">
 						{{{var this ../this}}}
 					</div>
 				{{/each}}
@@ -28,7 +28,7 @@
 
 <style>
 	.plate {
-		padding: 0 25px;
+		padding: 0 15px;
 	}
 	.item-container {
 		margin-bottom: 17px;

@@ -5,7 +5,7 @@
 	</div>
 	<div class="actions">{{{rowActions}}}</div>
 	<div class="field-preview">
-		<img src="?entryPoint=preview&size=small&id={{model.id}}&v={{model.attributes.modifiedAt}}" alt="">
+		<img src="?entryPoint=preview&size=small&id={{model.id}}&v={{version}}" alt="">
 	</div>
 	<div class="field-name">
 		<a href="#{{model.name}}/view/{{model.id}}" class="link" data-id="{{model.id}}" title="{{model.attributes.name}}">{{model.attributes.name}}</a>

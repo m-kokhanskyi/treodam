@@ -8,6 +8,9 @@
 		<img src="?entryPoint=preview&size=small&id={{model.id}}&v={{version}}" alt="">
 	</div>
 	<div class="field-name">
+		<span class="record-checkbox-container">
+			<input type="checkbox" class="record-checkbox" data-id="{{model.id}}">
+		</span>
 		<a href="#{{model.name}}/view/{{model.id}}" class="link" data-id="{{model.id}}" title="{{model.attributes.name}}">{{model.attributes.name}}</a>
 	</div>
 </div>
@@ -18,6 +21,9 @@
 		height: 200px;
 		border: 1px solid #e8eced;
 		position: relative;
+	}
+	.plate-item.active {
+		background-color: #e8eced
 	}
 	.plate-item .field-type {
 		display: inline-block;
@@ -41,7 +47,7 @@
 		position: absolute;
 		bottom: 10px;
 		left: 0;
-		padding: 0 10px;
+		padding: 0 10px 0 25px;
 		text-align: center;
 		white-space: nowrap;
 		overflow: hidden;
@@ -58,6 +64,9 @@
 	.plate-item .field-preview img {
 		max-height: 100%;
 		max-width: 100%;
+		background-image: linear-gradient(45deg, #cccccc 25%, transparent 25%), linear-gradient(-45deg, #cccccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #cccccc 75%), linear-gradient(-45deg, transparent 75%, #cccccc 75%);
+		background-size: 20px 20px;
+		background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 	}
 	.plate-item .actions {
 		color: #999999;
@@ -65,5 +74,14 @@
 		position: absolute;
 		top: 6px;
 		right: 0;
+	}
+	.plate-item .record-checkbox-container {
+		display: inline-block;
+		position: absolute;
+		left: 10px;
+		top: 0;
+	}
+	.plate-item .record-checkbox-container input {
+		cursor: pointer;
 	}
 </style>

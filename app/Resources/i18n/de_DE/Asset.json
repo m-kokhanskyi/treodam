@@ -1,6 +1,7 @@
 {
   "labels": {
-    "Create Asset": "Asset erstellen"
+    "Create Asset": "Asset erstellen",
+    "sort": "Sortieren"
   },
   "exceptions": {
     "Code is invalid": "Code ist ungültig. Der Code sollte eindeutig sein. Es werden nur Buchstaben, Zahlen und Zeichen \"_\" erwartet.",

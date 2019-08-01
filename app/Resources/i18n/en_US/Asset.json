@@ -4,5 +4,8 @@
     },
     "links": {
         "assetVariants1": "AssetVariants1"
+    },
+    "labels": {
+        "sort": "Sort"
     }
 }

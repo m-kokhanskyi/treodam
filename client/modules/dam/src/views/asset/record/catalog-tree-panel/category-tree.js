@@ -46,17 +46,19 @@ Espo.define('dam:views/asset/record/catalog-tree-panel/category-tree', 'view',
                 this.selectCategory($(e.currentTarget).data('id'));
             }
         },
-        
+
         data() {
             return {
                 catalog: this.options.catalog,
-                rootCategoriesList: this.getRootCategoriesList()
+                rootCategoriesList: this.getRootCategoriesList(),
+                hash: this.getRandomHash()
             }
         },
 
         setup() {
             this.categories = this.options.categories || [];
-            this.rootCategories = this.categories.filter(category => (category.categoryParentId === null));
+            this.catalog = this.options.catalog;
+            this.rootCategories = this.categories.filter(category => (this.catalog.assetCategoriesIds || []).includes(category.id));
         },
 
         selectCategory(id) {

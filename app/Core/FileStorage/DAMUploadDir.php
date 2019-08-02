@@ -19,9 +19,7 @@ class DAMUploadDir extends UploadDir
 {
     const PRIVATE_PATH = 'data/dam/private/';
     const PUBLIC_PATH = 'data/dam/public/';
-
-    const PRIVATE_THUMB_PATH = "data/dam/private/thumbs/";
-    const PUBLIC_THUMB_PATH = "data/dam/public/thumbs/";
+    const DAM_THUMB_PATH = 'data/dam/thumbs/';
 
     public function __construct()
     {
@@ -35,8 +33,7 @@ class DAMUploadDir extends UploadDir
     public static function thumbsFolderList()
     {
         return [
-            self::PUBLIC_THUMB_PATH,
-            self::PRIVATE_THUMB_PATH,
+            self::DAM_THUMB_PATH,
             self::BASE_THUMB_PATH
         ];
     }

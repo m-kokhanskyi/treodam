@@ -3,9 +3,12 @@
         "name": "assetCategories"
     },
     {
-        "name": "assetVariants"
+        "name": "assetVariations"
     },
     {
         "name": "assetVersions"
+    },
+    {
+        "name": "assetMetaDatas"
     }
 ]

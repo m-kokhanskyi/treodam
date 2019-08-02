@@ -7,7 +7,11 @@
     }
   ],
   "require": {
-    "treolabs/treocore": "~3.21.0"
+    "treolabs/treocore": "~3.21.0",
+    "ext-gd": "*",
+    "ext-exif": "*",
+    "ext-imagick": "*",
+    "gumlet/php-image-resize" : "1.9.2"
   },
   "autoload": {
     "psr-4": {

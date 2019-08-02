@@ -1,5 +1,15 @@
 {
   "fields": {
+    "collection": {
+      "type": "link"
+    },
+    "assetMetaDatas": {
+      "type": "linkMultiple",
+      "layoutDetailDisabled": true,
+      "layoutMassUpdateDisabled": true,
+      "noLoad": true,
+      "importDisabled": true
+    },
     "assetVersions": {
       "type": "linkMultiple",
       "layoutDetailDisabled": true,
@@ -27,7 +37,7 @@
       "required": true,
       "trim": true,
       "isMultilang": true,
-      "view" : "dam:views/fields/name-from-file"
+      "view": "dam:views/fields/name-from-file"
     },
     "nameOfFile": {
       "type": "varchar",
@@ -92,7 +102,8 @@
       "fontSize": 1,
       "options": [
         "File",
-        "Image"
+        "Image",
+        "PDF"
       ],
       "optionColors": {
         "File": "fff",
@@ -181,6 +192,18 @@
     }
   },
   "links": {
+    "collection": {
+      "type": "belongsTo",
+      "foreign": "assets",
+      "entity": "Collection",
+      "audited": false
+    },
+    "assetMetaDatas": {
+      "type": "hasMany",
+      "foreign": "asset",
+      "entity": "AssetMetaData",
+      "audited": false
+    },
     "assetVersions": {
       "type": "hasMany",
       "foreign": "asset",

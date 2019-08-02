@@ -38,14 +38,31 @@ class Asset extends AbstractSelectManager
             $result['whereClause'][] = [
                 "id!=s" => [
                     "selectParams" => [
-                        "select"      => ['asset_category_asset.asset_id'],
-                        "customJoin"  => "JOIN asset_category_asset ON asset_category_asset.asset_id = asset.id",
+                        "select" => ['asset_category_asset.asset_id'],
+                        "customJoin" => "JOIN asset_category_asset ON asset_category_asset.asset_id = asset.id",
                         "whereClause" => [
                             'asset_category_asset.asset_category_id' => (string)$value,
-                            'asset_category_asset.deleted'           => 0,
+                            'asset_category_asset.deleted' => 0,
                         ],
                     ],
                 ],
+            ];
+        }
+    }
+
+    protected function boolFilterLinkedWithAssetCategory(&$result)
+    {
+        // prepare category
+        $category = $this
+            ->getEntityManager()
+            ->getEntity('AssetCategory', (string)$this->getBoolData('linkedWithAssetCategory'));
+
+        if (!empty($category)) {
+            // get category tree products
+            $products = $category->getTreeAssets();
+
+            $result['whereClause'][] = [
+                'id' => count($products > 0) ? array_column($products->toArray(), 'id') : []
             ];
         }
     }

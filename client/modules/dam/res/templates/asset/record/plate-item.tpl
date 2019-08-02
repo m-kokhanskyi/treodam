@@ -5,7 +5,7 @@
 	</div>
 	<div class="actions">{{{rowActions}}}</div>
 	<div class="field-preview">
-		<img src="?entryPoint=preview&size=small&id={{model.id}}&v={{version}}" alt="">
+		<img src="?entryPoint=preview&size=large&id={{model.id}}&v={{version}}" alt="">
 	</div>
 	<div class="field-name">
 		<span class="record-checkbox-container">

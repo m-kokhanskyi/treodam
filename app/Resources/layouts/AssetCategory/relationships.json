@@ -1,5 +1,8 @@
 [
-    {
-        "name": "assets"
-    }
+  {
+    "name": "assets"
+  },
+  {
+    "name": "collections"
+  }
 ]

@@ -22,7 +22,9 @@ declare(strict_types=1);
 
 namespace Dam\Repositories;
 
+use Espo\Core\Exceptions\Error;
 use \Espo\Core\Templates\Repositories\Base;
+use Espo\ORM\EntityCollection;
 
 class AssetCategory extends Base
 {

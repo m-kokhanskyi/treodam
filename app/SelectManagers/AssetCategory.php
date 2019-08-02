@@ -55,8 +55,8 @@ class AssetCategory extends AbstractSelectManager
         $result['whereClause'][] = [
             "id!=s" => [
                 "selectParams" => [
-                    "select"      => ['asset_category_asset.asset_category_id'],
-                    "customJoin"  => "JOIN asset_category_asset ON asset_category_asset.asset_category_id = asset_category.id",
+                    "select" => ['asset_category_asset.asset_category_id'],
+                    "customJoin" => "JOIN asset_category_asset ON asset_category_asset.asset_category_id = asset_category.id",
                     "whereClause" => [
                         'asset_category_asset.deleted' => 0,
                     ],
@@ -74,11 +74,11 @@ class AssetCategory extends AbstractSelectManager
             $result['whereClause'][] = [
                 "id!=s" => [
                     "selectParams" => [
-                        "select"      => ['asset_category_asset.asset_category_id'],
-                        "customJoin"  => "JOIN asset_category_asset ON asset_category_asset.asset_category_id = asset_category.id",
+                        "select" => ['asset_category_asset.asset_category_id'],
+                        "customJoin" => "JOIN asset_category_asset ON asset_category_asset.asset_category_id = asset_category.id",
                         "whereClause" => [
                             'asset_category_asset.asset_id' => (string)$value,
-                            'asset_category_asset.deleted'  => 0,
+                            'asset_category_asset.deleted' => 0,
                         ],
                     ],
                 ],
@@ -106,6 +106,35 @@ class AssetCategory extends AbstractSelectManager
         $result['whereClause'][] = [
             'hasChild' => 0,
         ];
+    }
+
+    protected function boolFilterOnlyRoot(&$result)
+    {
+        $result['whereClause'][] = [
+            'categoryParentId' => null
+        ];
+    }
+
+    protected function boolFilterByCollection(&$result)
+    {
+        if ($value = $this->getBoolData('byCollection')) {
+            // get catalog
+            $collection = $this
+                ->getEntityManager()
+                ->getEntity('Collection', (string)$value);
+
+            if (!empty($collection) && !empty($categories = $collection->get('assetCategories')->toArray())) {
+                // prepare where
+                $where[] = ['id' => array_column($categories, 'id')];
+                foreach ($categories as $category) {
+                    $where[] = ['categoryRoute*' => "%|" . $category['id'] . "|%"];
+                }
+
+                $result['whereClause'][] = ['OR' => $where];
+            } else {
+                $result['whereClause'][] = ['id' => -1];
+            }
+        }
     }
 
 }

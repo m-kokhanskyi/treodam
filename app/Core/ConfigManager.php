@@ -66,6 +66,7 @@ class ConfigManager
         foreach ($rules as $variationCode => $rule) {
             $res[$variationCode] = array_merge($config['variations'][$variationCode] ?? [], $rule);
             $res[$variationCode]['validations'] = array_merge($config['variations'][$variationCode]['validations'] ?? [], $rule['validations']);
+            $res[$variationCode]['handlers'] = array_merge($config['variations'][$variationCode]['handlers'] ?? [], $rule['handlers'] ?? []);
         }
 
         return $res;

@@ -1,5 +1,13 @@
 {
   "fields": {
+    "collections": {
+      "type": "linkMultiple",
+      "layoutDetailDisabled": true,
+      "layoutMassUpdateDisabled": true,
+      "importDisabled": true,
+      "noLoad": true,
+      "isCustom": true
+    },
     "categoryRoute": {
       "type": "varchar",
       "required": false,
@@ -100,6 +108,14 @@
     }
   },
   "links": {
+    "collections": {
+      "type": "hasMany",
+      "relationName": "collectionAssetCategory",
+      "foreign": "assetCategories",
+      "entity": "Collection",
+      "audited": false,
+      "isCustom": true
+    },
     "createdBy": {
       "type": "belongsTo",
       "entity": "User"

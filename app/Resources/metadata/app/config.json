@@ -28,13 +28,15 @@
         "variations": {
           "low-quality": {
             "auto": false,
-            "params": {
-              "quality": 20
+            "handlers": {
+              "quality": {
+                "params": {
+                  "quality": 25
+                }
+              }
             }
           },
           "200x200": {
-            "params": {
-            },
             "validations": {
               "size": 1
             }
@@ -46,7 +48,10 @@
         "validations": {
           "extension": [
             "pdf"
-          ]
+          ],
+          "unique": {
+            "skip": true
+          }
         },
         "variations": {
           "web": {}
@@ -56,13 +61,17 @@
         "natural": "image",
         "validations": {
           "unique": {
-            "skip" : true
+            "skip": true
           },
           "extension": [
             "png",
             "jpg",
             "jpeg"
           ]
+        },
+        "variations": {
+          "200x200": {},
+          "low-quality": {}
         }
       },
       "file": {
@@ -88,9 +97,12 @@
     "low-quality": {
       "auto": true,
       "private": false,
-      "class": "Dam\\...",
-      "params": {
-        "quality": 25
+      "handlers": {
+        "quality": {
+          "params": {
+            "quality": 25
+          }
+        }
       },
       "validations": {
         "size": 1
@@ -98,25 +110,28 @@
     },
     "200x200": {
       "auto": true,
-      "private": "asset",
-      "class": "Dam\\...",
+      "handlers": {
+        "resize": {
+          "params": {
+            "width": 200,
+            "height": 200
+          }
+        },
+        "quality": {
+          "params": {
+            "quality": 10
+          }
+        }
+      },
       "validations": {
         "dimension": {
           "minWidth": 200,
           "minHeight": 200
         }
-      },
-      "params": {
-        "width": 200,
-        "height": 200
       }
     },
     "web": {
-      "auto": false,
-      "class": "Dam\\..."
+      "auto": false
     }
-  },
-  "validations": {
-    "classMap": {}
   }
 }

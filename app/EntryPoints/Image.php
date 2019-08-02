@@ -152,7 +152,7 @@ class Image extends \Treo\EntryPoints\Image
             }
         }
 
-        $path = isset($isPrivate) ? ($isPrivate ? DAMUploadDir::PRIVATE_THUMB_PATH : DAMUploadDir::PUBLIC_THUMB_PATH) : DAMUploadDir::BASE_THUMB_PATH;
+        $path = isset($isPrivate) ? DAMUploadDir::DAM_THUMB_PATH : DAMUploadDir::BASE_THUMB_PATH;
 
         return $path . $attachment->get('storageFilePath') . "/{$size}/" . $attachment->get('name');
     }

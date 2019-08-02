@@ -81,17 +81,6 @@ class Attachment extends \Espo\Services\Attachment
 
     /**
      * @param $attachment
-     * @return array
-     */
-    public function getFileMetaData($attachment)
-    {
-        $path = $this->getPath($attachment);
-
-        return exif_read_data($path);
-    }
-
-    /**
-     * @param $attachment
      *
      * @return mixed
      * @throws \Espo\Core\Exceptions\BadRequest
@@ -247,6 +236,41 @@ class Attachment extends \Espo\Services\Attachment
     public function changeName(\Dam\Entities\Attachment $attachment, string $newName, Entity $entity = null)
     {
         return $this->getRepository()->renameFile($attachment, $newName, $entity);
+    }
+
+    /**
+     * @param \Dam\Entities\Attachment $attachment
+     * @return array|mixed
+     * @throws Error
+     * @throws \ImagickException
+     */
+    public function getFileMetaData(\Dam\Entities\Attachment $attachment)
+    {
+        $mime = $attachment->get('type');
+        $meta = [];
+
+        switch (true) {
+            case (stripos($mime, "image") !== false):
+                $meta = $this->getImageMeta($attachment);
+                break;
+        }
+
+        return $meta;
+    }
+
+    /**
+     * @param \Dam\Entities\Attachment $attachment
+     * @return array
+     * @throws Error
+     * @throws \ImagickException
+     */
+    public function getImageMeta(\Dam\Entities\Attachment $attachment)
+    {
+        $path = $this->getFileStorageManager()->getLocalFilePath($attachment);
+
+        $imagick = new \Imagick();
+        $imagick->readImage($path);
+        return $imagick->getImageProperties();
     }
 
     /**

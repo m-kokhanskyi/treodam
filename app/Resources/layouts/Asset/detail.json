@@ -27,6 +27,12 @@
                 {
                     "name": "code"
                 }
+            ],
+            [
+                {
+                    "name" : "collection"
+                },
+                false
             ]
         ],
         "style": "default",

@@ -23,6 +23,9 @@ Espo.define('dam:views/asset/record/panels/asset_category', 'views/record/panels
         boolFilterData: {
             notSelectCategories: function () {
                 return this.model.id;
+            },
+            byCollection : function () {
+                return this.model.attributes.collectionId;
             }
         },
         

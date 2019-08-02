@@ -50,7 +50,7 @@ Espo.define('dam:views/asset/record/catalog-tree-panel/category-search', 'view',
                                 firstParentId = category.categoryRoute.split('|').find(element => element);
                             }
                             this.options.catalogs.forEach(catalog => {
-                                if ((catalog.categoriesIds || []).includes(category.id) || (firstParentId && (catalog.categoriesIds || []).includes(firstParentId))) {
+                                if ((catalog.assetCategoriesIds || []).includes(category.id) || (firstParentId && (catalog.assetCategoriesIds || []).includes(firstParentId))) {
                                     let modifiedItem = Espo.Utils.cloneDeep(category);
                                     modifiedItem.value = catalog.name + ' > ' + modifiedItem.name;
                                     modifiedItem.catalogId = catalog.id;

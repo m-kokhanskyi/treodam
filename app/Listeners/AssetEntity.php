@@ -28,6 +28,7 @@ use Dam\Listeners\Traits\ValidateCode;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\ORM\Entity;
+use PDO;
 use Treo\Core\EventManager\Event;
 use Treo\Listeners\AbstractListener;
 
@@ -93,6 +94,76 @@ class AssetEntity extends AbstractListener
     }
 
     /**
+     * @param Event $event
+     */
+    public function afterSave(Event $event)
+    {
+        /** @var $entity Asset */
+        $entity = $event->getArgument("entity");
+        $assetService = $this->getService($entity->getEntityType());
+//
+//        //create variations
+//        if ($entity->isSaved()) {
+//            $assetService->createVariations($entity);
+//        }
+
+        //get meta data
+        if ($this->changeAttachment($entity)) {
+            $assetService->updateMetaData($entity);
+        }
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @throws BadRequest
+     */
+    public function beforeRelate(Event $event)
+    {
+        $foreign = $event->getArgument('foreign');
+        $entity = $event->getArgument('entity');
+
+        if ($this->isLast($event, $foreign)) {
+            throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
+        }
+
+        if ($this->isCollectionCatalog($entity, $foreign)) {
+            throw new BadRequest($this->getLanguage()->translate("Category is not set in collection", 'exceptions', 'Global'));
+        }
+    }
+
+    /**
+     * @param $entity
+     * @param $foreign
+     * @throws BadRequest
+     */
+    protected function isCollectionCatalog($entity, $foreign)
+    {
+        $collection = $entity->get('collection');
+
+        $route = $foreign->get('categoryRoute');
+        $routeEl = array_filter(explode("|", $route ?? ''), function ($item) {
+            return !empty($item);
+        });
+
+        if (!$this->isCorrectCategory($collection->id, $routeEl)) {
+            throw new BadRequest("Incorrect catalog");
+        }
+    }
+
+    protected function isCorrectCategory($collectionId, $categories): bool
+    {
+        $pdo = $this->getEntityManager()->getPDO();
+
+        $sql = "SELECT 1 FROM collection_asset_category WHERE asset_category_id IN ('" . implode("','", $categories) . "') AND collection_id = '{$collectionId}'";
+
+        $prepare = $pdo->query($sql);
+        $res = $prepare->fetch(PDO::FETCH_ASSOC);
+
+        return $res ? true : false;
+    }
+
+    /**
      * @param Entity $entity
      *
      * @return $this
@@ -105,7 +176,6 @@ class AssetEntity extends AbstractListener
 
         if ($attachment) {
             $imageInfo = $service->getImageInfo($attachment);
-            $metaData = $service->getFileMetaData($attachment);
 
             $entity->set([
                 "size" => round($imageInfo['size'] / 1024, 1),
@@ -115,26 +185,11 @@ class AssetEntity extends AbstractListener
                 "height" => $imageInfo['height'] ?? null,
                 "colorSpace" => $imageInfo['color_space'] ?? null,
                 "colorDepth" => $imageInfo['color_depth'] ?? null,
-                "orientation" => $imageInfo['orientation'] ?? null,
-                "metaData" => json_encode($metaData)
+                "orientation" => $imageInfo['orientation'] ?? null
             ]);
         }
 
         return $this;
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @throws BadRequest
-     */
-    public function beforeRelate(Event $event)
-    {
-        $entity = $event->getArgument('foreign');
-
-        if ($this->isLast($event, $entity)) {
-            throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
-        }
     }
 
     /**

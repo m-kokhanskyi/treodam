@@ -1,0 +1,36 @@
+[
+    {
+        "rows": [
+            [
+                {
+                    "name": "name"
+                },
+                {
+                    "name": "type"
+                }
+            ],
+            [
+                {
+                    "name": "fileName"
+                },
+                {
+                    "name": "private"
+                }
+            ],
+            [
+                false,
+                {
+                    "name": "file"
+                }
+            ],
+            [
+                false,
+                {
+                    "name": "image"
+                }
+            ]
+        ],
+        "style": "default",
+        "label": ""
+    }
+]

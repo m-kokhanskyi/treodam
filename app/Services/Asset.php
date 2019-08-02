@@ -25,6 +25,7 @@ namespace Dam\Services;
 use Dam\Core\ConfigManager;
 use Dam\Core\FileManager;
 use Espo\Core\Templates\Services\Base;
+use Espo\Core\Utils\Log;
 
 /**
  * Class Asset
@@ -37,6 +38,8 @@ class Asset extends Base
         parent::__construct();
 
         $this->addDependency("DAMFileManager");
+        $this->addDependency("ConfigManager");
+        $this->addDependency('log');
     }
 
     /**
@@ -54,11 +57,58 @@ class Asset extends Base
         return $this->getServiceFactory()->create("AssetVersion")->createEntity($attachment);
     }
 
+    public function createVariations(\Dam\Entities\Asset $asset)
+    {
+        $config = $this->getConfigManager()->get([ConfigManager::getType($asset->get("type")), "variations"]);
+
+        foreach ($config ?? [] as $variationCode => $variationProps) {
+            if ($variationProps['auto']) {
+
+                //TODO add validation
+
+                foreach ($variationProps['handlers'] ?? [] as $handlerCode => $handlerProps) {
+                    $class = $handlerProps['class'] ?? \Dam\Core\Variations\Base::getClass($handlerCode);
+
+                    if (class_exists($class) && is_a($class, \Dam\Core\Variations\Base::class, true)) {
+                        $class::init($variationCode, $this->getEntityManager()->getContainer(), $asset)->create();
+                    } else {
+                        $this->getLog()->addWarning("Class '{$class}' not found or not implement Base class");
+                    }
+                }
+            }
+        }
+    }
+
+    public function updateMetaData(\Dam\Entities\Asset $asset)
+    {
+        $attachment = $asset->get('image') ?? $asset->get('file');
+
+        $metaData = $this->getServiceFactory()->create("Attachment")->getFileMetaData($attachment);
+
+        return $this->getServiceFactory()->create("AssetMetaData")->insertData($asset->id, $metaData);
+    }
+
     /**
      * @return FileManager
      */
     protected function getFileManager(): FileManager
     {
         return $this->getInjection("DAMFileManager");
+    }
+
+    /**
+     * @return ConfigManager
+     */
+    protected function getConfigManager(): ConfigManager
+    {
+        return $this->getInjection("ConfigManager");
+    }
+
+    /**
+     * @return Log
+     */
+    protected function getLog(): Log
+    {
+        return $this->getInjection("log");
     }
 }

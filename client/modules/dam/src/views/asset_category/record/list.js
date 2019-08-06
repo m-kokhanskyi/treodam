@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-Espo.define('dam:views/asset_category/record/list', 'pim:views/record/list',
+Espo.define('dam:views/asset_category/record/list', 'dam:views/record/list',
     Dep => Dep.extend({
 
         setup() {

@@ -22,8 +22,93 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
-use \Espo\Core\Templates\Services\Base;
+use Dam\Core\ConfigManager;
+use Dam\Core\FileManager;
+use Espo\Core\Templates\Services\Base;
+use Espo\Core\Utils\Log;
 
+/**
+ * Class Asset
+ * @package Dam\Services
+ */
 class Asset extends Base
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->addDependency("DAMFileManager");
+        $this->addDependency("ConfigManager");
+        $this->addDependency('log');
+    }
+
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @return mixed
+     */
+    public function createVersion(\Dam\Entities\Asset $asset)
+    {
+        $natural = ConfigManager::getType($asset->getFetched("type"));
+
+        $attachmentId = $natural === "image" ? $asset->getFetched("imageId") : $asset->getFetched("fileId");
+
+        $attachment = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
+
+        return $this->getServiceFactory()->create("AssetVersion")->createEntity($attachment);
+    }
+
+    public function createVariations(\Dam\Entities\Asset $asset)
+    {
+        $config = $this->getConfigManager()->get([ConfigManager::getType($asset->get("type")), "variations"]);
+
+        foreach ($config ?? [] as $variationCode => $variationProps) {
+            if ($variationProps['auto']) {
+
+                //TODO add validation
+
+                foreach ($variationProps['handlers'] ?? [] as $handlerCode => $handlerProps) {
+                    $class = $handlerProps['class'] ?? \Dam\Core\Variations\Base::getClass($handlerCode);
+
+                    if (class_exists($class) && is_a($class, \Dam\Core\Variations\Base::class, true)) {
+                        $class::init($variationCode, $this->getEntityManager()->getContainer(), $asset)->create();
+                    } else {
+                        $this->getLog()->addWarning("Class '{$class}' not found or not implement Base class");
+                    }
+                }
+            }
+        }
+    }
+
+    public function updateMetaData(\Dam\Entities\Asset $asset)
+    {
+        $attachment = $asset->get('image') ?? $asset->get('file');
+
+        $metaData = $this->getServiceFactory()->create("Attachment")->getFileMetaData($attachment);
+
+        return $this->getServiceFactory()->create("AssetMetaData")->insertData($asset->id, $metaData);
+    }
+
+    /**
+     * @return FileManager
+     */
+    protected function getFileManager(): FileManager
+    {
+        return $this->getInjection("DAMFileManager");
+    }
+
+    /**
+     * @return ConfigManager
+     */
+    protected function getConfigManager(): ConfigManager
+    {
+        return $this->getInjection("ConfigManager");
+    }
+
+    /**
+     * @return Log
+     */
+    protected function getLog(): Log
+    {
+        return $this->getInjection("log");
+    }
 }

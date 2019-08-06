@@ -1,0 +1,15 @@
+{
+    "fields": {
+        "path": "Path",
+        "info": "Info",
+        "assets": "Assets",
+        "asset": "Asset"
+    },
+    "links": {
+        "assets": "Assets",
+        "asset": "Asset"
+    },
+    "labels": {
+        "Create AssetVersion": "Create AssetVersion"
+    }
+}

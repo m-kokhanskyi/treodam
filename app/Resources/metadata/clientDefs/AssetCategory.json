@@ -1,63 +1,66 @@
 {
-  "controller"          : "dam:controllers/record-tree",
-  "boolFilterList"      : [
+  "controller": "dam:controllers/record-tree",
+  "boolFilterList": [
     "onlyMy",
     "notEntity",
     "notAttachment",
     "notChildCategory",
     "onlyChildCategory",
-    "notSelectCategories"
+    "notSelectCategories",
+    "onlyRoot",
+    "byCollection"
   ],
   "hiddenBoolFilterList": [
     "notEntity",
     "notAttachment",
     "notChildCategory",
     "onlyChildCategory",
-    "notSelectCategories"
+    "notSelectCategories",
+    "onlyRoot",
+    "byCollection"
   ],
-  "iconClass"           : "fas fa-layer-group",
-  "recordViews"         : {
-    "list"    : "dam:views/asset_category/record/list",
+  "iconClass": "fas fa-layer-group",
+  "recordViews": {
+    "list": "dam:views/asset_category/record/list",
     "listTree": "dam:views/asset_category/record/list-tree",
-    "detail"  : "dam:views/asset_category/record/detail"
+    "detail": "dam:views/asset_category/record/detail"
   },
-  "views"               : {
-    "list"  : "dam:views/asset_category/list",
+  "views": {
+    "list": "dam:views/asset_category/list",
     "detail": "dam:views/asset_category/detail"
   },
-  "menu"                : {
+  "menu": {
     "listTree": {
       "buttons": [
         {
           "label": "List View",
-          "link" : "#AssetCategory",
-          "acl"  : "read",
+          "link": "#AssetCategory",
+          "acl": "read",
           "style": "default"
         }
       ]
     },
-    "list"    : {
+    "list": {
       "buttons": [
         {
           "label": "Tree View",
-          "link" : "#AssetCategory/listTree",
-          "acl"  : "read",
+          "link": "#AssetCategory/listTree",
+          "acl": "read",
           "style": "default"
         }
       ]
     }
   },
-  "relationshipPanels"  : {
+  "relationshipPanels": {
     "assets": {
       "selectBoolFilterList": [
-        "onlyMaster",
         "notSelectAssets"
       ],
-      "view"                : "dam:views/asset_category/record/panels/assets",
-      "selectAction"        : "selectRelatedEntity"
+      "view": "dam:views/asset_category/record/panels/assets",
+      "selectAction": "selectRelatedEntity"
     }
   },
-  "dynamicLogic"        : {
+  "dynamicLogic": {
     "panels": {
       "assets": {
         "visible": {
@@ -65,6 +68,16 @@
             {
               "type": "isFalse",
               "attribute": "hasChild"
+            }
+          ]
+        }
+      },
+      "collections": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "isEmpty",
+              "attribute": "categoryParentId"
             }
           ]
         }

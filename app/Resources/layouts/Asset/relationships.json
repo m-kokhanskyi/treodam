@@ -1,5 +1,14 @@
 [
     {
         "name": "assetCategories"
+    },
+    {
+        "name": "assetVariations"
+    },
+    {
+        "name": "assetVersions"
+    },
+    {
+        "name": "assetMetaDatas"
     }
 ]

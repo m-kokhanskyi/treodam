@@ -12,6 +12,22 @@
                     "name": "code",
                     "fullWidth": true
                 }
+            ],
+            [
+                {
+                    "name": "type"
+                }
+            ],
+            [
+                {
+                    "name": "image"
+                },
+                {
+                    "name": "file"
+                },
+                {
+                    "name": "private"
+                }
             ]
         ],
         "style": "default",

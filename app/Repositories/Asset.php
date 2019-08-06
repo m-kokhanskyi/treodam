@@ -22,13 +22,24 @@ declare(strict_types=1);
 
 namespace Dam\Repositories;
 
+use Dam\Core\DAMAttachment;
+use Dam\Core\FilePathBuilder;
+use Dam\Core\FileStorage\DAMUploadDir;
 use \Espo\Core\Templates\Repositories\Base;
+use Espo\ORM\Entity;
 
 /**
  * Class Asset
  *
  * @package Dam\Repositories
  */
-class Asset extends Base
+class Asset extends Base implements DAMAttachment
 {
+    public function buildPath(Entity $entity): array
+    {
+        return [
+            ($entity->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/",
+            $entity->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC
+        ];
+    }
 }

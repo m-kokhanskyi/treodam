@@ -1,6 +1,13 @@
 {
   "implementationClassNameMap": {
-    "DAMStorage": "\\Dam\\Core\\FileStorage\\DAMStorage"
+    "DAMUploadDir": "\\Dam\\Core\\FileStorage\\DAMUploadDir"
   },
-  "folderDepth" : 3
+  "public": {
+    "folderDepth": 3,
+    "folderNameLength": 2
+  },
+  "private": {
+    "folderDepth": 3,
+    "folderNameLength": 2
+  }
 }

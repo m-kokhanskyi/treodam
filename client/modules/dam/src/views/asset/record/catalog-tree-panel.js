@@ -185,7 +185,7 @@ Espo.define('dam:views/asset/record/catalog-tree-panel', 'view',
             let data = {};
             if (type === 'isEmpty') {
                 data.advanced = {
-                    productCategories: {
+                    assetCategories: {
                         type: 'isNotLinked',
                         data: {
                             type: type
@@ -194,15 +194,15 @@ Espo.define('dam:views/asset/record/catalog-tree-panel', 'view',
                 };
             } else if (type === 'anyOf' && category) {
                 data.bool = {
-                    linkedWithCategory: true
+                    linkedWithAssetCategory: true
                 };
                 data.boolData = {
-                    linkedWithCategory: category.id
+                    linkedWithAssetCategory: category.id
                 };
                 data.advanced = {
-                    catalog: {
+                    collection: {
                         type: 'equals',
-                        field: 'catalogId',
+                        field: 'collectionId',
                         value: category.catalogId,
                         data: {
                             type: 'is',

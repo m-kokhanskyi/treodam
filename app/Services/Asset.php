@@ -88,6 +88,18 @@ class Asset extends Base
         return $this->getServiceFactory()->create("AssetMetaData")->insertData($asset->id, $metaData);
     }
 
+    public function getImageInfo(\Dam\Entities\Asset $asset)
+    {
+        $attachment = $asset->get('image') ?? $asset->get('file');
+        $attachmentService = $this->getService("Attachment");
+
+        $imageInfo = $attachmentService->getImageInfo($attachment);
+
+        if ($imageInfo) {
+            return $this->getRepository()->saveImageInfo($asset, $imageInfo);
+        }
+    }
+
     /**
      * @return FileManager
      */
@@ -110,5 +122,10 @@ class Asset extends Base
     protected function getLog(): Log
     {
         return $this->getInjection("log");
+    }
+
+    protected function getService($name)
+    {
+        return $this->getServiceFactory()->create($name);
     }
 }

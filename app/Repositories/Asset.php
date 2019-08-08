@@ -25,7 +25,7 @@ namespace Dam\Repositories;
 use Dam\Core\DAMAttachment;
 use Dam\Core\FilePathBuilder;
 use Dam\Core\FileStorage\DAMUploadDir;
-use \Espo\Core\Templates\Repositories\Base;
+use Espo\Core\Templates\Repositories\Base;
 use Espo\ORM\Entity;
 
 /**
@@ -35,11 +35,38 @@ use Espo\ORM\Entity;
  */
 class Asset extends Base implements DAMAttachment
 {
+    /**
+     * @param Entity $entity
+     * @return array
+     */
     public function buildPath(Entity $entity): array
     {
         return [
             ($entity->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/",
             $entity->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC
         ];
+    }
+
+    /**
+     * @param Entity $entity
+     * @param $data
+     * @return mixed
+     */
+    public function saveImageInfo(Entity $entity, $data, $save = false)
+    {
+        $entity->set([
+            "size" => round($data['size'] / 1024, 1),
+            "sizeUnit" => "kb",
+            "fileType" => $data['extension'],
+            "width" => $data['width'] ?? null,
+            "height" => $data['height'] ?? null,
+            "colorSpace" => $data['color_space'] ?? null,
+            "colorDepth" => $data['color_depth'] ?? null,
+            "orientation" => $data['orientation'] ?? null
+        ]);
+
+        if ($save) {
+            $this->save($entity);
+        }
     }
 }

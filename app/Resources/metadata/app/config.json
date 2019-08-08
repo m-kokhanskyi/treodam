@@ -1,137 +1,137 @@
 {
-  "types": {
-    "global": {
-      "natural": "file",
-      "validations": {
-        "size": 5,
-        "unique": {}
-      }
-    },
-    "default": {
-      "validations": {
-        "size": 1
-      }
-    },
-    "custom": {
-      "gallery-image": {
-        "validations": {
-          "size": {
-            "private": 1,
-            "public": 2
-          },
-          "extension": [
-            "png",
-            "jpeg",
-            "jpg"
-          ]
-        },
-        "variations": {
-          "low-quality": {
-            "auto": false,
-            "handlers": {
-              "quality": {
-                "params": {
-                  "quality": 25
-                }
-              }
-            }
-          },
-          "200x200": {
+    "types": {
+        "global": {
+            "nature": "file",
             "validations": {
-              "size": 1
+                "size": 5,
+                "unique": {}
             }
-          }
-        }
-      },
-      "pdf": {
-        "preview": true,
-        "validations": {
-          "extension": [
-            "pdf"
-          ],
-          "unique": {
-            "skip": true
-          }
         },
-        "variations": {
-          "web": {}
-        }
-      },
-      "image": {
-        "natural": "image",
-        "validations": {
-          "unique": {
-            "skip": true
-          },
-          "extension": [
-            "png",
-            "jpg",
-            "jpeg"
-          ]
+        "default": {
+            "validations": {
+                "size": 1
+            }
         },
-        "variations": {
-          "200x200": {},
-          "low-quality": {}
+        "custom": {
+            "gallery-image": {
+                "validations": {
+                    "size": {
+                        "private": 1,
+                        "public": 2
+                    },
+                    "extension": [
+                        "png",
+                        "jpeg",
+                        "jpg"
+                    ]
+                },
+                "variations": {
+                    "low-quality": {
+                        "auto": false,
+                        "handlers": {
+                            "quality": {
+                                "params": {
+                                    "quality": 25
+                                }
+                            }
+                        }
+                    },
+                    "200x200": {
+                        "validations": {
+                            "size": 1
+                        }
+                    }
+                }
+            },
+            "pdf": {
+                "preview": true,
+                "validations": {
+                    "extension": [
+                        "pdf"
+                    ],
+                    "unique": {
+                        "skip": true
+                    }
+                },
+                "variations": {
+                    "web": {}
+                }
+            },
+            "image": {
+                "nature": "image",
+                "validations": {
+                    "unique": {
+                        "skip": true
+                    },
+                    "extension": [
+                        "png",
+                        "jpg",
+                        "jpeg"
+                    ]
+                },
+                "variations": {
+                    "200x200": {},
+                    "low-quality": {}
+                }
+            },
+            "file": {
+                "nature": "file",
+                "validations": {
+                    "size": {
+                        "private": 1,
+                        "public": 2
+                    },
+                    "unique": {
+                        "skip": true
+                    },
+                    "extension": [
+                        "doc",
+                        "docx",
+                        "html"
+                    ]
+                }
+            }
         }
-      },
-      "file": {
-        "natural": "file",
-        "validations": {
-          "size": {
-            "private": 1,
-            "public": 2
-          },
-          "unique": {
-            "skip": true
-          },
-          "extension": [
-            "doc",
-            "docx",
-            "html"
-          ]
-        }
-      }
-    }
-  },
-  "variations": {
-    "low-quality": {
-      "auto": true,
-      "private": false,
-      "handlers": {
-        "quality": {
-          "params": {
-            "quality": 25
-          }
-        }
-      },
-      "validations": {
-        "size": 1
-      }
     },
-    "200x200": {
-      "auto": true,
-      "handlers": {
-        "resize": {
-          "params": {
-            "width": 200,
-            "height": 200
-          }
+    "variations": {
+        "low-quality": {
+            "auto": true,
+            "private": false,
+            "handlers": {
+                "quality": {
+                    "params": {
+                        "quality": 25
+                    }
+                }
+            },
+            "validations": {
+                "size": 1
+            }
         },
-        "quality": {
-          "params": {
-            "quality": 10
-          }
+        "200x200": {
+            "auto": true,
+            "handlers": {
+                "resize": {
+                    "params": {
+                        "width": 200,
+                        "height": 200
+                    }
+                },
+                "quality": {
+                    "params": {
+                        "quality": 10
+                    }
+                }
+            },
+            "validations": {
+                "dimension": {
+                    "minWidth": 200,
+                    "minHeight": 200
+                }
+            }
+        },
+        "web": {
+            "auto": false
         }
-      },
-      "validations": {
-        "dimension": {
-          "minWidth": 200,
-          "minHeight": 200
-        }
-      }
-    },
-    "web": {
-      "auto": false
     }
-  }
 }

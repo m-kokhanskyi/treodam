@@ -37,7 +37,7 @@ use Treo\Core\FileStorage\Manager;
  *
  * @package Dam\Services
  */
-class Attachment extends \Espo\Services\Attachment
+class Attachment extends \Treo\Services\Attachment
 {
     public function __construct()
     {
@@ -168,19 +168,19 @@ class Attachment extends \Espo\Services\Attachment
      */
     public function moveToMaster(\Dam\Entities\Asset $asset)
     {
-        $natural = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "natural"]);
+        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
 
-        $attachmentId = $natural === "image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
         $attachment = $this->getEntity($attachmentId);
 
         if ($attachment->get('sourceId')) {
             return $this->copyDuplicate($asset);
         }
 
-        $sourcePath = DAMUploadDir::BASE_PATH . $attachment->get('storageFilePath');
-        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path');
+        $sourcePath = $attachment->get("tmpPath");
+        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path') . "/" . $attachment->get('name');
 
-        if ($this->getFileManager()->moveFolder($sourcePath, $destPath)) {
+        if ($this->getFileManager()->move($sourcePath, $destPath)) {
             return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment, $asset->get('path'));
         }
 
@@ -189,9 +189,9 @@ class Attachment extends \Espo\Services\Attachment
 
     public function copyDuplicate(\Dam\Entities\Asset $asset)
     {
-        $natural = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "natural"]);
+        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
 
-        $attachmentId = $natural === "image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
         $attachment = $this->getEntity($attachmentId);
 
         $sourcePath = $this->getFileStorageManager()->getLocalFilePath($attachment);
@@ -217,9 +217,9 @@ class Attachment extends \Espo\Services\Attachment
         $source = ($asset->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->getFetched("path");
         $dest = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get("path");
 
-        $natural = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "natural"]);
+        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
 
-        $attachmentId = $natural === "image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
         $attachment = $this->getEntity($attachmentId);
 
         if ($this->getFileManager()->moveFolder($source, $dest)) {
@@ -292,7 +292,11 @@ class Attachment extends \Espo\Services\Attachment
             $attachment = $this->getRepository()->where(['id' => $attachment->get('sourceId')])->findOne();
         }
 
-        return $this->getRepository()->getFilePath($attachment);
+        if ($attachment->get("tmpPath")) {
+            return $attachment->get("tmpPath");
+        } else {
+            return $this->getRepository()->getFilePath($attachment);
+        }
     }
 
     /**

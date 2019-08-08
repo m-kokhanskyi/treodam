@@ -59,16 +59,18 @@ class AssetEntity extends AbstractListener
             throw new BadRequest("You can't change type");
         }
 
-        if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
-            $this->getImageInfo($entity);
-        }
-
+        //Change path for new entity or after change private
         if ($entity->isNew() || $entity->isAttributeChanged("private")) {
             $entity->set('path', $this->setPath($entity));
         }
 
         $attachmentService = $this->getService("Attachment");
         $assetService = $this->getService("Asset");
+
+        //After update image
+        if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
+            $assetService->getImageInfo($entity);
+        }
 
         //After create new asset
         if ($entity->isNew()) {
@@ -161,35 +163,6 @@ class AssetEntity extends AbstractListener
         $res = $prepare->fetch(PDO::FETCH_ASSOC);
 
         return $res ? true : false;
-    }
-
-    /**
-     * @param Entity $entity
-     *
-     * @return $this
-     */
-    protected function getImageInfo(Entity $entity)
-    {
-        $service = $this->getService('Attachment');
-
-        $attachment = $entity->get("image") ?? $entity->get("file");
-
-        if ($attachment) {
-            $imageInfo = $service->getImageInfo($attachment);
-
-            $entity->set([
-                "size" => round($imageInfo['size'] / 1024, 1),
-                "sizeUnit" => "kb",
-                "fileType" => $imageInfo['extension'],
-                "width" => $imageInfo['width'] ?? null,
-                "height" => $imageInfo['height'] ?? null,
-                "colorSpace" => $imageInfo['color_space'] ?? null,
-                "colorDepth" => $imageInfo['color_depth'] ?? null,
-                "orientation" => $imageInfo['orientation'] ?? null
-            ]);
-        }
-
-        return $this;
     }
 
     /**

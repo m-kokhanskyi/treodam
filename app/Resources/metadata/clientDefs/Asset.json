@@ -1,163 +1,183 @@
 {
-  "controller": "dam:controllers/asset",
-  "boolFilterList": [
-    "onlyMy",
-    "notSelectAssets"
-  ],
-  "hiddenBoolFilterList": [
-    "notSelectAssets"
-  ],
-  "views": {
-    "list": "dam:views/asset/list",
-    "plate": "dam:views/asset/plate"
-  },
-  "recordViews": {
-    "plate": "dam:views/asset/record/plate",
-    "plateItem": "dam:views/asset/record/plate-item"
-  },
-  "menu": {
-    "list": {
-      "buttons": [
-        {
-          "acl": "read",
-          "label": "",
-          "link": "#Asset/list",
-          "style": "primary",
-          "title": "List",
-          "iconHtml": "<span class=\"fa fa-list\"></span>"
-        },
-        {
-          "acl": "read",
-          "label": "",
-          "link": "#Asset/plate",
-          "style": "default",
-          "title": "Plate",
-          "iconHtml": "<span class=\"fa fa-th\"></span>"
-        }
-      ]
+    "controller": "dam:controllers/asset",
+    "boolFilterList": [
+        "onlyMy",
+        "notSelectAssets"
+    ],
+    "hiddenBoolFilterList": [
+        "notSelectAssets"
+    ],
+    "views": {
+        "list": "dam:views/asset/list",
+        "plate": "dam:views/asset/plate"
     },
-    "plate": {
-      "buttons": [
-        {
-          "acl": "read",
-          "label": "",
-          "link": "#Asset/list",
-          "style": "default",
-          "title": "List",
-          "iconHtml": "<span class=\"fa fa-list\"></span>"
+    "recordViews": {
+        "plate": "dam:views/asset/record/plate",
+        "plateItem": "dam:views/asset/record/plate-item"
+    },
+    "menu": {
+        "list": {
+            "buttons": [
+                {
+                    "acl": "read",
+                    "label": "",
+                    "link": "#Asset/list",
+                    "style": "primary",
+                    "title": "List",
+                    "iconHtml": "<span class=\"fa fa-list\"></span>"
+                },
+                {
+                    "acl": "read",
+                    "label": "",
+                    "link": "#Asset/plate",
+                    "style": "default",
+                    "title": "Plate",
+                    "iconHtml": "<span class=\"fa fa-th\"></span>"
+                }
+            ]
         },
-        {
-          "acl": "read",
-          "label": "",
-          "link": "#Asset/plate",
-          "style": "primary",
-          "title": "Plate",
-          "iconHtml": "<span class=\"fa fa-th\"></span>"
+        "plate": {
+            "buttons": [
+                {
+                    "acl": "read",
+                    "label": "",
+                    "link": "#Asset/list",
+                    "style": "default",
+                    "title": "List",
+                    "iconHtml": "<span class=\"fa fa-list\"></span>"
+                },
+                {
+                    "acl": "read",
+                    "label": "",
+                    "link": "#Asset/plate",
+                    "style": "primary",
+                    "title": "Plate",
+                    "iconHtml": "<span class=\"fa fa-th\"></span>"
+                }
+            ]
         }
-      ]
+    },
+    "iconClass": "fas fa-archive",
+    "dynamicLogic": {
+        "fields": {
+            "type": {
+                "readOnly": {
+                    "conditionGroup": [
+                        {
+                            "type": "isNotEmpty",
+                            "attribute": "id"
+                        }
+                    ]
+                }
+            },
+            "height": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "width": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "colorSpace": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "colorDepth": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "orientation": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        }
+                    ]
+                }
+            },
+            "file": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "and",
+                            "value": [
+                                {
+                                    "type": "notEquals",
+                                    "attribute": "type",
+                                    "value": "Image"
+                                },
+                                {
+                                    "type": "notEquals",
+                                    "attribute": "type",
+                                    "value": "Icon"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "image": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "or",
+                            "value": [
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Icon"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "relationshipPanels": {
+        "assetCategories": {
+            "selectBoolFilterList": [
+                "onlyChildCategory",
+                "notSelectCategories",
+                "byCollection"
+            ],
+            "view": "dam:views/asset/record/panels/asset_category",
+            "selectAction": "selectRelatedEntity"
+        }
     }
-  },
-  "iconClass"           : "fas fa-archive",
-  "dynamicLogic"        : {
-    "fields": {
-      "type": {
-        "readOnly": {
-          "conditionGroup": [
-            {
-              "type": "isNotEmpty",
-              "attribute": "id"
-            }
-          ]
-        }
-      },
-      "height"     : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "width"      : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "colorSpace" : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "colorDepth" : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "orientation": {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "file"       : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "notEquals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "image"      : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      }
-    }
-  },
-  "relationshipPanels"  : {
-    "assetCategories": {
-      "selectBoolFilterList": [
-        "onlyChildCategory",
-        "notSelectCategories",
-        "byCollection"
-      ],
-      "view"                : "dam:views/asset/record/panels/asset_category",
-      "selectAction"        : "selectRelatedEntity"
-    }
-  }
 }

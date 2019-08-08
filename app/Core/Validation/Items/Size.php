@@ -14,7 +14,7 @@ class Size extends Base
             return true;
         }
 
-        return ($this->params * 1024 * 1024) > mb_strlen($this->attachment->contents, '8bit');
+        return ($this->params * 1024 * 1024) > filesize($this->attachment->get("tmpPath"));
     }
 
     /**

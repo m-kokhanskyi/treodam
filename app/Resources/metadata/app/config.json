@@ -13,6 +13,12 @@
             }
         },
         "custom": {
+            "icon": {
+                "nature": "image",
+                "validations": {
+                    "ratio" : 1
+                }
+            },
             "gallery-image": {
                 "validations": {
                     "size": {

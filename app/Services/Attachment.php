@@ -89,6 +89,149 @@ class Attachment extends \Treo\Services\Attachment
      */
     public function createEntity($attachment)
     {
+        $entity = parent::createEntity($attachment);
+
+        try {
+            $this->validateAttachment($attachment, $entity);
+        } catch (\Exception $exception) {
+            $this->getFileManager()->removeFile([$entity->get('tmpPath')]);
+            /**@var $repo \Dam\Repositories\Attachment* */
+            $repo = $this->getRepository();
+            $repo->deleteFromDb($entity->id);
+
+            throw $exception;
+        }
+
+        if (!empty($attachment->file)) {
+            $entity->clear('contents');
+        }
+
+        return $entity;
+    }
+
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @return mixed
+     * @throws Error
+     * @throws Forbidden
+     */
+    public function moveToMaster(\Dam\Entities\Asset $asset)
+    {
+        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
+
+        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachment = $this->getEntity($attachmentId);
+
+        if ($attachment->get('sourceId')) {
+            return $this->copyDuplicate($asset);
+        }
+
+        $sourcePath = $attachment->get("tmpPath");
+        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path') . "/" . $attachment->get('name');
+
+        if ($this->getFileManager()->move($sourcePath, $destPath)) {
+            return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment,
+                $asset->get('path'));
+        }
+
+        return false;
+    }
+
+    public function copyDuplicate(\Dam\Entities\Asset $asset)
+    {
+        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
+
+        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachment = $this->getEntity($attachmentId);
+
+        $sourcePath = $this->getFileStorageManager()->getLocalFilePath($attachment);
+        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path');
+
+        if ($this->getFileManager()->copy($sourcePath, $destPath, false, null, true)) {
+            $attachment->set("storageFilePath", $asset->get('path'));
+            $attachment->set('sourceId', null);
+            return $this->getEntityManager()->getRepository("Attachment")->save($attachment);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @return mixed
+     * @throws Error
+     * @throws Forbidden
+     */
+    public function changeAccess(\Dam\Entities\Asset $asset)
+    {
+        $source = ($asset->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->getFetched("path");
+        $dest = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get("path");
+
+        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
+
+        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachment = $this->getEntity($attachmentId);
+
+        if ($this->getFileManager()->moveFolder($source, $dest)) {
+            return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment,
+                $asset->get('path'));
+        }
+    }
+
+    /**
+     * @param \Dam\Entities\Attachment $attachment
+     * @param string $newName
+     * @param Entity $entity
+     * @return mixed
+     */
+    public function changeName(\Dam\Entities\Attachment $attachment, string $newName, Entity $entity = null)
+    {
+        return $this->getRepository()->renameFile($attachment, $newName, $entity);
+    }
+
+    /**
+     * @param \Dam\Entities\Attachment $attachment
+     * @return array|mixed
+     * @throws Error
+     * @throws \ImagickException
+     */
+    public function getFileMetaData(\Dam\Entities\Attachment $attachment)
+    {
+        $mime = $attachment->get('type');
+        $meta = [];
+
+        switch (true) {
+            case (stripos($mime, "image") !== false):
+                $meta = $this->getImageMeta($attachment);
+                break;
+        }
+
+        return $meta;
+    }
+
+    /**
+     * @param \Dam\Entities\Attachment $attachment
+     * @return array
+     * @throws Error
+     * @throws \ImagickException
+     */
+    public function getImageMeta(\Dam\Entities\Attachment $attachment)
+    {
+        $path = $this->getFileStorageManager()->getLocalFilePath($attachment);
+
+        $imagick = new \Imagick();
+        $imagick->readImage($path);
+        return $imagick->getImageProperties();
+    }
+
+    /**
+     * @param $attachment
+     * @throws BadRequest
+     * @throws Error
+     * @throws Forbidden
+     */
+    protected function validateAttachment($attachment, $entity)
+    {
         if (!empty($attachment->file)) {
             $arr = explode(',', $attachment->file);
             $contents = '';
@@ -145,132 +288,11 @@ class Attachment extends \Treo\Services\Attachment
                     $config = $this->getConfigManager()->get([$type]);
 
                     foreach ($config['validations'] as $type => $value) {
-                        $this->getValidator()->validate($type, $attachment, ($value[$private] ?? $value));
+                        $this->getValidator()->validate($type, $entity, ($value[$private] ?? $value));
                     }
                 }
             }
         }
-
-        $entity = parent::createEntity($attachment);
-
-        if (!empty($attachment->file)) {
-            $entity->clear('contents');
-        }
-
-        return $entity;
-    }
-
-    /**
-     * @param \Dam\Entities\Asset $asset
-     * @return mixed
-     * @throws Error
-     * @throws Forbidden
-     */
-    public function moveToMaster(\Dam\Entities\Asset $asset)
-    {
-        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
-
-        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
-        $attachment = $this->getEntity($attachmentId);
-
-        if ($attachment->get('sourceId')) {
-            return $this->copyDuplicate($asset);
-        }
-
-        $sourcePath = $attachment->get("tmpPath");
-        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path') . "/" . $attachment->get('name');
-
-        if ($this->getFileManager()->move($sourcePath, $destPath)) {
-            return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment, $asset->get('path'));
-        }
-
-        return false;
-    }
-
-    public function copyDuplicate(\Dam\Entities\Asset $asset)
-    {
-        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
-
-        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
-        $attachment = $this->getEntity($attachmentId);
-
-        $sourcePath = $this->getFileStorageManager()->getLocalFilePath($attachment);
-        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path');
-
-        if ($this->getFileManager()->copy($sourcePath, $destPath, false, null, true)) {
-            $attachment->set("storageFilePath", $asset->get('path'));
-            $attachment->set('sourceId', null);
-            return $this->getEntityManager()->getRepository("Attachment")->save($attachment);
-        }
-
-        return false;
-    }
-
-    /**
-     * @param \Dam\Entities\Asset $asset
-     * @return mixed
-     * @throws Error
-     * @throws Forbidden
-     */
-    public function changeAccess(\Dam\Entities\Asset $asset)
-    {
-        $source = ($asset->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->getFetched("path");
-        $dest = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get("path");
-
-        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
-
-        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
-        $attachment = $this->getEntity($attachmentId);
-
-        if ($this->getFileManager()->moveFolder($source, $dest)) {
-            return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment, $asset->get('path'));
-        }
-    }
-
-    /**
-     * @param \Dam\Entities\Attachment $attachment
-     * @param string $newName
-     * @param Entity $entity
-     * @return mixed
-     */
-    public function changeName(\Dam\Entities\Attachment $attachment, string $newName, Entity $entity = null)
-    {
-        return $this->getRepository()->renameFile($attachment, $newName, $entity);
-    }
-
-    /**
-     * @param \Dam\Entities\Attachment $attachment
-     * @return array|mixed
-     * @throws Error
-     * @throws \ImagickException
-     */
-    public function getFileMetaData(\Dam\Entities\Attachment $attachment)
-    {
-        $mime = $attachment->get('type');
-        $meta = [];
-
-        switch (true) {
-            case (stripos($mime, "image") !== false):
-                $meta = $this->getImageMeta($attachment);
-                break;
-        }
-
-        return $meta;
-    }
-
-    /**
-     * @param \Dam\Entities\Attachment $attachment
-     * @return array
-     * @throws Error
-     * @throws \ImagickException
-     */
-    public function getImageMeta(\Dam\Entities\Attachment $attachment)
-    {
-        $path = $this->getFileStorageManager()->getLocalFilePath($attachment);
-
-        $imagick = new \Imagick();
-        $imagick->readImage($path);
-        return $imagick->getImageProperties();
     }
 
     /**
@@ -325,7 +347,8 @@ class Attachment extends \Treo\Services\Attachment
      */
     private function hasAcl($relatedEntityType): bool
     {
-        return !$this->getAcl()->checkScope($relatedEntityType, 'create') && !$this->getAcl()->checkScope($relatedEntityType, 'edit');
+        return !$this->getAcl()->checkScope($relatedEntityType,
+                'create') && !$this->getAcl()->checkScope($relatedEntityType, 'edit');
     }
 
     protected function getFileManager(): FileManager

@@ -14,7 +14,7 @@ class Unique extends Base
             return true;
         }
 
-        $md5 = md5($this->attachment->contents);
+        $md5 = md5(file_get_contents($this->attachment->get("tmpPath")));
 
         /**@var $repository Attachment* */
         $count = $this->getRepository("Attachment")

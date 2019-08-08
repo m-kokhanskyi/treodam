@@ -15,7 +15,7 @@ class Extension extends Base
             return true;
         }
 
-        return in_array(pathinfo($this->attachment->name)['extension'], $this->params);
+        return in_array(pathinfo($this->attachment->get('name'))['extension'], $this->params);
     }
 
     /**

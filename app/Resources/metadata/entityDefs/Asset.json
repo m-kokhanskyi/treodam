@@ -103,12 +103,14 @@
       "options": [
         "File",
         "Image",
-        "PDF"
+        "PDF",
+        "Icon"
       ],
       "optionColors": {
         "File": "fff",
         "PDF": "fff",
-        "Image": "fff"
+        "Image": "fff",
+        "Icon" : "fff"
       },
       "default": "File",
       "isSorted": false,

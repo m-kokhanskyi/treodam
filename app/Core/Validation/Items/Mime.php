@@ -33,7 +33,7 @@ class Mime extends Base
      */
     public function onValidateFail()
     {
-        $message = $this->params['message'] ?? "Only {$this->params['pattern']}";
+        $message = $this->params['message'] ?? "Incorrect MIME type";
 
         throw new BadRequest($message);
     }

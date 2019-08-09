@@ -106,7 +106,12 @@
                 "Description Image",
                 "File",
                 "Image",
-                "PDF"
+                "PDF",
+                "Office Document",
+                "Text",
+                "CSV",
+                "PDF Document",
+                "Archive"
             ],
             "optionColors": {
                 "File": "fff",
@@ -114,9 +119,14 @@
                 "Image": "fff",
                 "Icon": "fff",
                 "Description Image": "fff",
-                "Gallery Image": "fff"
+                "Gallery Image": "fff",
+                "Office Document": "fff",
+                "Text": "fff",
+                "CSV": "fff",
+                "PDF Document": "fff",
+                "Archive": "fff"
             },
-            "default": "Description Image",
+            "default": "Archive",
             "isSorted": false,
             "audited": false,
             "readOnly": false,

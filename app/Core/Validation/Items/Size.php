@@ -6,15 +6,28 @@ namespace Dam\Core\Validation\Items;
 use Dam\Core\Validation\Base;
 use Espo\Core\Exceptions\Error;
 
+/**
+ * Class Size
+ * @package Dam\Core\Validation\Items
+ */
 class Size extends Base
 {
+    /**
+     * @return bool
+     */
     public function validate(): bool
     {
         if ($this->skip()){
             return true;
         }
+        
+        $imageSize = filesize($this->attachment->get('tmpPath'));
 
-        return ($this->params * 1024 * 1024) > filesize($this->attachment->get("tmpPath"));
+        if ($imageSize >= $this->params['min'] && $imageSize <= $this->params['max']) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -22,6 +35,6 @@ class Size extends Base
      */
     public function onValidateFail()
     {
-        throw new Error("File size should not exceed {$this->params}Mb.");
+        throw new Error("File size should not exceed from {$this->params['min']}kb to {$this->params['max']}kb");
     }
 }

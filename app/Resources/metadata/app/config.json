@@ -16,36 +16,217 @@
             "icon": {
                 "nature": "image",
                 "validations": {
-                    "ratio" : 1
+                    "mime": {
+                        "pattern": "image",
+                        "message": "Only images"
+                    },
+                    "ratio": 1
                 }
             },
             "gallery-image": {
+                "nature": "image",
+                "validations": {
+                    "mime": {
+                        "pattern": "image",
+                        "message": "Only images"
+                    },
+                    "size": {
+                        "private": {
+                            "min": 100,
+                            "max": 100000000
+                        },
+                        "public": {
+                            "min": 100,
+                            "max": 100000000
+                        }
+                    },
+                    "quality": {
+                        "min": 10,
+                        "max": 100
+                    },
+                    "colorDepth": [
+                        8
+                    ],
+                    "colorSpace": [
+                        "RGB",
+                        "SRGB"
+                    ],
+                    "scale": {
+                        "min": {
+                            "width": 50000,
+                            "height": 50000
+                        }
+                    },
+                    "unique": {}
+                }
+            },
+            "description-image": {
+                "nature": "image",
+                "validations": {
+                    "mime": {
+                        "pattern": "image",
+                        "message": "Only images"
+                    },
+                    "size": {
+                        "private": {
+                            "min": 100,
+                            "max": 100000000
+                        },
+                        "public": {
+                            "min": 100,
+                            "max": 100000000
+                        }
+                    },
+                    "quality": {
+                        "min": 10,
+                        "max": 100
+                    },
+                    "colorDepth": [
+                        8
+                    ],
+                    "colorSpace": [
+                        "RGB",
+                        "SRGB"
+                    ],
+                    "scale": {
+                        "min": {
+                            "width": 50000,
+                            "height": 50000
+                        }
+                    },
+                    "unique": {}
+                }
+            },
+            "office-document": {
+                "nature": "file",
                 "validations": {
                     "size": {
-                        "private": 1,
-                        "public": 2
+                        "private": {
+                            "min": 100,
+                            "max": 100000000
+                        },
+                        "public": {
+                            "min": 100,
+                            "max": 100000000
+                        }
                     },
                     "extension": [
-                        "png",
-                        "jpeg",
-                        "jpg"
-                    ]
-                },
-                "variations": {
-                    "low-quality": {
-                        "auto": false,
-                        "handlers": {
-                            "quality": {
-                                "params": {
-                                    "quality": 25
-                                }
-                            }
-                        }
-                    },
-                    "200x200": {
-                        "validations": {
-                            "size": 1
-                        }
+                        "doc",
+                        "dot",
+                        "docx",
+                        "dotx",
+                        "dotm",
+                        "docb",
+                        "xls",
+                        "xlt",
+                        "xlm",
+                        "xlxs",
+                        "xlsm",
+                        "xltx",
+                        "xltm",
+                        "ppt",
+                        "pot",
+                        "pps",
+                        "pptx",
+                        "pptm",
+                        "potx",
+                        "potm",
+                        "ppam",
+                        "ppsx",
+                        "ppsm",
+                        "sldx",
+                        "sldm",
+                        "mdb",
+                        "accdb",
+                        "accdr",
+                        "accdt",
+                        "vaccdr",
+                        "rtf",
+                        "odt",
+                        "ott",
+                        "odm",
+                        "ods",
+                        "ots",
+                        "odg",
+                        "otg",
+                        "odp",
+                        "otp",
+                        "odf",
+                        "odc",
+                        "odb"
+                    ],
+                    "mime": {
+                        "list": [
+                            "application/x-vnd.oasis.opendocument.chart",
+                            "application/vnd.oasis.opendocument.chart",
+                            "application/vnd.oasis.opendocument.formula",
+                            "application/x-vnd.oasis.opendocument.formula",
+                            "application/vnd.oasis.opendocument.presentation-template",
+                            "application/x-vnd.oasis.opendocument.presentation-template",
+                            "application/x-vnd.oasis.opendocument.presentation",
+                            "application/vnd.oasis.opendocument.presentation",
+                            "application/x-vnd.oasis.opendocument.graphics-template",
+                            "application/vnd.oasis.opendocument.graphics-template",
+                            "application/x-vnd.oasis.opendocument.graphics",
+                            "application/vnd.oasis.opendocument.graphics",
+                            "application/x-vnd.oasis.opendocument.spreadsheet-template",
+                            "application/vnd.oasis.opendocument.spreadsheet-template",
+                            "application/x-vnd.oasis.opendocument.spreadsheet",
+                            "application/vnd.oasis.opendocument.spreadsheet",
+                            "application/vnd.oasis.opendocument.textmaster",
+                            "application/x-vnd.oasis.opendocument.textmaster",
+                            "application/doc",
+                            "application/ms-doc",
+                            "application/msword",
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+                            "application/vnd.ms-word.template.macroEnabled.12",
+                            "application/vnd.ms-excel",
+                            "application/excel",
+                            "application/msexcel",
+                            "application/x-excel",
+                            "application/xlt",
+                            "application/x-msexcel",
+                            "application/x-ms-excel",
+                            "application/x-dos_ms_excel",
+                            "application/xls",
+                            "application/vnd.ms-excel.sheet.macroEnabled.12",
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+                            "application/vnd.ms-excel.template.macroEnabled.12",
+                            "application/vnd.ms-powerpoint",
+                            "application/mspowerpoint",
+                            "application/ms-powerpoint",
+                            "application/mspowerpnt",
+                            "application/vnd-mspowerpoint",
+                            "application/powerpoint",
+                            "application/x-powerpoint",
+                            "application/x-m",
+                            "application/x-mspowerpoint",
+                            "application/x-dos_ms_powerpnt",
+                            "application/pot",
+                            "application/x-soffic",
+                            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                            "application/vnd.ms-powerpoint.presentation.macroEnabled.12",
+                            "application/vnd.openxmlformats-officedocument.presentationml.template",
+                            "application/vnd.ms-powerpoint.addin.macroEnabled.12",
+                            "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+                            "application/vnd.ms-powerpoint.slideshow.macroEnabled.12",
+                            "application/msaccess",
+                            "application/x-msaccess",
+                            "application/vnd.msaccess",
+                            "application/vnd.ms-access",
+                            "application/mdb",
+                            "application/x-mdb",
+                            "zz-application/zz-winassoc-mdb",
+                            "application/rtf",
+                            "application/x-rtf",
+                            "text/rtf",
+                            "text/richtext",
+                            "application/x-soffice",
+                            "application/vnd.oasis.opendocument.text",
+                            "application/x-vnd.oasis.opendocument.text",
+                            "application/vnd.oasis.opendocument.text-template"
+                        ]
                     }
                 }
             },

@@ -139,6 +139,16 @@
                                 {
                                     "type": "notEquals",
                                     "attribute": "type",
+                                    "value": "Description Image"
+                                },
+                                {
+                                    "type": "notEquals",
+                                    "attribute": "type",
+                                    "value": "Gallery Image"
+                                },
+                                {
+                                    "type": "notEquals",
+                                    "attribute": "type",
                                     "value": "Icon"
                                 }
                             ]
@@ -161,6 +171,16 @@
                                     "type": "equals",
                                     "attribute": "type",
                                     "value": "Icon"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Gallery Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Description Image"
                                 }
                             ]
                         }

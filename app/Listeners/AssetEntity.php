@@ -64,34 +64,31 @@ class AssetEntity extends AbstractListener
             $entity->set('path', $this->setPath($entity));
         }
 
-        $attachmentService = $this->getService("Attachment");
-        $assetService = $this->getService("Asset");
-
         //After update image
         if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
-            $assetService->getImageInfo($entity);
+            $this->getService("Asset")->getImageInfo($entity);
         }
 
         //After create new asset
         if ($entity->isNew()) {
-            $attachmentService->moveToMaster($entity);
+            //move from tmp to master storage
+            $this->getService("Attachment")->moveToMaster($entity);
         }
 
         //After upload new file|image
         if ($this->changeAttachment($entity) && !$entity->isNew()) {
-            $attachmentService->moveToMaster($entity);
-            $assetService->createVersion($entity);
+            $this->getService("Attachment")->moveToMaster($entity);
+            $this->getService("Asset")->createVersion($entity);
         }
 
         //After change private (move to other folder)
         if (!$entity->isNew() && $entity->isAttributeChanged("private")) {
-            $attachmentService->changeAccess($entity);
-            $this->getService("AssetVariant")->rebuildPath($entity);
+            $this->getService("Attachment")->changeAccess($entity);
         }
 
         //rename file
-        if ($entity->isAttributeChanged("nameOfFile")) {
-            $attachmentService->changeName($entity->get('image') ?? $entity->get('file'), $entity->get('nameOfFile'), $entity);
+        if (!$entity->isNew() && $entity->isAttributeChanged("nameOfFile")) {
+            $this->getService("Attachment")->changeName($entity->get('image') ?? $entity->get('file'), $entity->get('nameOfFile'), $entity);
         }
     }
 
@@ -102,16 +99,15 @@ class AssetEntity extends AbstractListener
     {
         /** @var $entity Asset */
         $entity = $event->getArgument("entity");
-        $assetService = $this->getService($entity->getEntityType());
-//
-//        //create variations
-//        if ($entity->isSaved()) {
-//            $assetService->createVariations($entity);
-//        }
+
+        if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
+            //build Renditions
+            $this->getService("Rendition")->buildRenditions($entity, $entity->isNew());
+        }
 
         //get meta data
         if ($this->changeAttachment($entity)) {
-            $assetService->updateMetaData($entity);
+            $this->getService("Asset")->updateMetaData($entity);
         }
     }
 

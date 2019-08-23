@@ -12,6 +12,10 @@ class ColorDepth extends Base
 
     public function validate(): bool
     {
+        if ($this->skip()){
+            return true;
+        }
+
         $img = new \Imagick($this->attachment->get("tmpPath"));
 
         return in_array($img->getImageDepth(), $this->params);

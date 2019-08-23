@@ -10,6 +10,10 @@ class CSVValidation extends Base
 {
     public function validate(): bool
     {
+        if ($this->skip()){
+            return true;
+        }
+
         return true;
     }
 

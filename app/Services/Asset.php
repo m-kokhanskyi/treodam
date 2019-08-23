@@ -43,40 +43,24 @@ class Asset extends Base
     }
 
     /**
-     * @param \Dam\Entities\Asset $asset
+     * @param \Dam\Entities\Asset $asset1
      * @return mixed
      */
     public function createVersion(\Dam\Entities\Asset $asset)
     {
-        $natural = ConfigManager::getType($asset->getFetched("type"));
+        $type = ConfigManager::getType($asset->get("type"));
 
-        $attachmentId = $natural === "image" ? $asset->getFetched("imageId") : $asset->getFetched("fileId");
+        if (!$this->getConfigManager()->get([$type, "createVersion"])) {
+            return true;
+        }
+
+        $nature = $this->getConfigManager()->get([$type, "nature"]);
+
+        $attachmentId = $nature === "image" ? $asset->getFetched("imageId") : $asset->getFetched("fileId");
 
         $attachment = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
 
         return $this->getServiceFactory()->create("AssetVersion")->createEntity($attachment);
-    }
-
-    public function createVariations(\Dam\Entities\Asset $asset)
-    {
-        $config = $this->getConfigManager()->get([ConfigManager::getType($asset->get("type")), "variations"]);
-
-        foreach ($config ?? [] as $variationCode => $variationProps) {
-            if ($variationProps['auto']) {
-
-                //TODO add validation
-
-                foreach ($variationProps['handlers'] ?? [] as $handlerCode => $handlerProps) {
-                    $class = $handlerProps['class'] ?? \Dam\Core\Variations\Base::getClass($handlerCode);
-
-                    if (class_exists($class) && is_a($class, \Dam\Core\Variations\Base::class, true)) {
-                        $class::init($variationCode, $this->getEntityManager()->getContainer(), $asset)->create();
-                    } else {
-                        $this->getLog()->addWarning("Class '{$class}' not found or not implement Base class");
-                    }
-                }
-            }
-        }
     }
 
     public function updateMetaData(\Dam\Entities\Asset $asset)
@@ -85,7 +69,7 @@ class Asset extends Base
 
         $metaData = $this->getServiceFactory()->create("Attachment")->getFileMetaData($attachment);
 
-        return $this->getServiceFactory()->create("AssetMetaData")->insertData($asset->id, $metaData);
+        return $this->getServiceFactory()->create("AssetMetaData")->insertData("asset", $asset->id, $metaData);
     }
 
     public function getImageInfo(\Dam\Entities\Asset $asset)

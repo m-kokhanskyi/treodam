@@ -51,11 +51,12 @@ class Attachment extends \Treo\Services\Attachment
 
     /**
      * @param $attachment
+     * @param null $path
      * @return array
      */
-    public function getImageInfo($attachment): array
+    public function getImageInfo($attachment, $path = null): array
     {
-        $path = $this->getPath($attachment);
+        $path = $path ?? $this->getPath($attachment);
         $result = [];
 
         if ($imageInfo = getimagesize($path)) {
@@ -129,9 +130,23 @@ class Attachment extends \Treo\Services\Attachment
         $sourcePath = $attachment->get("tmpPath");
         $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path') . "/" . $attachment->get('name');
 
-        if ($this->getFileManager()->move($sourcePath, $destPath)) {
+        if ($this->getFileManager()->move($sourcePath, $destPath, false)) {
             return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment,
                 $asset->get('path'));
+        }
+
+        return false;
+    }
+
+    public function moveToRendition($entity, $attachment)
+    {
+        $asset = $entity->get("asset");
+
+        $sourcePath = $attachment->get("tmpPath");
+        $destPath = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $entity->get("type") . "/" . $asset->get('path') . "/" . $attachment->get('name');
+
+        if ($this->getFileManager()->move($sourcePath, $destPath, false)) {
+            return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment, $asset->get('path'));
         }
 
         return false;

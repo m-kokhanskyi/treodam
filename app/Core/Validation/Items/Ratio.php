@@ -11,6 +11,10 @@ class Ratio extends Base
 {
     public function validate(): bool
     {
+        if ($this->skip()){
+            return true;
+        }
+
         $imageParams = getimagesize($this->attachment->get('tmpPath'));
 
         return ($imageParams[0] / $imageParams[1]) == $this->params;

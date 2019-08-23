@@ -89,9 +89,29 @@
         "dynamicLogicVisible": {
             "conditionGroup": [
                 {
-                    "type": "equals",
-                    "attribute": "type",
-                    "value": "Image"
+                    "type": "or",
+                    "value": [
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Image"
+                        },
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Icon"
+                        },
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Gallery Image"
+                        },
+                        {
+                            "type": "equals",
+                            "attribute": "type",
+                            "value": "Description Image"
+                        }
+                    ]
                 },
                 {
                     "type": "isNotEmpty",

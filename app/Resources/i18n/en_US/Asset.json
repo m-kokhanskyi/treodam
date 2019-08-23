@@ -1,10 +1,4 @@
 {
-    "fields": {
-        "assetVariants1": "AssetVariants1"
-    },
-    "links": {
-        "assetVariants1": "AssetVariants1"
-    },
     "labels": {
         "sort": "Sort"
     }

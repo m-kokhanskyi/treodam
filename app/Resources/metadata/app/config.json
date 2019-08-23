@@ -1,30 +1,25 @@
 {
     "types": {
-        "global": {
-            "nature": "file",
-            "validations": {
-                "size": 5,
-                "unique": {}
-            }
-        },
-        "default": {
-            "validations": {
-                "size": 1
-            }
-        },
+        "global": {},
+        "default": {},
         "custom": {
             "icon": {
                 "nature": "image",
+                "createVersion": false,
                 "validations": {
                     "mime": {
                         "pattern": "image",
                         "message": "Only images"
                     },
-                    "ratio": 1
+                    "ratio": 1,
+                    "size": {
+                        "skip": true
+                    }
                 }
             },
             "gallery-image": {
                 "nature": "image",
+                "createVersion": true,
                 "validations": {
                     "mime": {
                         "pattern": "image",
@@ -53,11 +48,21 @@
                     ],
                     "scale": {
                         "min": {
-                            "width": 50000,
-                            "height": 50000
+                            "width": 150,
+                            "height": 150
                         }
                     },
                     "unique": {}
+                },
+                "renditions": {
+                    "githumb1": {},
+                    "githumb2": {},
+                    "githumb3": {},
+                    "githumb4": {},
+                    "watermark": {},
+                    "test": {
+                        "createVersion": true
+                    }
                 }
             },
             "description-image": {
@@ -95,6 +100,13 @@
                         }
                     },
                     "unique": {}
+                },
+                "renditions": {
+                    "githumb1": {},
+                    "githumb2": {},
+                    "githumb3": {},
+                    "githumb4": {},
+                    "watermark": {}
                 }
             },
             "office-document": {
@@ -299,7 +311,7 @@
                         }
                     },
                     "mime": {
-                        "list" : [
+                        "list": [
                             "application/pdf",
                             "application/x-pdf",
                             "application/acrobat",
@@ -311,12 +323,12 @@
                     "extension": [
                         "pdf"
                     ],
-                    "PDFValidation" : {}
+                    "PDFValidation": {}
                 }
             },
-            "archive" : {
-                "nature" : "file",
-                "validations" : {
+            "archive": {
+                "nature": "file",
+                "validations": {
                     "size": {
                         "private": {
                             "min": 100,
@@ -327,8 +339,8 @@
                             "max": 100000000
                         }
                     },
-                    "mime" : {
-                        "list" : [
+                    "mime": {
+                        "list": [
                             "application/x-archive",
                             "application/x-cpio",
                             "application/x-shar",
@@ -373,82 +385,64 @@
                         ]
                     }
                 }
-            },
-            "image": {
-                "nature": "image",
-                "validations": {
-                    "unique": {
-                        "skip": true
-                    },
-                    "extension": [
-                        "png",
-                        "jpg",
-                        "jpeg"
-                    ]
-                },
-                "variations": {
-                    "200x200": {},
-                    "low-quality": {}
-                }
-            },
-            "file": {
-                "nature": "file",
-                "validations": {
-                    "size": {
-                        "private": 1,
-                        "public": 2
-                    },
-                    "unique": {
-                        "skip": true
-                    },
-                    "extension": [
-                        "doc",
-                        "docx",
-                        "html"
-                    ]
-                }
             }
         }
     },
-    "variations": {
-        "low-quality": {
+    "renditions": {
+        "githumb1": {
             "auto": true,
-            "private": false,
-            "handlers": {
-                "quality": {
-                    "params": {
-                        "quality": 25
-                    }
-                }
-            },
-            "validations": {
-                "size": 1
-            }
-        },
-        "200x200": {
-            "auto": true,
+            "createVersion": false,
+            "fileNameMask": "{{original}}-{{date:Y-d-m}}-{{rand:5}}",
             "handlers": {
                 "resize": {
-                    "params": {
-                        "width": 200,
-                        "height": 200
-                    }
-                },
-                "quality": {
-                    "params": {
-                        "quality": 10
-                    }
-                }
-            },
-            "validations": {
-                "dimension": {
-                    "minWidth": 200,
-                    "minHeight": 200
+                    "upscale": true,
+                    "w": 400,
+                    "h": 400
                 }
             }
         },
-        "web": {
-            "auto": false
+        "githumb2": {
+            "auto": true,
+            "createVersion": true,
+            "handlers": {
+                "resize": {
+                    "upscale": true,
+                    "w": 800,
+                    "h": 800
+                }
+            }
+        },
+        "githumb3": {
+            "auto": true,
+            "createVersion": true,
+            "handlers": {
+                "resize": {
+                    "upscale": true,
+                    "w": 1280,
+                    "h": 1280
+                }
+            }
+        },
+        "githumb4": {
+            "auto": true,
+            "createVersion": true,
+            "handlers": {
+                "resize": {
+                    "upscale": true,
+                    "w": 1920,
+                    "h": 1920
+                }
+            }
+        },
+        "watermark": {
+            "auto": true,
+            "createVersion": true,
+            "handlers": {
+                "watermark": {
+                    "watermark": "/home/ddis/phpProjects/localhost/images-test/watermark.png",
+                    "position": "left-top"
+                }
+            }
         }
     }
 }

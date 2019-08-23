@@ -45,6 +45,10 @@ class DAMUploadDir extends UploadDir
      */
     protected function getFilePath(Attachment $attachment): string
     {
+        if ($attachment->get("tmpPath")) {
+            return $attachment->get("tmpPath");
+        }
+
         $storage = $attachment->get('storageFilePath');
         $related = $attachment->get('related');
 

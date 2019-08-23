@@ -1,9 +1,9 @@
 [
     {
-        "name": "assetCategories"
+        "name": "renditions"
     },
     {
-        "name": "assetVariations"
+        "name": "assetCategories"
     },
     {
         "name": "assetVersions"

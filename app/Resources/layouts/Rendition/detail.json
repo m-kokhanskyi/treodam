@@ -1,0 +1,55 @@
+[
+    {
+        "rows": [
+            [
+                {
+                    "name": "name"
+                },
+                {
+                    "name": "image"
+                }
+            ],
+            [
+                {
+                    "name": "private"
+                },
+                {
+                    "name": "file"
+                }
+            ]
+        ],
+        "style": "default",
+        "label": "Overview"
+    },
+    {
+        "rows": [
+            [
+                {
+                    "name": "colorDepth"
+                },
+                {
+                    "name": "colorSpace"
+                }
+            ],
+            [
+                {
+                    "name": "width"
+                },
+                {
+                    "name": "height"
+                }
+            ],
+            [
+                {
+                    "name": "size"
+                },
+                {
+                    "name": "orientation"
+                }
+            ]
+        ],
+        "style": "default",
+        "dynamicLogicVisible": null,
+        "customLabel": "Info"
+    }
+]

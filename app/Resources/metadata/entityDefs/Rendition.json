@@ -38,12 +38,40 @@
         "type": {
             "type": "enum",
             "required": false,
-            "fontSize": 1,
-            "options": false,
-            "optionColors": [],
+            "options": [
+                "wlq",
+                "whq",
+                "githumb1",
+                "dithumb1",
+                "githumb2",
+                "dithumb2",
+                "githumb3",
+                "dithumb3",
+                "githumb4",
+                "dithumb4",
+                "watermark",
+                "test"
+            ],
+            "default": "wlq",
             "isSorted": false,
             "audited": false,
             "readOnly": false,
+            "tooltip": false,
+            "isCustom": true
+        },
+        "image": {
+            "type": "image",
+            "required": false,
+            "previewSize": "small",
+            "audited": false,
+            "tooltip": false,
+            "isCustom": true
+        },
+        "file": {
+            "type": "file",
+            "required": false,
+            "sourceList": [],
+            "audited": false,
             "tooltip": false,
             "isCustom": true
         },
@@ -110,33 +138,28 @@
             "tooltip": false,
             "isCustom": true
         },
-        "file": {
-            "type": "file",
-            "required": false,
-            "sourceList": [],
-            "audited": false,
-            "tooltip": false,
-            "isCustom": true
-        },
-        "image": {
-            "type": "image",
-            "required": false,
-            "previewSize": "small",
-            "audited": false,
-            "tooltip": false,
-            "isCustom": true
-        },
-        "fileName": {
-            "type": "varchar",
-            "required": false,
-            "trim": true,
-            "audited": false,
-            "readOnly": false,
-            "tooltip": false,
-            "isCustom": true
-        },
         "asset": {
             "type": "link"
+        },
+        "assetMetaDatas": {
+            "type": "linkMultiple",
+            "layoutDetailDisabled": true,
+            "layoutMassUpdateDisabled": true,
+            "noLoad": true,
+            "importDisabled": true,
+            "isCustom": true
+        },
+        "nameOfFile": {
+            "type": "varchar",
+            "trim": true
+        },
+        "renditionVersions": {
+            "type": "linkMultiple",
+            "layoutDetailDisabled": true,
+            "layoutMassUpdateDisabled": true,
+            "noLoad": true,
+            "importDisabled": true,
+            "isCustom": true
         }
     },
     "links": {
@@ -158,20 +181,34 @@
             "relationName": "EntityTeam",
             "layoutRelationshipsDisabled": true
         },
-        "file": {
+        "image": {
             "type": "belongsTo",
             "entity": "Attachment",
             "skipOrmDefs": true
         },
-        "image": {
+        "file": {
             "type": "belongsTo",
             "entity": "Attachment",
             "skipOrmDefs": true
         },
         "asset": {
             "type": "belongsTo",
-            "foreign": "assetVariations",
+            "foreign": "renditions",
             "entity": "Asset",
+            "audited": false,
+            "isCustom": true
+        },
+        "assetMetaDatas": {
+            "type": "hasMany",
+            "foreign": "rendition",
+            "entity": "AssetMetaData",
+            "audited": false,
+            "isCustom": true
+        },
+        "renditionVersions": {
+            "type": "hasMany",
+            "foreign": "rendition",
+            "entity": "RenditionVersion",
             "audited": false,
             "isCustom": true
         }

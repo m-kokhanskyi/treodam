@@ -49,14 +49,7 @@ class AssetVersion extends Base
             return false;
         }
 
-        $natural = ConfigManager::getType($asset->get('type'));
-        $currentAttachment = $natural === "image" ? $asset->get('image') : $asset->get('file');
-
-        if (!isset($currentAttachment) || !$currentAttachment) {
-            return false;
-        }
-
-        $filePath = $this->getFileStoreManager()->getLocalFilePath($currentAttachment);
+        $filePath = $this->getFileStoreManager()->getLocalFilePath($attachment);
 
         $path = pathinfo($filePath);
         $destPath = $this->buildDestPath($path['dirname'], $attachment);

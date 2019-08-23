@@ -74,9 +74,29 @@
                 "visible": {
                     "conditionGroup": [
                         {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
+                            "type": "or",
+                            "value": [
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Icon"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Gallery Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Description Image"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -85,9 +105,29 @@
                 "visible": {
                     "conditionGroup": [
                         {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
+                            "type": "or",
+                            "value": [
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Icon"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Gallery Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Description Image"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -96,9 +136,29 @@
                 "visible": {
                     "conditionGroup": [
                         {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
+                            "type": "or",
+                            "value": [
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Icon"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Gallery Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Description Image"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -107,9 +167,29 @@
                 "visible": {
                     "conditionGroup": [
                         {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
+                            "type": "or",
+                            "value": [
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Icon"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Gallery Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Description Image"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -118,9 +198,29 @@
                 "visible": {
                     "conditionGroup": [
                         {
-                            "type": "equals",
-                            "attribute": "type",
-                            "value": "Image"
+                            "type": "or",
+                            "value": [
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Icon"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Gallery Image"
+                                },
+                                {
+                                    "type": "equals",
+                                    "attribute": "type",
+                                    "value": "Description Image"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -198,6 +298,13 @@
             ],
             "view": "dam:views/asset/record/panels/asset_category",
             "selectAction": "selectRelatedEntity"
+        },
+        "renditions": {
+            "select": false
+        },
+        "assetMetaDatas": {
+            "select": false,
+            "create": false
         }
     }
 }

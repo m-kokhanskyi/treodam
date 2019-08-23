@@ -101,11 +101,9 @@
             "required": false,
             "fontSize": 1,
             "options": [
-                "Icon",
                 "Gallery Image",
                 "Description Image",
-                "File",
-                "Image",
+                "Icon",
                 "PDF",
                 "Office Document",
                 "Text",
@@ -126,7 +124,7 @@
                 "PDF Document": "fff",
                 "Archive": "fff"
             },
-            "default": "Archive",
+            "default": "Gallery Image",
             "isSorted": false,
             "audited": false,
             "readOnly": false,

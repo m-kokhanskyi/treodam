@@ -12,6 +12,10 @@ class Quality extends Base
 
     public function validate(): bool
     {
+        if ($this->skip()){
+            return true;
+        }
+
         $img = new \Imagick($this->attachment->get('tmpPath'));
         $quality = $img->getImageCompressionQuality();
 

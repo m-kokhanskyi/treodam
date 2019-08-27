@@ -116,7 +116,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         return $res ? $res : $this->getEntity();
     }
 
-    public function updateMetaData(\Espo\Custom\Entities\Rendition $entity)
+    public function updateMetaData(\Dam\Entities\Rendition $entity)
     {
         $attachment = $entity->get('image') ?? $entity->get("file");
 

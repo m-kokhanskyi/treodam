@@ -121,12 +121,15 @@ class AssetEntity extends AbstractListener
         $foreign = $event->getArgument('foreign');
         $entity = $event->getArgument('entity');
 
-        if ($this->isLast($event, $foreign)) {
-            throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
+        if ($event->getArgument("relationName") === "assetCategories") {
+            if ($this->isLast($event, $foreign)) {
+                throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
+            }
         }
-
-        if ($this->isCollectionCatalog($entity, $foreign)) {
-            throw new BadRequest($this->getLanguage()->translate("Category is not set in collection", 'exceptions', 'Global'));
+        if ($event->getArgument("relationName") === "collection") {
+            if ($this->isCollectionCatalog($entity, $foreign)) {
+                throw new BadRequest($this->getLanguage()->translate("Category is not set in collection", 'exceptions', 'Global'));
+            }
         }
     }
 

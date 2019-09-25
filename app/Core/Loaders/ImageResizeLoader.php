@@ -12,6 +12,6 @@ class ImageResizeLoader extends Base
 {
     public function load()
     {
-        return new ImageResize($this->getContainer());
+        return new ImageResize();
     }
 }

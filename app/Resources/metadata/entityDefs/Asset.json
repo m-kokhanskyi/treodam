@@ -1,5 +1,16 @@
 {
     "fields": {
+        "attributes": {
+            "type": "text",
+            "view": "dam:views/asset/fields/attributes"
+        },
+        "renditions": {
+            "type": "linkMultiple",
+            "layoutDetailDisabled": true,
+            "layoutMassUpdateDisabled": true,
+            "noLoad": true,
+            "importDisabled": true
+        },
         "collection": {
             "type": "link"
         },
@@ -130,62 +141,6 @@
             "readOnly": false,
             "tooltip": false
         },
-        "fileType": {
-            "type": "varchar",
-            "required": false,
-            "trim": true,
-            "readOnly": true,
-            "audited": false,
-            "tooltip": false
-        },
-        "size": {
-            "type": "unit",
-            "required": false,
-            "measure": "File Size",
-            "audited": false,
-            "readOnly": true,
-            "tooltip": false
-        },
-        "height": {
-            "type": "int",
-            "required": false,
-            "readOnly": true,
-            "disableFormatting": false,
-            "audited": false,
-            "tooltip": false
-        },
-        "width": {
-            "type": "int",
-            "required": false,
-            "readOnly": true,
-            "disableFormatting": false,
-            "audited": false,
-            "tooltip": false
-        },
-        "colorSpace": {
-            "type": "varchar",
-            "required": false,
-            "trim": true,
-            "readOnly": true,
-            "audited": false,
-            "tooltip": false
-        },
-        "colorDepth": {
-            "type": "varchar",
-            "required": false,
-            "trim": true,
-            "readOnly": true,
-            "audited": false,
-            "tooltip": false
-        },
-        "orientation": {
-            "type": "varchar",
-            "required": false,
-            "trim": true,
-            "readOnly": true,
-            "audited": false,
-            "tooltip": false
-        },
         "image": {
             "type": "image",
             "required": true,
@@ -203,9 +158,24 @@
             "tooltip": false,
             "view": "dam:views/fields/file",
             "layoutMassUpdateDisabled": true
+        },
+        "size": {
+            "type": "unit",
+            "required": false,
+            "measure": "File Size",
+            "audited": false,
+            "readOnly": true,
+            "tooltip": false
         }
     },
     "links": {
+        "renditions": {
+            "type": "hasMany",
+            "foreign": "asset",
+            "entity": "Rendition",
+            "audited": false,
+            "isCustom": true
+        },
         "collection": {
             "type": "belongsTo",
             "foreign": "assets",

@@ -49,9 +49,4 @@ class FilePathBuilder extends \Treo\Core\FilePathBuilder
             "public" => DAMUploadDir::PUBLIC_PATH,
         ]);
     }
-
-    protected function getPath($path)
-    {
-        return realpath($path) . "/master/";
-    }
 }

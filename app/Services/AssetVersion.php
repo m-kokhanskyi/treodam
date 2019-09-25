@@ -54,13 +54,12 @@ class AssetVersion extends Base
         $path = pathinfo($filePath);
         $destPath = $this->buildDestPath($path['dirname'], $attachment);
 
-        $filePath = $this->getFileStoreManager()->getLocalFilePath($attachment);
-
         if ($this->getFileManager()->copy($filePath, $destPath, false, null, true)) {
             return parent::createEntity((object)[
                 'name' => $this->createNameFromDate($attachment->get('createdAt')),
                 'assetId' => $asset->id,
                 "fileName" => $attachment->get('name'),
+                "assignedUserId" => $asset->get("assignedUserId")
             ]);
         }
 

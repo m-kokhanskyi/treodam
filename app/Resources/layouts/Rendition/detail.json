@@ -15,6 +15,9 @@
                 },
                 {
                     "name": "file"
+                },
+                {
+                    "name": "nameOfFile"
                 }
             ]
         ],

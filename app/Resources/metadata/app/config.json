@@ -63,7 +63,13 @@
                     "test": {
                         "createVersion": true
                     }
-                }
+                },
+                "attributes": [
+                    "width",
+                    "height",
+                    "alt",
+                    "title"
+                ]
             },
             "description-image": {
                 "nature": "image",
@@ -95,8 +101,8 @@
                     ],
                     "scale": {
                         "min": {
-                            "width": 50000,
-                            "height": 50000
+                            "width": 1,
+                            "height": 1
                         }
                     },
                     "unique": {}
@@ -107,7 +113,13 @@
                     "githumb3": {},
                     "githumb4": {},
                     "watermark": {}
-                }
+                },
+                "attributes": [
+                    "width",
+                    "height",
+                    "alt",
+                    "title"
+                ]
             },
             "office-document": {
                 "nature": "file",
@@ -397,7 +409,8 @@
                 "resize": {
                     "upscale": true,
                     "w": 400,
-                    "h": 400
+                    "h": 400,
+                    "type": "crop-center"
                 }
             }
         },
@@ -443,6 +456,56 @@
                     "position": "left-top"
                 }
             }
+        }
+    },
+    "attributes": {
+        "width": {
+            "type": "integer",
+            "label": "width",
+            "required": false,
+            "readOnly": true
+        },
+        "height": {
+            "type": "integer",
+            "label": "height",
+            "required": false,
+            "readOnly": true
+        },
+        "file-type": {
+            "type": "string",
+            "label": "File Type",
+            "required": false,
+            "readOnly": true
+        },
+        "color-space": {
+            "type": "string",
+            "label": "Color Space",
+            "required": false,
+            "readOnly": true
+        },
+        "color-depth": {
+            "type": "string",
+            "label": "Color Depth",
+            "required": false,
+            "readOnly": true
+        },
+        "orientation": {
+            "type": "string",
+            "label": "Orientation",
+            "required": false,
+            "readOnly": true
+        },
+        "alt": {
+            "type": "string",
+            "label": "Alt",
+            "required": false,
+            "readOnly": false
+        },
+        "title": {
+            "type": "string",
+            "label": "Title",
+            "required": false,
+            "readOnly": false
         }
     }
 }

@@ -13,7 +13,6 @@ class Rendition extends \Espo\Core\Templates\Repositories\Base implements DAMAtt
     {
         return [
             ($entity->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->get('type')}/",
-            ($entity->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->get('type')}/",
             $entity->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC
         ];
     }

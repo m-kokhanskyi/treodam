@@ -77,8 +77,8 @@ class AssetEntity extends AbstractListener
 
         //After upload new file|image
         if ($this->changeAttachment($entity) && !$entity->isNew()) {
-            $this->getService("Attachment")->moveToMaster($entity);
             $this->getService("Asset")->createVersion($entity);
+            $this->getService("Attachment")->moveToMaster($entity);
         }
 
         //After change private (move to other folder)
@@ -102,7 +102,7 @@ class AssetEntity extends AbstractListener
 
         if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
             //build Renditions
-            $this->getService("Rendition")->buildRenditions($entity, $entity->isNew());
+            $this->getService("Rendition")->buildRenditions($entity);
         }
 
         //get meta data
@@ -226,7 +226,7 @@ class AssetEntity extends AbstractListener
 
         do {
             $type = $entity->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC;
-            $path = $this->getFilePathBuilder()->createPath($type);
+            $path = $this->getFilePathBuilder()->createPath($type, "master");
 
             $count = $repository->where(['path' => $path])->count();
 

@@ -2,5 +2,11 @@
     "controller": "controllers/record",
     "boolFilterList": [
         "onlyMy"
-    ]
+    ],
+    "recordViews":{
+        "detail": "dam:views/asset_version/record/detail"
+    },
+    "views" : {
+        "detail" : "dam:views/asset_version/detail"
+    }
 }

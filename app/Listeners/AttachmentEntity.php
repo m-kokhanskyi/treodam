@@ -43,14 +43,13 @@ class AttachmentEntity extends AbstractListener
         /**@var $entity Attachment* */
         $entity = $event->getArgument('entity');
 
-        if ($entity->isNew() && $entity->get("contents")) {
+        if ($entity->isNew() && $entity->get("contents") && $entity->get('relatedType') === "Asset") {
             $entity->set('hash_md5', md5($entity->get("contents")));
         }
     }
 
     public function afterSave(Event $event)
     {
-        $r = 1;
     }
 
     /**

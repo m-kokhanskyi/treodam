@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Dam\Listeners;
 
-use Dam\Entities\Asset;
+use Dam\Entities\Collection;
 use Dam\Listeners\Traits\ValidateCode;
 use Espo\Core\Exceptions\BadRequest;
 use Treo\Core\EventManager\Event;
@@ -42,7 +42,7 @@ class CollectionEntity extends AbstractListener
      */
     public function beforeSave(Event $event)
     {
-        /**@var $entity Asset* */
+        /**@var $entity Collection* */
         $entity = $event->getArgument('entity');
 
         if (!$this->isValidCode($entity)) {
@@ -52,7 +52,12 @@ class CollectionEntity extends AbstractListener
 
     public function afterSave(Event $event)
     {
+        /**@var $entity Collection* */
+        $entity = $event->getArgument("entity");
 
+        if ($entity->isAttributeChanged("isDefault")) {
+            $this->getService("Collection")->updateDefault($entity);
+        }
     }
 
     /**

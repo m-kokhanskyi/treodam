@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace Dam\Listeners;
 
 use Dam\Core\ConfigManager;
-use Dam\Core\FileStorage\DAMUploadDir;
+use Dam\Entities\Rendition;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\ORM\Entity;
 use Treo\Core\EventManager\Event;
@@ -48,21 +48,16 @@ class RenditionEntity extends AbstractListener
             $entity->get("type")
         ]);
 
-        if ($entity->isNew()) {
-            $this->getService($entity->getEntityType())->validateType($entity);
-
-            $attachment = $entity->get("image") ?? $entity->get("file");
-            if ($attachment->get("tmpPath")) {
-                $this->getService("Attachment")->moveToRendition($entity, $attachment);
-            }
+        if ($this->changeAttachmentInAuto($entity, $info)) {
+            throw new BadRequest("You can't change attachment for this rendition");
         }
 
         if (!$entity->isNew() && $entity->isAttributeChanged("type")) {
             throw new BadRequest("You can't change type");
         }
 
-        if ($entity->isNew() && !$entity->hasAttribute("nameOfFile")) {
-
+        if ($entity->isNew()) {
+            $this->getService($entity->getEntityType())->validateType($entity);
         }
 
         if (!$entity->isNew() && $this->changeAttachment($entity)) {
@@ -71,24 +66,24 @@ class RenditionEntity extends AbstractListener
             }
         }
 
+        $attachment = $entity->get("image") ?? $entity->get("file");
+        if ($attachment->get("tmpPath")) {
+            $this->getService("Attachment")->moveToRendition($entity, $attachment);
+        }
+
         if ($this->changeAttachment($entity)) {
+            $this->getService($entity->getEntityType())->updateAttachmentInfo($entity);
+        }
 
-            $attachmentService = $this->getService("Attachment");
-            $attachmentEntity = $entity->get("image") ?? $entity->get("file");
+        if (!$entity->get("nameOfFile")) {
+            $this->getService($entity->getEntityType())->createNameOfFile($entity);
+        } elseif ($entity->isAttributeChanged("nameOfFile")) {
+            $this->getService("Attachment")
+                ->changeName($attachment, $entity->get("nameOfFile"), $entity);
+        }
 
-            $path = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->get("type")}/" . $entity->get('asset')->get("path") . "/" . $attachmentEntity->get("name");
-
-            $imageInfo = $attachmentService->getImageInfo($attachmentEntity, $path);
-
-            $entity->set([
-                "width" => $imageInfo['width'],
-                "height" => $imageInfo['height'],
-                "colorSpace" => $imageInfo['color_space'],
-                "colorDepth" => $imageInfo['color_depth'],
-                "orientation" => $imageInfo['orientation'],
-                "size" => $imageInfo['size'],
-                "sizeUnit" => "kb"
-            ]);
+        if (!$entity->isNew() && $entity->isAttributeChanged("private")) {
+            $this->getService("Attachment")->changeAccess($entity);
         }
     }
 
@@ -97,6 +92,7 @@ class RenditionEntity extends AbstractListener
      */
     public function afterSave(Event $event)
     {
+        /**@var $entity \Dam\Entities\Rendition* */
         $entity = $event->getArgument('entity');
 
         if ($entity->isNew() || $this->changeAttachment($entity)) {
@@ -112,5 +108,15 @@ class RenditionEntity extends AbstractListener
     protected function getConfigManager(): ConfigManager
     {
         return $this->container->get("ConfigManager");
+    }
+
+    /**
+     * @param Entity $entity
+     * @param array $info
+     * @return bool
+     */
+    private function changeAttachmentInAuto(Rendition $entity, ?array $info): bool
+    {
+        return !$entity->isNew() && $this->changeAttachment($entity) && $info['auto'] && !$entity->isAutoCreated;
     }
 }

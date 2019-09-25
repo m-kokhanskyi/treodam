@@ -27,7 +27,7 @@
   },
   "views": {
     "list": "dam:views/asset_category/list",
-    "detail": "dam:views/asset_category/detail"
+    "detail": "dam:views/detail"
   },
   "menu": {
     "listTree": {

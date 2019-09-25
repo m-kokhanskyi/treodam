@@ -5,6 +5,14 @@
             "required": true,
             "trim": true
         },
+        "path": {
+            "type": "varchar",
+            "emHidden": true,
+            "hidden": true,
+            "layoutDetailDisabled": true,
+            "layoutMassUpdateDisabled": true,
+            "layoutListDisabled": true
+        },
         "description": {
             "type": "text"
         },

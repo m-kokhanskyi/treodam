@@ -1,0 +1,33 @@
+<?php
+
+
+namespace Dam\Controllers;
+
+use Espo\Core\Templates\Controllers\Base;
+use Slim\Http\Request;
+use Espo\Core\Exceptions;
+
+class AbstractController extends Base
+{
+    /**
+     * Validate Get action
+     *
+     * @param Request $request
+     *
+     * @return bool
+     * @throws Exceptions\BadRequest
+     * @throws Exceptions\Forbidden
+     */
+    public function isReadAction(Request $request): bool
+    {
+        if (!$request->isGet()) {
+            throw new Exceptions\BadRequest();
+        }
+
+        if (!$this->getAcl()->check($this->name, 'read')) {
+            throw new Exceptions\Forbidden();
+        }
+
+        return true;
+    }
+}

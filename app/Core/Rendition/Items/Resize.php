@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dam\Core\Rendition\Items;
 
-
 use Gumlet\ImageResize;
 
 class Resize extends Base
@@ -15,10 +14,8 @@ class Resize extends Base
      */
     public function create(): bool
     {
-        $image = new ImageResize($this->file);
-        $image->quality_jpg = 100;
-        $image->quality_png = 8;
-
+        $image = $this->getImageResize()->load($this->file);
+        //$image = new ImageResize($this->file);
         $type = $this->params['type'] ?? "bestFit";
 
         switch ($type) {
@@ -48,5 +45,10 @@ class Resize extends Base
         $image->save($this->file);
 
         return true;
+    }
+
+    protected function getImageResize() : \Dam\Core\ImageResize
+    {
+        return $this->container->get("ImageResize");
     }
 }

@@ -39,6 +39,7 @@ class RenditionVersion extends \Espo\Core\Templates\Services\Base
                 'name' => $this->createNameFromDate($attachment->get('createdAt')),
                 'renditionId' => $rendition->id,
                 "fileName" => $attachment->get('name'),
+                "assignedUserId" => $rendition->get("assignedUserId")
             ]);
         }
 

@@ -1,4 +1,13 @@
 {
+    "bottomPanels": {
+        "detail": [
+            {
+                "name": "relations",
+                "label": "Relations",
+                "view": "dam:views/asset/record/panels/asset_relations"
+            }
+        ]
+    },
     "controller": "dam:controllers/asset",
     "boolFilterList": [
         "onlyMy",
@@ -13,7 +22,8 @@
     },
     "recordViews": {
         "plate": "dam:views/asset/record/plate",
-        "plateItem": "dam:views/asset/record/plate-item"
+        "plateItem": "dam:views/asset/record/plate-item",
+        "detail": "dam:views/asset/record/detail"
     },
     "menu": {
         "list": {
@@ -70,157 +80,12 @@
                     ]
                 }
             },
-            "height": {
+            "size": {
                 "visible": {
                     "conditionGroup": [
                         {
-                            "type": "or",
-                            "value": [
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Icon"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Gallery Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Description Image"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            "width": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "or",
-                            "value": [
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Icon"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Gallery Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Description Image"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            "colorSpace": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "or",
-                            "value": [
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Icon"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Gallery Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Description Image"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            "colorDepth": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "or",
-                            "value": [
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Icon"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Gallery Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Description Image"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            "orientation": {
-                "visible": {
-                    "conditionGroup": [
-                        {
-                            "type": "or",
-                            "value": [
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Icon"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Gallery Image"
-                                },
-                                {
-                                    "type": "equals",
-                                    "attribute": "type",
-                                    "value": "Description Image"
-                                }
-                            ]
+                            "type": "isNotEmpty",
+                            "attribute": "id"
                         }
                     ]
                 }

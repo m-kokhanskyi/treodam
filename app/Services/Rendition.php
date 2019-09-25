@@ -3,8 +3,9 @@
 namespace Dam\Services;
 
 use Dam\Core\ConfigManager;
+use Dam\Core\FilePathBuilder;
 use Dam\Core\FileStorage\DAMUploadDir;
-use Dam\Core\Util;
+use Dam\Core\Utils\Util;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Treo\Core\Utils\Language;
@@ -16,10 +17,11 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         parent::__construct();
 
         $this->addDependency("ConfigManager");
+        $this->addDependency("filePathBuilder");
         $this->addDependency("language");
     }
 
-    public function buildRenditions($entity, $isNew)
+    public function buildRenditions($entity)
     {
         $info = $this->getConfigManager()->get([ConfigManager::getType($entity->get("type"))]);
 
@@ -60,7 +62,9 @@ class Rendition extends \Espo\Core\Templates\Services\Base
                     "rendition" => $renditionKey
                 ]) . ".{$pathInfo['extension']}";
 
-            $newPath = ($private ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$renditionKey}/" . $entity->get('path') . "/" . $fileName;
+            $path = $this->buildPath($private, $renditionKey);
+
+            $newPath = ($private ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$renditionKey}/{$path}/" . $fileName;
             if ($this->getFileManager()->move($tmp, $newPath, false)) {
                 $fileFieldName = $info['nature'] === "image" ? "imageId" : "fileId";
                 $attachmentRepository = $this->getEntityManager()->getRepository("Attachment");
@@ -75,7 +79,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
 
                 $attachmentEntity->set([
                     "role" => "Attachment",
-                    "storageFilePath" => $entity->get("path"),
+                    "storageFilePath" => $path,
                     "storage" => "DAMUploadDir",
                     "relatedId" => $renditionEntity->id,
                     "relatedType" => "Rendition",
@@ -90,8 +94,13 @@ class Rendition extends \Espo\Core\Templates\Services\Base
                     "type" => $renditionKey,
                     "private" => $private,
                     $fileFieldName => $attachmentEntity->id,
-                    "assetId" => $entity->id
+                    "assetId" => $entity->id,
+                    "nameOfFile" => $this->getFileName($attachmentEntity->get("name")),
+                    "path" => $path,
+                    "assignedUserId" => $entity->get("assignedUserId")
                 ]);
+
+                $renditionEntity->isAutoCreated = true;
 
                 if (!$attachmentRepository->save($attachmentEntity)) {
                     throw new Error("Can't save 'Attachment'");
@@ -102,18 +111,6 @@ class Rendition extends \Espo\Core\Templates\Services\Base
                 }
             }
         }
-    }
-
-    protected function renditionEntity($assetId, $renditionType)
-    {
-        /**@var $renditionRepository \Espo\Custom\Repositories\Rendition* */
-        $renditionRepository = $this->getRepository();
-        $res = $renditionRepository->where([
-            "assetId" => $assetId,
-            "type" => $renditionType
-        ])->findOne();
-
-        return $res ? $res : $this->getEntity();
     }
 
     public function updateMetaData(\Dam\Entities\Rendition $entity)
@@ -169,6 +166,52 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         return $this->getServiceFactory()->create("RenditionVersion")->createEntity($attachment);
     }
 
+    public function updateAttachmentInfo($entity)
+    {
+        $attachmentService = $this->getServiceFactory()->create("Attachment");
+        $attachmentEntity = $entity->get("image") ?? $entity->get("file");
+
+        $path = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->get("type")}/" . $entity->get("path") . "/" . $attachmentEntity->get("name");
+
+        $imageInfo = $attachmentService->getImageInfo($attachmentEntity, $path);
+
+        $entity->set([
+            "width" => $imageInfo['width'],
+            "height" => $imageInfo['height'],
+            "colorSpace" => $imageInfo['color_space'],
+            "colorDepth" => $imageInfo['color_depth'],
+            "orientation" => $imageInfo['orientation'],
+            "size" => round($imageInfo['size'] / 1024, 2),
+            "sizeUnit" => "kb"
+        ]);
+    }
+
+    public function createNameOfFile($entity)
+    {
+        $attachmentName = $entity->get("imageName") ?? $entity->get("fileName");
+        $attachmentInfo = pathinfo($attachmentName);
+        $entity->set("nameOfFile", $attachmentInfo['basename']);
+    }
+
+    protected function buildPath($private, $renditionType)
+    {
+        $type = $private ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC;
+
+        return $this->getFilePathBuilder()->createPath($type, $renditionType);
+    }
+
+    protected function renditionEntity($assetId, $renditionType)
+    {
+        /**@var $renditionRepository \Espo\Custom\Repositories\Rendition* */
+        $renditionRepository = $this->getRepository();
+        $res = $renditionRepository->where([
+            "assetId" => $assetId,
+            "type" => $renditionType
+        ])->findOne();
+
+        return $res ? $res : $this->getEntity();
+    }
+
     protected function createFile($renditionParams, $tmp)
     {
         $res = true;
@@ -186,6 +229,13 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         return $res;
     }
 
+    protected function getFileName(string $name): ?string
+    {
+        $info = pathinfo($name);
+
+        return $info['filename'] ?? null;
+    }
+
     protected function getConfigManager(): ConfigManager
     {
         return $this->getInjection("ConfigManager");
@@ -195,6 +245,11 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     protected function getLanguage(): Language
     {
         return $this->getInjection("language");
+    }
+
+    protected function getFilePathBuilder(): FilePathBuilder
+    {
+        return $this->getInjection("filePathBuilder");
     }
 }
 

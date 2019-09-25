@@ -30,7 +30,7 @@
 namespace Dam\EntryPoints;
 
 use Dam\Core\FileStorage\DAMUploadDir;
-use Espo\Core\Exceptions\Error;
+use Dam\Core\PathInfo;
 use Treo\Entities\Attachment;
 
 class Image extends \Treo\EntryPoints\Image
@@ -42,14 +42,12 @@ class Image extends \Treo\EntryPoints\Image
      */
     protected function getThumbPath($attachment, $size)
     {
-        if ($attachment->get('relatedType') === "Asset") {
-            $asset = $attachment->get('related');
-            if ($asset) {
-                $isPrivate = $asset->get('private');
-            }
-        }
+        $related = $attachment->get("related");
+        $path = DAMUploadDir::BASE_THUMB_PATH;
 
-        $path = isset($isPrivate) ? DAMUploadDir::DAM_THUMB_PATH : DAMUploadDir::BASE_THUMB_PATH;
+        if (is_a($related, PathInfo::class)) {
+            $path = DAMUploadDir::DAM_THUMB_PATH . $related->getMainFolder() . "/";
+        }
 
         return $path . $attachment->get('storageFilePath') . "/{$size}/" . $attachment->get('name');
     }

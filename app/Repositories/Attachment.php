@@ -23,6 +23,7 @@ namespace Dam\Repositories;
 
 use Dam\Core\FileManager;
 use Dam\Core\FileStorage\DAMUploadDir;
+use Dam\Core\PathInfo;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\ORM\Entity;
 
@@ -129,11 +130,11 @@ class Attachment extends \Treo\Repositories\Attachment
     /**
      * @param Entity $attachment
      * @param string $newFileName
-     * @param Entity|null $entity
+     * @param PathInfo|null $entity
      * @return bool
      * @throws Error
      */
-    public function renameFile(Entity $attachment, string $newFileName, Entity $entity = null): bool
+    public function renameFile(Entity $attachment, string $newFileName, PathInfo $entity = null): bool
     {
         $path = $this->buildPath($entity, $attachment);
         $pathInfo = pathinfo($path);
@@ -141,9 +142,9 @@ class Attachment extends \Treo\Repositories\Attachment
             return true;
         }
 
-        if ($this->getFileManager()->renameFile($path, $newFileName)) {
-            $attachment->set("name", $newFileName);
+        $attachment->setName($newFileName);
 
+        if ($this->getFileManager()->renameFile($path, (string)$attachment->get("name"))) {
             return $this->save($attachment) ? true : false;
         }
 
@@ -156,7 +157,7 @@ class Attachment extends \Treo\Repositories\Attachment
      * @return mixed
      * @throws Error
      */
-    public function saveImageInfo ($attachment, $data)
+    public function saveImageInfo($attachment, $data)
     {
         $attachment->set([
             "size" => round($data['size'] / 1024, 1),
@@ -172,6 +173,22 @@ class Attachment extends \Treo\Repositories\Attachment
         return $this->save($attachment);
     }
 
+    public function afterRemove(\Espo\ORM\Entity $entity, array $options = [])
+    {
+        //if uploaded new attachment with previous name
+        $res = $this->where([
+            "relatedId" => $entity->get("relatedId"),
+            "relatedType" => $entity->get("relatedType"),
+            "storageFilePath" => $entity->get("storageFilePath"),
+            "name" => $entity->get("name"),
+            "deleted" => 0
+        ])->count();
+
+        if (!$res) {
+            parent::afterRemove($entity, $options);
+        }
+    }
+
     /**
      * @return FileManager
      */
@@ -180,9 +197,9 @@ class Attachment extends \Treo\Repositories\Attachment
         return $this->getInjection("DAMFileManager");
     }
 
-    private function buildPath(Entity $entity, Entity $attachment): string
+    private function buildPath(PathInfo $entity, Entity $attachment): string
     {
-        return ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $entity->get('path') . "/" . $attachment->get('name');
-
+        $path = $entity->getPathInfo()[0];
+        return $path . $attachment->get('storageFilePath') . "/" . $attachment->get('name');
     }
 }

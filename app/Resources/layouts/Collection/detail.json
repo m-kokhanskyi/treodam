@@ -6,13 +6,18 @@
                     "name": "name"
                 },
                 {
-                    "name": "isActive"
+                    "name": "code"
                 }
             ],
             [
                 {
-                    "name": "code"
+                    "name": "isActive"
                 },
+                {
+                    "name": "isDefault"
+                }
+            ],
+            [
                 {
                     "name": "description"
                 }

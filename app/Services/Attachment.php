@@ -24,12 +24,15 @@ namespace Dam\Services;
 
 use Dam\Core\ConfigManager;
 use Dam\Core\FileManager;
+use Dam\Core\FilePathBuilder;
 use Dam\Core\FileStorage\DAMUploadDir;
+use Dam\Core\Utils\Util;
 use Dam\Core\Validation\Validator;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\ORM\Entity;
+use Imagick;
 use Treo\Core\FileStorage\Manager;
 
 /**
@@ -45,6 +48,7 @@ class Attachment extends \Treo\Services\Attachment
         $this->addDependency("DAMFileManager");
         $this->addDependency("fileStorageManager");
         $this->addDependency("ConfigManager");
+        $this->addDependency("filePathBuilder");
 
         parent::__construct();
     }
@@ -53,20 +57,25 @@ class Attachment extends \Treo\Services\Attachment
      * @param $attachment
      * @param null $path
      * @return array
+     * @throws \ImagickException
+     * @throws \ReflectionException
      */
     public function getImageInfo($attachment, $path = null): array
     {
         $path = $path ?? $this->getPath($attachment);
         $result = [];
 
+        $image = new Imagick($path);
+
         if ($imageInfo = getimagesize($path)) {
+            $orientation = $image->getImageOrientation() ? $image->getImageOrientation() : null;
             $result = [
-                "width" => $imageInfo[0],
-                "height" => $imageInfo[1],
-                "color_space" => is_null($imageInfo['channels'] ?? null) ? null : ($imageInfo['channels'] == 3 ? "RGB" : "CMYK"),
-                "color_depth" => $imageInfo['bits'] ?? null,
-                'orientation' => $this->getPosition($imageInfo[0], $imageInfo[1]),
-                'mime' => $imageInfo['mime'] ?? null,
+                "width" => $image->getImageWidth(),
+                "height" => $image->getImageHeight(),
+                "color_space" => Util::getColorSpace($image),
+                "color_depth" => $image->getImageDepth(),
+                'orientation' => $orientation ?? $this->getPosition($image->getImageWidth(), $image->getImageHeight()),
+                'mime' => $image->getImageMimeType(),
             ];
         }
 
@@ -123,8 +132,12 @@ class Attachment extends \Treo\Services\Attachment
         $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
         $attachment = $this->getEntity($attachmentId);
 
-        if ($attachment->get('sourceId')) {
-            return $this->copyDuplicate($asset);
+//        if ($attachment->get('sourceId')) {
+//            return $this->copyDuplicate($asset);
+//        }
+
+        if ($asset->get("nameOfFile")) {
+            $attachment->setName($asset->get("nameOfFile"));
         }
 
         $sourcePath = $attachment->get("tmpPath");
@@ -140,13 +153,20 @@ class Attachment extends \Treo\Services\Attachment
 
     public function moveToRendition($entity, $attachment)
     {
-        $asset = $entity->get("asset");
-
         $sourcePath = $attachment->get("tmpPath");
-        $destPath = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $entity->get("type") . "/" . $asset->get('path') . "/" . $attachment->get('name');
+
+        if (!$entity->get("path")) {
+            $type = $entity->get("private") ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC;
+            $entity->set("path", $this->getFilePathBuilder()->createPath($type, $entity->get('type')));
+        }
+
+        $destPath = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . $entity->get("type") . "/" . $entity->get('path') . "/" . $attachment->get('name');
 
         if ($this->getFileManager()->move($sourcePath, $destPath, false)) {
-            return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment, $asset->get('path'));
+            return $this
+                ->getEntityManager()
+                ->getRepository("Attachment")
+                ->updateStorage($attachment, $entity->get('path'));
         }
 
         return false;
@@ -172,24 +192,25 @@ class Attachment extends \Treo\Services\Attachment
     }
 
     /**
-     * @param \Dam\Entities\Asset $asset
+     * @param Entity $entity
      * @return mixed
      * @throws Error
      * @throws Forbidden
      */
-    public function changeAccess(\Dam\Entities\Asset $asset)
+    public function changeAccess(Entity $entity)
     {
-        $source = ($asset->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->getFetched("path");
-        $dest = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get("path");
+        $source = ($entity->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->getMainFolder()}/" . $entity->getFetched("path");
+        $dest = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->getMainFolder()}/" . $entity->get("path");
 
-        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
+        $nature = $this->getConfigManager()->get([ConfigManager::getType($entity->get('type')), "nature"]);
 
-        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
+        $attachmentId = $nature === "image" ? $entity->get("imageId") : $entity->get("fileId");
         $attachment = $this->getEntity($attachmentId);
 
         if ($this->getFileManager()->moveFolder($source, $dest)) {
-            return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment,
-                $asset->get('path'));
+            return $this->getEntityManager()
+                ->getRepository("Attachment")
+                ->updateStorage($attachment, $entity->get('path'));
         }
     }
 
@@ -380,4 +401,10 @@ class Attachment extends \Treo\Services\Attachment
     {
         return $this->getInjection("ConfigManager");
     }
+
+    protected function getFilePathBuilder(): FilePathBuilder
+    {
+        return $this->getInjection("filePathBuilder");
+    }
+
 }

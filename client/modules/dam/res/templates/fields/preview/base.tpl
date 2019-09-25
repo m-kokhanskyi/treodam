@@ -1,0 +1,1 @@
+<img src="?entryPoint=preview&size=small&id={{assetId}}&v=1567595490"/>

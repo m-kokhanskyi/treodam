@@ -29,6 +29,7 @@ use Espo\Core\Utils\Log;
 
 /**
  * Class Asset
+ *
  * @package Dam\Services
  */
 class Asset extends Base
@@ -44,6 +45,7 @@ class Asset extends Base
 
     /**
      * @param \Dam\Entities\Asset $asset1
+     *
      * @return mixed
      */
     public function createVersion(\Dam\Entities\Asset $asset)
@@ -74,14 +76,23 @@ class Asset extends Base
 
     public function getImageInfo(\Dam\Entities\Asset $asset)
     {
-        $attachment = $asset->get('image') ?? $asset->get('file');
-        $attachmentService = $this->getService("Attachment");
+        $type = ConfigManager::getType($asset->get('type'));
+        $nature = $this->getConfigManager()->get([$type, "nature"]);
 
-        $imageInfo = $attachmentService->getImageInfo($attachment);
+        $attachment = $nature === "image" ? $asset->get("image") : $asset->get("file");
+        $imageInfo = $this->getService("Attachment")->getImageInfo($attachment);
 
-        if ($imageInfo) {
-            return $this->getRepository()->saveImageInfo($asset, $imageInfo);
-        }
+        $asset->set([
+            "size" => round($imageInfo['size'] / 1024, 1),
+            "sizeUnit" => "kb",
+        ]);
+
+        $attributesList = $this->getConfigManager()->get([$type, "attributes"]);
+
+        $asset->set("attributes", json_encode(array_merge(
+                json_decode(($asset->get("attributes") ?? "{}"), true),
+                array_intersect_key($imageInfo, $attributesList))
+        ));
     }
 
     /**

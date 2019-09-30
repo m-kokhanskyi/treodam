@@ -151,28 +151,6 @@ class Attachment extends \Treo\Repositories\Attachment
         return false;
     }
 
-    /**
-     * @param $attachment
-     * @param $data
-     * @return mixed
-     * @throws Error
-     */
-    public function saveImageInfo($attachment, $data)
-    {
-        $attachment->set([
-            "size" => round($data['size'] / 1024, 1),
-            "sizeUnit" => "kb",
-            "fileType" => $data['extension'],
-            "width" => $data['width'] ?? null,
-            "height" => $data['height'] ?? null,
-            "colorSpace" => $data['color_space'] ?? null,
-            "colorDepth" => $data['color_depth'] ?? null,
-            "orientation" => $data['orientation'] ?? null
-        ]);
-
-        return $this->save($attachment);
-    }
-
     public function afterRemove(\Espo\ORM\Entity $entity, array $options = [])
     {
         //if uploaded new attachment with previous name

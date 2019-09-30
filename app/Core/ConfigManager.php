@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Dam\Core;
 
 use Treo\Core\Container;
@@ -49,11 +50,13 @@ class ConfigManager
             $res[$type] = array_merge($config['types']['global'] ?? [], $rules);
             $res[$type]['validations'] = array_merge($config['types']['global']['validations'] ?? [], $rules['validations']);
             $res[$type]['renditions'] = $this->joinVariation($rules['renditions'] ?? []);
+            $res[$type]['attributes'] = $this->joinAttributes($rules['attributes'] ?? []);
         }
 
         $res["default"] = array_merge($config['types']['global'] ?? [], $config['types']['default']);
         $res["default"]['validations'] = array_merge(($config['types']['global']['validations'] ?? []), ($config['types']['default']['validations'] ?? []));
         $res["default"]['renditions'] = $this->joinVariation($config['types']['default']['renditions'] ?? []);
+        $res["default"]['renditions'] = $this->joinAttributes($config['types']['default']['attributes'] ?? []);
 
         return $res;
     }
@@ -70,5 +73,12 @@ class ConfigManager
         }
 
         return $res;
+    }
+
+    private function joinAttributes($rules)
+    {
+        $attributes = $this->container->get('metadata')->get(['app', 'config', 'attributes']);
+
+        return array_intersect_key($attributes, array_flip($rules));
     }
 }

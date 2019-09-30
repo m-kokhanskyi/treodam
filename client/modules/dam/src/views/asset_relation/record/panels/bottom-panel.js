@@ -2,7 +2,6 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
     Dep => Dep.extend({
         template: "dam:asset_relation/record/panels/asset-relations",
         blocks: [],
-        assetRelationLayoutList: [],
 
         data() {
             return {
@@ -20,36 +19,27 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
             let items = this.getMetadata().get("entityDefs.Asset.fields.type.options");
             let url = "AssetRelation/" + this.model.name + "/" + this.model.id + "/itemsInEntity?list=" + items.join(",");
             this.blocks = [];
-            Promise.all([
-                new Promise(resolve => {
-                    this.getCollectionFactory().create("AssetRelation", (collection) => {
-                        collection.url = url;
-                        collection.fetch().then(() => {
-                            this.collection = collection;
-                            resolve();
-                        })
-                    });
-                }),
-                new Promise(resolve => {
-                    this.ajaxGetRequest("AssetRelation/layout/listSmall").then(data => {
-                        this.assetRelationLayoutList = data;
-                        resolve();
-                    });
-                })
-            ]).then(() => {
-                this.collection.forEach((model) => {
-                    if (model.get("hasItem")) {
-                        this.blocks.push(model.get("name"));
-                        this.createView(model.get('name'), "dam:views/asset_relation/record/panels/asset-type-block", {
-                            model: model,
-                            el: this.options.el + ' .group[data-name="' + model.get("name") + '"]',
-                            assetRelationLayoutList: this.assetRelationLayoutList
-                        });
-                    }
-                });
-                this.wait(false);
-            })
 
+            this.getCollectionFactory().create("AssetRelation", (collection) => {
+                collection.url = url;
+                collection.fetch().then(() => {
+                    this.collection = collection;
+                    this.collection.forEach((model) => {
+                        if (model.get("hasItem")) {
+                            model.set({
+                                entityName: this.defs.entityName,
+                                entityId: this.model.id
+                            });
+                            this.blocks.push(model.get("name"));
+                            this.createView(model.get('name'), "dam:views/asset_relation/record/panels/asset-type-block", {
+                                model: model,
+                                el: this.options.el + ' .group[data-name="' + model.get("name") + '"]'
+                            });
+                        }
+                    });
+                    this.wait(false);
+                })
+            });
         },
 
         actionButtonList() {
@@ -75,9 +65,7 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         },
 
         actionCreateRelation() {
-            this.createView("createAssetRelation", "dam:views/asset_relation/record/modals/create-asset-relation", {
-
-            }, (view) => {
+            this.createView("createAssetRelation", "dam:views/asset_relation/record/modals/create-asset-relation", {}, (view) => {
                 view.render();
             });
         },

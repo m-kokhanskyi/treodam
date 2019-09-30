@@ -39,16 +39,5 @@
         ],
         "style": "default",
         "label": "Overview"
-    },
-    {
-        "rows": [
-            [
-                {
-                    "name": "attributes"
-                }
-            ]
-        ],
-        "style": "default",
-        "label": "Attributes"
     }
 ]

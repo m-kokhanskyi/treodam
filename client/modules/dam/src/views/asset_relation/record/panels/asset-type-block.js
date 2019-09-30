@@ -16,44 +16,36 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
 
         showInfo() {
             if (this.collection) {
-                this.collection.fetch().then(() => {
-                    this.showItems();
-                });
+                this.getView("list").reRender();
             } else {
                 this.getCollectionFactory().create("AssetRelation", (collection) => {
-                    collection.url = "AssetRelation";
+                    collection.url = `AssetRelation/byEntity/${this.model.get('entityName')}/${this.model.get('entityId')}?type=${this.model.get('name')}`;
 
-                    collection.fetch().then(() => {
-                        this.collection = collection;
-                        this.showItems();
+                    this.collection = collection;
+                    this.createView('list', "views/record/list", {
+                        collection: this.collection,
+                        model: this.model,
+                        buttonsDisabled: true,
+                        checkboxes: false,
+                        el: this.options.el + ' .list-container',
+                        layoutName: "listSmall",
+                        dragableListRows: true,
+                        listRowsOrderSaveUrl: `AssetRelation/${this.model.get('entityName')}/${this.model.get('entityId')}/sortOrder`,
+                        listLayout: null,
+                        skipBuildRows: true
+                    }, function (view) {
+                        view.listenTo(view, "after:render", () => {
+                            $(view.el).find('.list').slideDown("fast");
+                        });
+                        collection.fetch();
                     });
-                });
-            }
-        },
-
-        showItems() {
-            if (this.hasView("rows")) {
-                let view = this.getView("rows");
-
-                view.reRender();
-            } else {
-                this.createView("rows", "dam:views/asset_relation/record/panels/rows", {
-                    model: this.model,
-                    el: this.options.el + " .list-container",
-                    collection: this.collection,
-                    assetRelationLayoutList: this.options.assetRelationLayoutList || {}
-                }, view => {
-                    view.listenTo(view, "after:render", () => {
-                        $(view.el).find('.list').slideDown("fast");
-                    });
-                    view.render();
                 });
             }
         },
 
         hideInfo() {
-            if (this.hasView("rows")) {
-                let view = this.getView("rows");
+            if (this.hasView("list")) {
+                let view = this.getView("list");
                 $(view.el).find(".list").slideUp("fast");
             }
         }

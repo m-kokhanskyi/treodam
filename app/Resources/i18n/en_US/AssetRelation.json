@@ -1,0 +1,13 @@
+{
+    "fields": {
+        "attributes": "Attributes",
+        "entityName": "Entity Name",
+        "entityId": "EntityId",
+        "assetId": "AssetId",
+        "sortOrder": "SortOrder"
+    },
+    "links": [],
+    "labels": {
+        "Create AssetRelation": "Create AssetRelation"
+    }
+}

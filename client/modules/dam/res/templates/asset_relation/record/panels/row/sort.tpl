@@ -1,1 +1,0 @@
-<span class="flaticon flaticon-move-arrows" style="font-size: 12px;" data-id="{{get model "id"}}"></span>

@@ -65,7 +65,7 @@ class AssetEntity extends AbstractListener
         }
 
         //After update image
-        if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
+        if ($this->changeAttachment($entity)) {
             $this->getService("Asset")->getImageInfo($entity);
         }
 

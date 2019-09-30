@@ -49,26 +49,4 @@ class Asset extends Base implements DAMAttachment
         ];
     }
 
-    /**
-     * @param Entity $entity
-     * @param $data
-     * @return mixed
-     */
-    public function saveImageInfo(Entity $entity, $data, $save = false)
-    {
-        $entity->set([
-            "size" => round($data['size'] / 1024, 1),
-            "sizeUnit" => "kb",
-            "fileType" => $data['extension'],
-            "width" => $data['width'] ?? null,
-            "height" => $data['height'] ?? null,
-            "colorSpace" => $data['color_space'] ?? null,
-            "colorDepth" => $data['color_depth'] ?? null,
-            "orientation" => $data['orientation'] ?? null
-        ]);
-
-        if ($save) {
-            $this->save($entity);
-        }
-    }
 }

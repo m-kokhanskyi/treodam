@@ -15,16 +15,20 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
     const ASSET_RELATION_NAME = "asset_relations";
     const RELATION_NAME = 'relations';
 
-    public function w__construct(Container $container = null)
+    protected static function getAssetRelationTemplate(string $entityName)
     {
-        $this->asset_relation = [
+        return [
             [
                 "name" => self::ASSET_RELATION_NAME,
                 "label" => "Asset Relations",
-                "view" => "dam:views/asset_relation/record/panels/bottom-panel"
+                "view" => "dam:views/asset_relation/record/panels/bottom-panel",
+                "entityName" => $entityName
             ]
         ];
+    }
 
+    public function __construct(Container $container = null)
+    {
         $this->relation = [
             [
                 "name" => self::RELATION_NAME,
@@ -89,7 +93,7 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         $this->getMetadata()->set("clientDefs", $relationEntityName, [
             "bottomPanels" => [
                 "detail" => array_merge(
-                    $this->asset_relation,
+                    $this->getAssetRelationTemplate($relationEntityName),
                     $panels ?? []
                 )
             ]

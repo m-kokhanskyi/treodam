@@ -1,0 +1,84 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Dam\Services;
+
+use Dam\Entities\Asset;
+use Espo\Core\ORM\Entity;
+
+class AssetRelation extends \Espo\Core\Templates\Services\Base
+{
+    public function createLink($entity1, $entity2, $assignedUserId)
+    {
+        if (is_a($entity1, Asset::class)) {
+            $assetEntity = $entity1;
+            $relatedEntity = $entity2;
+        } else {
+            $assetEntity = $entity2;
+            $relatedEntity = $entity1;
+        }
+
+        if (!$this->checkDuplicate($assetEntity, $relatedEntity)) {
+            $repository = $this->getRepository()->createLink($assetEntity, $relatedEntity, $assignedUserId);
+        }
+    }
+
+    public function checkDuplicate(Entity $assetEntity, Entity $relatedEntity)
+    {
+        return $this->getRepository()
+            ->getEntityAssetsById($assetEntity->id, $relatedEntity->getEntityName(), $relatedEntity->id);
+    }
+
+    public function getItemsInList(array $list, string $entityName, string $entityId)
+    {
+        $items = $this
+            ->getRepository()
+            ->getItemsInList($list, $entityName, $entityId);
+        $resItems = [];
+        $res = [];
+
+        foreach ($items as $item) {
+            $resItems[$item['type']] = $item['count'];
+        }
+
+        foreach ($list as $listItem) {
+            $res[] = [
+                "name" => $listItem,
+                "hasItem" => $resItems[$listItem] ?? false,
+            ];
+        }
+        return $res;
+    }
+
+    public function getItems(string $entityId, string $entityName, string $type)
+    {
+        return $this->getRepository()
+            ->getItemsByEntity($entityId, $entityName, $type);
+    }
+
+    public function updateSortOrder(string $entityName, string $entityId, array $data): bool
+    {
+        // prepare data
+        $result = false;
+
+        if (!empty($data)) {
+            $template
+                = "UPDATE asset_relation SET sort_order = %s 
+                      WHERE entity_name = '%s' AND entity_id = '%s' AND id = '%s';";
+            $sql = '';
+            foreach ($data as $k => $id) {
+                $sql .= sprintf($template, $k, $entityName, $entityId,  $id);
+            }
+
+            // update DB data
+            $sth = $this->getEntityManager()->getPDO()->prepare($sql);
+            $sth->execute();
+
+            // prepare result
+            $result = true;
+        }
+
+        return $result;
+    }
+}

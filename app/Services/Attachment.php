@@ -72,8 +72,8 @@ class Attachment extends \Treo\Services\Attachment
             $result = [
                 "width" => $image->getImageWidth(),
                 "height" => $image->getImageHeight(),
-                "color_space" => Util::getColorSpace($image),
-                "color_depth" => $image->getImageDepth(),
+                "color-space" => Util::getColorSpace($image),
+                "color-depth" => $image->getImageDepth(),
                 'orientation' => $orientation ?? $this->getPosition($image->getImageWidth(), $image->getImageHeight()),
                 'mime' => $image->getImageMimeType(),
             ];

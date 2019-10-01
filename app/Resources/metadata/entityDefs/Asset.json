@@ -1,5 +1,35 @@
 {
   "fields": {
+    "active": {
+      "notNull": true,
+      "type": "bool",
+      "default": true,
+      "audited": false,
+      "readOnly": false,
+      "tooltip": false
+    },
+    "tags": {
+      "type": "multiEnum",
+      "storeArrayValues": true,
+      "required": false,
+      "fontSize": 1,
+      "options": [
+        "tag1",
+        "tag2",
+        "tag3",
+        "tag4",
+        "tag5"
+      ],
+      "optionColors": {
+        "tag1": "FF0000",
+        "tag2": "FFFF00",
+        "tag3": "00FF00",
+        "tag4": "0000FF",
+        "tag5": "00FFFF"
+      },
+      "audited": false,
+      "readOnly": false
+    },
     "renditions": {
       "type": "linkMultiple",
       "layoutDetailDisabled": true,

@@ -3,7 +3,7 @@
 namespace Dam\Repositories;
 
 use Dam\Core\ORM\Query\DamQuery;
-use Dam\Core\Templates\Repositories\Base;
+use Espo\Core\Templates\Repositories\Base;
 use Espo\Core\ORM\Entity;
 use PDO;
 

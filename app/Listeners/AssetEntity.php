@@ -90,6 +90,10 @@ class AssetEntity extends AbstractListener
         if (!$entity->isNew() && $entity->isAttributeChanged("nameOfFile")) {
             $this->getService("Attachment")->changeName($entity->get('image') ?? $entity->get('file'), $entity->get('nameOfFile'), $entity);
         }
+
+        if ($this->isDeactivateAsset($entity) && $this->getService("Asset")->getRelationsCount($entity)) {
+            throw new BadRequest("You can't deactivate this asset");
+        }
     }
 
     /**
@@ -233,5 +237,10 @@ class AssetEntity extends AbstractListener
         } while ($count);
 
         return $path;
+    }
+
+    private function isDeactivateAsset(Entity $entity)
+    {
+        return $entity->isAttributeChanged("active") && !$entity->get("active");
     }
 }

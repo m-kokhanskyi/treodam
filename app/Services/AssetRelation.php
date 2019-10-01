@@ -20,7 +20,7 @@ class AssetRelation extends \Espo\Core\Templates\Services\Base
         }
 
         if (!$this->checkDuplicate($assetEntity, $relatedEntity)) {
-            $repository = $this->getRepository()->createLink($assetEntity, $relatedEntity, $assignedUserId);
+            $this->getRepository()->createLink($assetEntity, $relatedEntity, $assignedUserId);
         }
     }
 
@@ -35,6 +35,7 @@ class AssetRelation extends \Espo\Core\Templates\Services\Base
         $items = $this
             ->getRepository()
             ->getItemsInList($list, $entityName, $entityId);
+
         $resItems = [];
         $res = [];
 
@@ -48,6 +49,7 @@ class AssetRelation extends \Espo\Core\Templates\Services\Base
                 "hasItem" => $resItems[$listItem] ?? false,
             ];
         }
+
         return $res;
     }
 
@@ -59,26 +61,29 @@ class AssetRelation extends \Espo\Core\Templates\Services\Base
 
     public function updateSortOrder(string $entityName, string $entityId, array $data): bool
     {
-        // prepare data
         $result = false;
 
         if (!empty($data)) {
-            $template
-                = "UPDATE asset_relation SET sort_order = %s 
+            $template = "UPDATE asset_relation SET sort_order = %s 
                       WHERE entity_name = '%s' AND entity_id = '%s' AND id = '%s';";
             $sql = '';
             foreach ($data as $k => $id) {
-                $sql .= sprintf($template, $k, $entityName, $entityId,  $id);
+                $sql .= sprintf($template, $k, $entityName, $entityId, $id);
             }
 
-            // update DB data
             $sth = $this->getEntityManager()->getPDO()->prepare($sql);
             $sth->execute();
 
-            // prepare result
             $result = true;
         }
 
         return $result;
+    }
+
+    public function getRelationsLinks(Entity $entity)
+    {
+        return $this->getRepository()->where([
+            "assetId" => $entity->id
+        ])->find();
     }
 }

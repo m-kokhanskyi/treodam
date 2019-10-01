@@ -4,6 +4,11 @@ Espo.define('dam:views/asset_relation/record/panels/header', 'view',
         template: "dam:asset_relation/record/panels/header",
         show: false,
 
+        setup() {
+            Dep.prototype.setup.call(this);
+            this.show = this.options.show || false;
+        },
+
         data() {
             return {
                 name: this.model.get("name"),
@@ -12,7 +17,7 @@ Espo.define('dam:views/asset_relation/record/panels/header', 'view',
             }
         },
 
-        showPanel () {
+        showPanel() {
             this.show = !this.show;
             this.reRender();
             if (this.show) {

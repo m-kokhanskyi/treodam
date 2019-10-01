@@ -19,6 +19,7 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
             let items = this.getMetadata().get("entityDefs.Asset.fields.type.options");
             let url = "AssetRelation/" + this.model.name + "/" + this.model.id + "/itemsInEntity?list=" + items.join(",");
             this.blocks = [];
+            let showFirst = true;
 
             this.getCollectionFactory().create("AssetRelation", (collection) => {
                 collection.url = url;
@@ -30,11 +31,19 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
                                 entityName: this.defs.entityName,
                                 entityId: this.model.id
                             });
-                            this.blocks.push(model.get("name"));
-                            this.createView(model.get('name'), "dam:views/asset_relation/record/panels/asset-type-block", {
+
+                            let params = {
                                 model: model,
                                 el: this.options.el + ' .group[data-name="' + model.get("name") + '"]'
-                            });
+                            };
+
+                            if (showFirst) {
+                                params.show = true;
+                                showFirst = false;
+                            }
+
+                            this.blocks.push(model.get("name"));
+                            this.createView(model.get('name'), "dam:views/asset_relation/record/panels/asset-type-block", params);
                         }
                     });
                     this.wait(false);

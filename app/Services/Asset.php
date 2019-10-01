@@ -26,6 +26,7 @@ use Dam\Core\ConfigManager;
 use Dam\Core\FileManager;
 use Espo\Core\Templates\Services\Base;
 use Espo\Core\Utils\Log;
+use Espo\ORM\Entity;
 
 /**
  * Class Asset
@@ -34,6 +35,9 @@ use Espo\Core\Utils\Log;
  */
 class Asset extends Base
 {
+    /**
+     * Asset constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -44,9 +48,8 @@ class Asset extends Base
     }
 
     /**
-     * @param \Dam\Entities\Asset $asset1
-     *
-     * @return mixed
+     * @param \Dam\Entities\Asset $asset
+     * @return bool
      */
     public function createVersion(\Dam\Entities\Asset $asset)
     {
@@ -65,6 +68,10 @@ class Asset extends Base
         return $this->getServiceFactory()->create("AssetVersion")->createEntity($attachment);
     }
 
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @return mixed
+     */
     public function updateMetaData(\Dam\Entities\Asset $asset)
     {
         $attachment = $asset->get('image') ?? $asset->get('file');
@@ -74,6 +81,9 @@ class Asset extends Base
         return $this->getServiceFactory()->create("AssetMetaData")->insertData("asset", $asset->id, $metaData);
     }
 
+    /**
+     * @param \Dam\Entities\Asset $asset
+     */
     public function getImageInfo(\Dam\Entities\Asset $asset)
     {
         $type = ConfigManager::getType($asset->get('type'));
@@ -89,10 +99,17 @@ class Asset extends Base
 
         $attributesList = $this->getConfigManager()->get([$type, "attributes"]);
 
-        $asset->set("attributes", json_encode(array_merge(
-                json_decode(($asset->get("attributes") ?? "{}"), true),
-                array_intersect_key($imageInfo, $attributesList))
-        ));
+//        $asset->set("attributes", json_encode(array_merge(
+//                json_decode(($asset->get("attributes") ?? "{}"), true),
+//                array_intersect_key($imageInfo, $attributesList))
+//        ));
+    }
+
+    public function getRelationsCount(Entity $entity)
+    {
+        $collection = $this->getService("AssetRelation")->getRelationsLinks($entity);
+
+        return $collection->count();
     }
 
     /**
@@ -119,6 +136,10 @@ class Asset extends Base
         return $this->getInjection("log");
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     protected function getService($name)
     {
         return $this->getServiceFactory()->create($name);

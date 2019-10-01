@@ -5,12 +5,16 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
         setup() {
             Dep.prototype.setup.call(this);
             this.createHeaderBlock();
+            if (this.options.show) {
+                this.showInfo();
+            }
         },
 
         createHeaderBlock() {
             this.createView("headerBlock", "dam:views/asset_relation/record/panels/header", {
                 model: this.model,
-                el: this.options.el + " .group-name"
+                el: this.options.el + " .group-name",
+                show : this.options.show || false
             });
         },
 
@@ -34,7 +38,7 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
                         listLayout: null,
                         skipBuildRows: true
                     }, function (view) {
-                        view.listenTo(view, "after:render", () => {
+                        view.listenTo(collection, "sync", () => {
                             $(view.el).find('.list').slideDown("fast");
                         });
                         collection.fetch();

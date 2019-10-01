@@ -6,8 +6,9 @@ namespace Dam\Services;
 
 use Dam\Entities\Asset;
 use Espo\Core\ORM\Entity;
+use Espo\Core\Templates\Services\Base;
 
-class AssetRelation extends \Espo\Core\Templates\Services\Base
+class AssetRelation extends Base
 {
     public function createLink($entity1, $entity2, $assignedUserId)
     {
@@ -20,6 +21,7 @@ class AssetRelation extends \Espo\Core\Templates\Services\Base
         }
 
         if (!$this->checkDuplicate($assetEntity, $relatedEntity)) {
+            $this->deleteBelongsRelations($assetEntity, $relatedEntity);
             $this->getRepository()->createLink($assetEntity, $relatedEntity, $assignedUserId);
         }
     }
@@ -86,4 +88,125 @@ class AssetRelation extends \Espo\Core\Templates\Services\Base
             "assetId" => $entity->id
         ])->find();
     }
+
+    public function deleteBelongsRelations(Asset $asset, Entity $entity)
+    {
+        list($assetTo, $entityTo) = $this->getRelationType($asset, $entity);
+
+        if ($assetTo === "hasMany" && $entityTo === "hasMany") {
+            return true;
+        }
+
+        /**@var $repository \Dam\Repositories\AssetRelation * */
+        $repository = $this->getRepository();
+
+        if ($assetTo === "belongsTo") {
+            $item = $repository->where([
+                'entityName' => $entity->getEntityType(),
+                "assetId" => $asset->id
+            ])->findOne();
+        }
+
+        if ($entityTo === "belongsTo") {
+            $item = $repository->where([
+                'entityName' => $entity->getEntityType(),
+                "entityId" => $entity->id
+            ])->findOne();
+        }
+        if (!isset($item)) {
+            return false;
+        }
+
+        return $repository->deleteFromDb($item->id);
+    }
+
+    public function deleteRelation(Entity $entity)
+    {
+        $asset = $this->getEntityManager()->getEntity("Asset", $entity->getFetched("assetId"));
+        $fEntity = $this->getEntityManager()->getEntity($entity->getFetched("entityName"), $entity->getFetched("entityId"));
+
+        list($assetTo, $entityTo) = $this->getRelationType($asset, $fEntity);
+
+        switch (true) {
+            case $assetTo === "belongsTo" :
+                $this->removeBelongsToRelation($asset, $fEntity->getEntityType());
+                break;
+            case $entityTo === "belongsTo" :
+                $this->removeBelongsToRelation($fEntity, "Asset");
+                break;
+            default:
+                $this->removeHasManyRelation($asset, $fEntity);
+
+        }
+
+    }
+
+    public function getAvailableEntities(string $assetId)
+    {
+        return $this->getRepository()->getAvailableEntities($assetId);
+    }
+
+    protected function removeBelongsToRelation(Entity $entity, string $relatedEntityName)
+    {
+        if (!$info = $this->getRelationInfo($entity, $relatedEntityName)) {
+            return false;
+        }
+
+        $entity->set($info['key'], null);
+
+        return $this->getEntityManager()->saveEntity($entity, ['skipAll' => true]);
+    }
+
+    protected function removeHasManyRelation(Asset $asset, Entity $entity)
+    {
+        $info = $this->getRelationInfo($asset, $entity->getEntityType());
+        /** @var \Espo\Core\Templates\Repositories\Base $relationRepository */
+        $relationRepository = $this->getEntityManager()->getRepository($info['relationName']);
+
+        return $relationRepository->unrelate($asset, $info['relationIndex'], $entity);
+    }
+
+    protected function getRelationInfo(Entity $entity, string $entityName): array
+    {
+        foreach ($entity->getRelations() as $key => $relation) {
+            if ($relation['entity'] === $entityName) {
+                $relation['relationIndex'] = $key;
+                return $relation;
+            }
+        }
+
+        return null;
+    }
+
+    protected function getRelationType(Asset $asset, Entity $entity)
+    {
+        foreach ($asset->getRelations() as $relation) {
+            if ($relation['entity'] === $entity->getEntityType()) {
+                $assetTo = $relation['type'];
+                break;
+            }
+        }
+
+        foreach ($entity->getRelations() as $relation) {
+            if ($relation['entity'] === $asset->getEntityType()) {
+                $entityTo = $relation['type'];
+                break;
+            }
+        }
+
+        return [
+            $assetTo ?? null,
+            $entityTo ?? null
+        ];
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    protected function getService($name)
+    {
+        return $this->getServiceFactory()->create($name);
+    }
+
 }

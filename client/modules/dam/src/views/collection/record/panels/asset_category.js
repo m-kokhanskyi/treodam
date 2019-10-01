@@ -31,7 +31,6 @@ Espo.define('dam:views/collection/record/panels/asset_category', 'views/record/p
         
         setup() {
             Dep.prototype.setup.call(this);
-            
             let select = this.actionList.find(item => item.action === (this.defs.selectAction || 'selectRelated'));
             
             if (select) {

@@ -41,7 +41,7 @@
                     "name": "tags"
                 },
                 {
-                    "name": "active"
+                    "name": "isActive"
                 }
             ]
         ],

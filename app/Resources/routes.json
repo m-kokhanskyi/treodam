@@ -22,5 +22,21 @@
       "controller": "AssetRelation",
       "action": "sortOrder"
     }
+  },
+  {
+    "route": "/AssetRelation/EntityList/:asset_id",
+    "method": "GET",
+    "params": {
+      "controller": "AssetRelation",
+      "action": "entityList"
+    }
+  },
+  {
+    "route": "/AssetRelation/byAsset/:asset_id",
+    "method": "GET",
+    "params": {
+      "controller": "AssetRelation",
+      "action": "byAsset"
+    }
   }
 ]

@@ -112,6 +112,25 @@ class Asset extends Base
         return $collection->count();
     }
 
+    public function assetRelation(Entity $entity, $userId)
+    {
+        if (!$list = $this->checkCreateLink($entity)) {
+            return false;
+        }
+
+        $service = $this->getService("AssetRelation");
+
+        foreach ($list as $item) {
+            $fEntity = $this->getEntityManager()->getEntity($item['entityName'], $item['entityId']);
+
+            if ($fEntity) {
+                $service->createLink($entity, $fEntity, $userId);
+            }
+        }
+
+        return true;
+    }
+
     /**
      * @return FileManager
      */
@@ -143,5 +162,21 @@ class Asset extends Base
     protected function getService($name)
     {
         return $this->getServiceFactory()->create($name);
+    }
+
+    protected function checkCreateLink(Entity $entity)
+    {
+        $list = [];
+
+        foreach ($entity->getRelations() as $key => $relation) {
+            if ($relation['type'] === "belongsTo" && $entity->isAttributeChanged($relation['key'])) {
+                $list[] = [
+                    "entityName" => $relation['entity'],
+                    "entityId" => $entity->get($relation['key'])
+                ];
+            }
+        }
+
+        return $list;
     }
 }

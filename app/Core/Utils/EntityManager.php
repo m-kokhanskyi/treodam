@@ -5,6 +5,7 @@ namespace Dam\Core\Utils;
 
 
 use Dam\Entities\Asset;
+use Espo\Core\Exceptions\BadRequest;
 use Treo\Core\Container;
 
 class EntityManager extends \Espo\Core\Utils\EntityManager
@@ -55,6 +56,12 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
      */
     public function createLink(array $params)
     {
+        $relationEntityName = $params['entity'] === "Asset" ? $params['entityForeign'] : $params['entity'];
+
+        if ($this->hasLinkTo($relationEntityName, "Asset")) {
+            throw new BadRequest("You can't create link to 'Asset' entity");
+        }
+
         $res = parent::createLink($params);
 
         if ($params['entity'] === "Asset" || $params['entityForeign'] === "Asset") {
@@ -129,7 +136,7 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
             $relationEntityName = $this->getMetadata()->get(["entityDefs", "Asset", "links", $relationLink, "entity"]);
         }
 
-        if ($this->hasLinkTo($relationEntityName, "assets")) {
+        if ($this->hasLinkTo($relationEntityName, "Asset")) {
             return true;
         }
 
@@ -170,9 +177,17 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         return true;
     }
 
-    protected function hasLinkTo(string $entityName, string $to)
+    protected function hasLinkTo(?string $entityName, ?string $to)
     {
-        return $entityInfo = $this->getMetadata()->get(['entityDefs', $entityName, "links", $to]) ? true : false;
+        $links = $this->getMetadata()->get(['entityDefs', $entityName, "links"]);
+
+        foreach ($links as $link) {
+            if ($link['entity'] === $to) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

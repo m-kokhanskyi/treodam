@@ -30,4 +30,26 @@ class AbstractController extends Base
 
         return true;
     }
+
+    /**
+     * Validate Put action
+     *
+     * @param Request $request
+     *
+     * @return bool
+     * @throws Exceptions\BadRequest
+     * @throws Exceptions\Forbidden
+     */
+    public function isPutAction($request)
+    {
+        if (!$request->isPut()) {
+            throw new Exceptions\BadRequest();
+        }
+
+        if (!$this->getAcl()->check($this->name, 'edit')) {
+            throw new Exceptions\Forbidden();
+        }
+
+        return true;
+    }
 }

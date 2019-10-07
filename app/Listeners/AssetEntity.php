@@ -59,38 +59,43 @@ class AssetEntity extends AbstractListener
             throw new BadRequest("You can't change type");
         }
 
-        if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
-            $this->getImageInfo($entity);
-        }
-
+        //Change path for new entity or after change private
         if ($entity->isNew() || $entity->isAttributeChanged("private")) {
             $entity->set('path', $this->setPath($entity));
         }
 
-        $attachmentService = $this->getService("Attachment");
-        $assetService = $this->getService("Asset");
+        //After update image
+        if ($this->changeAttachment($entity)) {
+            $this->getService("Asset")->getImageInfo($entity);
+        }
 
         //After create new asset
         if ($entity->isNew()) {
-            $attachmentService->moveToMaster($entity);
+            //move from tmp to master storage
+            $this->getService("Attachment")->moveToMaster($entity);
         }
 
         //After upload new file|image
         if ($this->changeAttachment($entity) && !$entity->isNew()) {
-            $attachmentService->moveToMaster($entity);
-            $assetService->createVersion($entity);
+            $this->getService("Asset")->createVersion($entity);
+            $this->getService("Attachment")->moveToMaster($entity);
         }
 
         //After change private (move to other folder)
         if (!$entity->isNew() && $entity->isAttributeChanged("private")) {
-            $attachmentService->changeAccess($entity);
-            $this->getService("AssetVariant")->rebuildPath($entity);
+            $this->getService("Attachment")->changeAccess($entity);
         }
 
         //rename file
-        if ($entity->isAttributeChanged("nameOfFile")) {
-            $attachmentService->changeName($entity->get('image') ?? $entity->get('file'), $entity->get('nameOfFile'), $entity);
+        if (!$entity->isNew() && $entity->isAttributeChanged("nameOfFile")) {
+            $this->getService("Attachment")->changeName($entity->get('image') ?? $entity->get('file'), $entity->get('nameOfFile'), $entity);
         }
+
+        //deactivate asset
+        if ($this->isDeactivateAsset($entity) && $this->getService("Asset")->getRelationsCount($entity)) {
+            throw new BadRequest("You can't deactivate this asset");
+        }
+
     }
 
     /**
@@ -100,16 +105,15 @@ class AssetEntity extends AbstractListener
     {
         /** @var $entity Asset */
         $entity = $event->getArgument("entity");
-        $assetService = $this->getService($entity->getEntityType());
-//
-//        //create variations
-//        if ($entity->isSaved()) {
-//            $assetService->createVariations($entity);
-//        }
+
+        if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
+            //build Renditions
+            $this->getService("Rendition")->buildRenditions($entity);
+        }
 
         //get meta data
         if ($this->changeAttachment($entity)) {
-            $assetService->updateMetaData($entity);
+            $this->getService("Asset")->updateMetaData($entity);
         }
     }
 
@@ -123,12 +127,15 @@ class AssetEntity extends AbstractListener
         $foreign = $event->getArgument('foreign');
         $entity = $event->getArgument('entity');
 
-        if ($this->isLast($event, $foreign)) {
-            throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
+        if ($event->getArgument("relationName") === "assetCategories") {
+            if ($this->isLast($event, $foreign)) {
+                throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
+            }
         }
-
-        if ($this->isCollectionCatalog($entity, $foreign)) {
-            throw new BadRequest($this->getLanguage()->translate("Category is not set in collection", 'exceptions', 'Global'));
+        if ($event->getArgument("relationName") === "collection") {
+            if ($this->isCollectionCatalog($entity, $foreign)) {
+                throw new BadRequest($this->getLanguage()->translate("Category is not set in collection", 'exceptions', 'Global'));
+            }
         }
     }
 
@@ -161,35 +168,6 @@ class AssetEntity extends AbstractListener
         $res = $prepare->fetch(PDO::FETCH_ASSOC);
 
         return $res ? true : false;
-    }
-
-    /**
-     * @param Entity $entity
-     *
-     * @return $this
-     */
-    protected function getImageInfo(Entity $entity)
-    {
-        $service = $this->getService('Attachment');
-
-        $attachment = $entity->get("image") ?? $entity->get("file");
-
-        if ($attachment) {
-            $imageInfo = $service->getImageInfo($attachment);
-
-            $entity->set([
-                "size" => round($imageInfo['size'] / 1024, 1),
-                "sizeUnit" => "kb",
-                "fileType" => $imageInfo['extension'],
-                "width" => $imageInfo['width'] ?? null,
-                "height" => $imageInfo['height'] ?? null,
-                "colorSpace" => $imageInfo['color_space'] ?? null,
-                "colorDepth" => $imageInfo['color_depth'] ?? null,
-                "orientation" => $imageInfo['orientation'] ?? null
-            ]);
-        }
-
-        return $this;
     }
 
     /**
@@ -254,12 +232,17 @@ class AssetEntity extends AbstractListener
 
         do {
             $type = $entity->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC;
-            $path = $this->getFilePathBuilder()->createPath($type);
+            $path = $this->getFilePathBuilder()->createPath($type, "master");
 
             $count = $repository->where(['path' => $path])->count();
 
         } while ($count);
 
         return $path;
+    }
+
+    private function isDeactivateAsset(Entity $entity)
+    {
+        return $entity->isAttributeChanged("isActive") && !$entity->get("isActive");
     }
 }

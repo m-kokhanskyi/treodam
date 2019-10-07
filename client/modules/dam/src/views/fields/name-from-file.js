@@ -40,15 +40,15 @@ Espo.define('dam:views/fields/name-from-file', 'views/fields/varchar',
         },
         setName() {
             let fileName = this.model.get('fileName') || this.model.get('imageName');
-            this.model.set("nameOfFile", fileName);
-            this.model.set("name", this.modifyName(fileName));
-            this.prevFileName = this.modifyName(fileName);
+            let baseFileName = this.modifyName(fileName);
+            this.model.set("nameOfFile", baseFileName);
+            this.model.set("name", baseFileName);
+            this.prevFileName = baseFileName;
         },
         modifyName(name) {
             if (name === null || name === undefined) {
                 return '';
             }
-
             name = name.split('.');
             name.pop();
             return name.join('.');

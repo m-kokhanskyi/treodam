@@ -25,7 +25,7 @@ namespace Dam\Repositories;
 use Dam\Core\DAMAttachment;
 use Dam\Core\FilePathBuilder;
 use Dam\Core\FileStorage\DAMUploadDir;
-use \Espo\Core\Templates\Repositories\Base;
+use Espo\Core\Templates\Repositories\Base;
 use Espo\ORM\Entity;
 
 /**
@@ -35,6 +35,12 @@ use Espo\ORM\Entity;
  */
 class Asset extends Base implements DAMAttachment
 {
+    /**
+     * TODO: change to work with entity (look entity params)
+     *
+     * @param Entity $entity
+     * @return array
+     */
     public function buildPath(Entity $entity): array
     {
         return [
@@ -42,4 +48,5 @@ class Asset extends Base implements DAMAttachment
             $entity->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC
         ];
     }
+
 }

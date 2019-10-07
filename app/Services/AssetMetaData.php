@@ -4,8 +4,9 @@ namespace Dam\Services;
 
 class AssetMetaData extends \Espo\Core\Templates\Services\Base
 {
-    public function insertData($assetId, $metaData)
+    public function insertData($entityType, $entityId, $metaData)
     {
-        return $this->getRepository()->insertMeta($assetId, $metaData);
+        $field = $entityType . "_id";
+        return $this->getRepository()->insertMeta($field, $entityId, $metaData);
     }
 }

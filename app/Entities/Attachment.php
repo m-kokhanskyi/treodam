@@ -38,4 +38,12 @@ class Attachment extends \Treo\Entities\Attachment
     {
         return "DAMUploadDir";
     }
+
+    public function setName($name)
+    {
+        $baseFileInfo = pathinfo($this->get("name"));
+        $this->set("name", $name . "." . $baseFileInfo['extension']);
+
+        return $this;
+    }
 }

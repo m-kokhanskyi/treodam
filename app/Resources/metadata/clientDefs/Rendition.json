@@ -1,0 +1,12 @@
+{
+    "controller": "controllers/record",
+    "boolFilterList": [
+        "onlyMy"
+    ],
+    "recordViews":{
+        "detail": "dam:views/rendition/record/detail"
+    },
+    "views" : {
+        "detail" : "dam:views/rendition/detail"
+    }
+}

@@ -49,25 +49,17 @@ class AssetVersion extends Base
             return false;
         }
 
-        $natural = ConfigManager::getType($asset->get('type'));
-        $currentAttachment = $natural === "image" ? $asset->get('image') : $asset->get('file');
-
-        if (!isset($currentAttachment) || !$currentAttachment) {
-            return false;
-        }
-
-        $filePath = $this->getFileStoreManager()->getLocalFilePath($currentAttachment);
+        $filePath = $this->getFileStoreManager()->getLocalFilePath($attachment);
 
         $path = pathinfo($filePath);
         $destPath = $this->buildDestPath($path['dirname'], $attachment);
-
-        $filePath = $this->getFileStoreManager()->getLocalFilePath($attachment);
 
         if ($this->getFileManager()->copy($filePath, $destPath, false, null, true)) {
             return parent::createEntity((object)[
                 'name' => $this->createNameFromDate($attachment->get('createdAt')),
                 'assetId' => $asset->id,
                 "fileName" => $attachment->get('name'),
+                "assignedUserId" => $asset->get("assignedUserId")
             ]);
         }
 

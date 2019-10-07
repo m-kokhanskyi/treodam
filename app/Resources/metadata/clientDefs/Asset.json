@@ -1,19 +1,38 @@
 {
+  "bottomPanels": {
+    "detail": [
+      {
+        "name": "relations",
+        "label": "Relations",
+        "view": "dam:views/asset/record/panels/asset_relations"
+      }
+    ]
+  },
   "controller": "dam:controllers/asset",
   "boolFilterList": [
     "onlyMy",
     "notSelectAssets"
   ],
   "hiddenBoolFilterList": [
-    "notSelectAssets"
+    "notSelectAssets",
+    "onlyActive"
   ],
+  "selectDefaultFilters": {
+    "boolFilterList": [
+      "onlyActive"
+    ]
+  },
+  "modalViews": {
+    "select": "dam:views/asset/modals/select-records"
+  },
   "views": {
     "list": "dam:views/asset/list",
     "plate": "dam:views/asset/plate"
   },
   "recordViews": {
     "plate": "dam:views/asset/record/plate",
-    "plateItem": "dam:views/asset/record/plate-item"
+    "plateItem": "dam:views/asset/record/plate-item",
+    "detail": "dam:views/asset/record/detail"
   },
   "menu": {
     "list": {
@@ -57,8 +76,8 @@
       ]
     }
   },
-  "iconClass"           : "fas fa-archive",
-  "dynamicLogic"        : {
+  "iconClass": "fas fa-archive",
+  "dynamicLogic": {
     "fields": {
       "type": {
         "readOnly": {
@@ -70,94 +89,96 @@
           ]
         }
       },
-      "height"     : {
+      "size": {
         "visible": {
           "conditionGroup": [
             {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
+              "type": "isNotEmpty",
+              "attribute": "id"
             }
           ]
         }
       },
-      "width"      : {
+      "file": {
         "visible": {
           "conditionGroup": [
             {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
+              "type": "and",
+              "value": [
+                {
+                  "type": "notEquals",
+                  "attribute": "type",
+                  "value": "Image"
+                },
+                {
+                  "type": "notEquals",
+                  "attribute": "type",
+                  "value": "Description Image"
+                },
+                {
+                  "type": "notEquals",
+                  "attribute": "type",
+                  "value": "Gallery Image"
+                },
+                {
+                  "type": "notEquals",
+                  "attribute": "type",
+                  "value": "Icon"
+                }
+              ]
             }
           ]
         }
       },
-      "colorSpace" : {
+      "image": {
         "visible": {
           "conditionGroup": [
             {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "colorDepth" : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "orientation": {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "file"       : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "notEquals",
-              "attribute": "type",
-              "value"    : "Image"
-            }
-          ]
-        }
-      },
-      "image"      : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type"     : "equals",
-              "attribute": "type",
-              "value"    : "Image"
+              "type": "or",
+              "value": [
+                {
+                  "type": "equals",
+                  "attribute": "type",
+                  "value": "Image"
+                },
+                {
+                  "type": "equals",
+                  "attribute": "type",
+                  "value": "Icon"
+                },
+                {
+                  "type": "equals",
+                  "attribute": "type",
+                  "value": "Gallery Image"
+                },
+                {
+                  "type": "equals",
+                  "attribute": "type",
+                  "value": "Description Image"
+                }
+              ]
             }
           ]
         }
       }
     }
   },
-  "relationshipPanels"  : {
+  "relationshipPanels": {
     "assetCategories": {
       "selectBoolFilterList": [
         "onlyChildCategory",
         "notSelectCategories",
         "byCollection"
       ],
-      "view"                : "dam:views/asset/record/panels/asset_category",
-      "selectAction"        : "selectRelatedEntity"
+      "view": "dam:views/asset/record/panels/asset_category",
+      "selectAction": "selectRelatedEntity"
+    },
+    "renditions": {
+      "select": false
+    },
+    "assetMetaDatas": {
+      "select": false,
+      "create": false
     }
   }
 }

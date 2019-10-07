@@ -1,5 +1,42 @@
 {
   "fields": {
+    "isActive": {
+      "notNull": true,
+      "type": "bool",
+      "default": true,
+      "audited": false,
+      "readOnly": false,
+      "tooltip": false
+    },
+    "tags": {
+      "type": "multiEnum",
+      "storeArrayValues": true,
+      "required": false,
+      "fontSize": 1,
+      "options": [
+        "tag1",
+        "tag2",
+        "tag3",
+        "tag4",
+        "tag5"
+      ],
+      "optionColors": {
+        "tag1": "FF0000",
+        "tag2": "FFFF00",
+        "tag3": "00FF00",
+        "tag4": "0000FF",
+        "tag5": "00FFFF"
+      },
+      "audited": false,
+      "readOnly": false
+    },
+    "renditions": {
+      "type": "linkMultiple",
+      "layoutDetailDisabled": true,
+      "layoutMassUpdateDisabled": true,
+      "noLoad": true,
+      "importDisabled": true
+    },
     "collection": {
       "type": "link"
     },
@@ -101,75 +138,33 @@
       "required": false,
       "fontSize": 1,
       "options": [
-        "File",
-        "Image",
-        "PDF"
+        "Gallery Image",
+        "Description Image",
+        "Icon",
+        "PDF",
+        "Office Document",
+        "Text",
+        "CSV",
+        "PDF Document",
+        "Archive"
       ],
       "optionColors": {
         "File": "fff",
         "PDF": "fff",
-        "Image": "fff"
+        "Image": "fff",
+        "Icon": "fff",
+        "Description Image": "fff",
+        "Gallery Image": "fff",
+        "Office Document": "fff",
+        "Text": "fff",
+        "CSV": "fff",
+        "PDF Document": "fff",
+        "Archive": "fff"
       },
-      "default": "File",
+      "default": "Gallery Image",
       "isSorted": false,
       "audited": false,
       "readOnly": false,
-      "tooltip": false
-    },
-    "fileType": {
-      "type": "varchar",
-      "required": false,
-      "trim": true,
-      "readOnly": true,
-      "audited": false,
-      "tooltip": false
-    },
-    "size": {
-      "type": "unit",
-      "required": false,
-      "measure": "File Size",
-      "audited": false,
-      "readOnly": true,
-      "tooltip": false
-    },
-    "height": {
-      "type": "int",
-      "required": false,
-      "readOnly": true,
-      "disableFormatting": false,
-      "audited": false,
-      "tooltip": false
-    },
-    "width": {
-      "type": "int",
-      "required": false,
-      "readOnly": true,
-      "disableFormatting": false,
-      "audited": false,
-      "tooltip": false
-    },
-    "colorSpace": {
-      "type": "varchar",
-      "required": false,
-      "trim": true,
-      "readOnly": true,
-      "audited": false,
-      "tooltip": false
-    },
-    "colorDepth": {
-      "type": "varchar",
-      "required": false,
-      "trim": true,
-      "readOnly": true,
-      "audited": false,
-      "tooltip": false
-    },
-    "orientation": {
-      "type": "varchar",
-      "required": false,
-      "trim": true,
-      "readOnly": true,
-      "audited": false,
       "tooltip": false
     },
     "image": {
@@ -189,9 +184,23 @@
       "tooltip": false,
       "view": "dam:views/fields/file",
       "layoutMassUpdateDisabled": true
+    },
+    "size": {
+      "type": "unit",
+      "required": false,
+      "measure": "File Size",
+      "audited": false,
+      "readOnly": true,
+      "tooltip": false
     }
   },
   "links": {
+    "renditions": {
+      "type": "hasMany",
+      "foreign": "asset",
+      "entity": "Rendition",
+      "audited": false
+    },
     "collection": {
       "type": "belongsTo",
       "foreign": "assets",
@@ -255,6 +264,11 @@
       "columns": [
         "name",
         "deleted"
+      ]
+    },
+    "type": {
+      "columns": [
+        "type"
       ]
     },
     "assignedUser": {

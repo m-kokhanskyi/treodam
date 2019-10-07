@@ -26,13 +26,18 @@ use Dam\Core\ConfigManager;
 use Dam\Core\FileManager;
 use Espo\Core\Templates\Services\Base;
 use Espo\Core\Utils\Log;
+use Espo\ORM\Entity;
 
 /**
  * Class Asset
+ *
  * @package Dam\Services
  */
 class Asset extends Base
 {
+    /**
+     * Asset constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -44,48 +49,86 @@ class Asset extends Base
 
     /**
      * @param \Dam\Entities\Asset $asset
-     * @return mixed
+     * @return bool
      */
     public function createVersion(\Dam\Entities\Asset $asset)
     {
-        $natural = ConfigManager::getType($asset->getFetched("type"));
+        $type = ConfigManager::getType($asset->get("type"));
 
-        $attachmentId = $natural === "image" ? $asset->getFetched("imageId") : $asset->getFetched("fileId");
+        if (!$this->getConfigManager()->get([$type, "createVersion"])) {
+            return true;
+        }
+
+        $nature = $this->getConfigManager()->get([$type, "nature"]);
+
+        $attachmentId = $nature === "image" ? $asset->getFetched("imageId") : $asset->getFetched("fileId");
 
         $attachment = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
 
         return $this->getServiceFactory()->create("AssetVersion")->createEntity($attachment);
     }
 
-    public function createVariations(\Dam\Entities\Asset $asset)
-    {
-        $config = $this->getConfigManager()->get([ConfigManager::getType($asset->get("type")), "variations"]);
-
-        foreach ($config ?? [] as $variationCode => $variationProps) {
-            if ($variationProps['auto']) {
-
-                //TODO add validation
-
-                foreach ($variationProps['handlers'] ?? [] as $handlerCode => $handlerProps) {
-                    $class = $handlerProps['class'] ?? \Dam\Core\Variations\Base::getClass($handlerCode);
-
-                    if (class_exists($class) && is_a($class, \Dam\Core\Variations\Base::class, true)) {
-                        $class::init($variationCode, $this->getEntityManager()->getContainer(), $asset)->create();
-                    } else {
-                        $this->getLog()->addWarning("Class '{$class}' not found or not implement Base class");
-                    }
-                }
-            }
-        }
-    }
-
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @return mixed
+     */
     public function updateMetaData(\Dam\Entities\Asset $asset)
     {
         $attachment = $asset->get('image') ?? $asset->get('file');
 
         $metaData = $this->getServiceFactory()->create("Attachment")->getFileMetaData($attachment);
 
-        return $this->getServiceFactory()->create("AssetMetaData")->insertData($asset->id, $metaData);
+        return $this->getServiceFactory()->create("AssetMetaData")->insertData("asset", $asset->id, $metaData);
+    }
+
+    /**
+     * @param \Dam\Entities\Asset $asset
+     */
+    public function getImageInfo(\Dam\Entities\Asset $asset)
+    {
+        $type = ConfigManager::getType($asset->get('type'));
+        $nature = $this->getConfigManager()->get([$type, "nature"]);
+
+        $attachment = $nature === "image" ? $asset->get("image") : $asset->get("file");
+        $imageInfo = $this->getService("Attachment")->getImageInfo($attachment);
+
+        $asset->set([
+            "size" => round($imageInfo['size'] / 1024, 1),
+            "sizeUnit" => "kb",
+        ]);
+
+        $attributesList = $this->getConfigManager()->get([$type, "attributes"]);
+
+//        $asset->set("attributes", json_encode(array_merge(
+//                json_decode(($asset->get("attributes") ?? "{}"), true),
+//                array_intersect_key($imageInfo, $attributesList))
+//        ));
+    }
+
+    public function getRelationsCount(Entity $entity)
+    {
+        $collection = $this->getService("AssetRelation")->getRelationsLinks($entity);
+
+        return $collection->count();
+    }
+
+    public function assetRelation(Entity $entity, $userId)
+    {
+        if (!$list = $this->checkCreateLink($entity)) {
+            return false;
+        }
+
+        $service = $this->getService("AssetRelation");
+
+        foreach ($list as $item) {
+            $fEntity = $this->getEntityManager()->getEntity($item['entityName'], $item['entityId']);
+
+            if ($fEntity) {
+                $service->createLink($entity, $fEntity, $userId);
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -110,5 +153,30 @@ class Asset extends Base
     protected function getLog(): Log
     {
         return $this->getInjection("log");
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    protected function getService($name)
+    {
+        return $this->getServiceFactory()->create($name);
+    }
+
+    protected function checkCreateLink(Entity $entity)
+    {
+        $list = [];
+
+        foreach ($entity->getRelations() as $key => $relation) {
+            if ($relation['type'] === "belongsTo" && $entity->isAttributeChanged($relation['key'])) {
+                $list[] = [
+                    "entityName" => $relation['entity'],
+                    "entityId" => $entity->get($relation['key'])
+                ];
+            }
+        }
+
+        return $list;
     }
 }

@@ -17,7 +17,7 @@
                     "name": "name"
                 },
                 {
-                    "name" : "nameOfFile"
+                    "name": "nameOfFile"
                 }
             ],
             [
@@ -30,75 +30,22 @@
             ],
             [
                 {
-                    "name" : "collection"
+                    "name": "collection"
                 },
-                false
+                {
+                    "name": "size"
+                }
+            ],
+            [
+                {
+                    "name": "tags"
+                },
+                {
+                    "name": "isActive"
+                }
             ]
         ],
         "style": "default",
         "label": "Overview"
-    },
-    {
-        "rows": [
-            [
-                {
-                    "name": "size"
-                },
-                {
-                    "name": "fileType"
-                }
-            ]
-        ],
-        "style": "default",
-        "dynamicLogicVisible": {
-            "conditionGroup": [
-                {
-                    "type": "isNotEmpty",
-                    "attribute": "id"
-                }
-            ]
-        },
-        "customLabel": "File info"
-    },
-    {
-        "rows": [
-            [
-                {
-                    "name": "width"
-                },
-                {
-                    "name": "height"
-                }
-            ],
-            [
-                {
-                    "name": "colorDepth"
-                },
-                {
-                    "name": "colorSpace"
-                }
-            ],
-            [
-                {
-                    "name": "orientation",
-                    "fullWidth": true
-                }
-            ]
-        ],
-        "style": "default",
-        "dynamicLogicVisible": {
-            "conditionGroup": [
-                {
-                    "type": "equals",
-                    "attribute": "type",
-                    "value": "Image"
-                },
-                {
-                    "type": "isNotEmpty",
-                    "attribute": "id"
-                }
-            ]
-        },
-        "customLabel": "Image info"
     }
 ]

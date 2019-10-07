@@ -1,0 +1,41 @@
+{
+    "fields": {
+        "type": "Type",
+        "image": "Image",
+        "file": "File",
+        "private": "Private",
+        "width": "Width",
+        "height": "Height",
+        "size": "Size",
+        "colorDepth": "Color Depth",
+        "colorSpace": "Color Space",
+        "orientation": "Orientation",
+        "asset": "Asset",
+        "assetMetaDatas": "AssetMetaDatas",
+        "renditionVersions": "RenditionVersions"
+    },
+    "links": {
+        "asset": "Asset",
+        "assetMetaDatas": "AssetMetaDatas",
+        "renditionVersions": "RenditionVersions"
+    },
+    "labels": {
+        "Create Rendition": "Create Rendition"
+    },
+    "options": {
+        "type": {
+            "wlq": "Web Low Quality",
+            "whq": "Web High Quality",
+            "githumb1": "400px x 400px",
+            "dithumb1": "400px x 400px",
+            "githumb2": "800px x 800px",
+            "dithumb2": "800px x 800px",
+            "githumb3": "1280px x 1280px",
+            "dithumb3": "1280px x 1280px",
+            "githumb4": "1920px x 1920px",
+            "dithumb4": "1920px x 1920px",
+            "watermark": "Watermark",
+            "test": "test"
+        }
+    }
+}

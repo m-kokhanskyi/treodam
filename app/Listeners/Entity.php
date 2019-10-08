@@ -23,7 +23,7 @@ class Entity extends AbstractListener
         $userId = $this->getUser()->id;
 
         if (is_a($entity, Asset::class) || is_a($foreign, Asset::class)) {
-            $this->getService("AssetRelation")->createLink($entity, $foreign, $userId);
+            //$this->getService("AssetRelation")->createLink($entity, $foreign, $userId);
         }
     }
 
@@ -33,9 +33,9 @@ class Entity extends AbstractListener
         $userId = $this->getUser()->id;
 
         if (is_a($entity, Asset::class)) {
-            $this->getService("Asset")->assetRelation($entity, $userId);
+            //$this->getService("Asset")->assetRelation($entity, $userId);
         } else {
-            $this->getService("Entity")->assetRelation($entity, $userId);
+            //$this->getService("Entity")->assetRelation($entity, $userId);
         }
     }
 

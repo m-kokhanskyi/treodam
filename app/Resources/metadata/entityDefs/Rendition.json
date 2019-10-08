@@ -64,24 +64,21 @@
             "isSorted": false,
             "audited": false,
             "readOnly": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "image": {
             "type": "image",
             "required": false,
             "previewSize": "small",
             "audited": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "file": {
             "type": "file",
             "required": false,
             "sourceList": [],
             "audited": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "private": {
             "notNull": true,
@@ -89,8 +86,7 @@
             "default": false,
             "audited": false,
             "readOnly": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "width": {
             "type": "int",
@@ -98,8 +94,7 @@
             "disableFormatting": false,
             "audited": false,
             "readOnly": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "height": {
             "type": "int",
@@ -107,8 +102,7 @@
             "disableFormatting": false,
             "audited": false,
             "readOnly": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "size": {
             "type": "unit",
@@ -116,8 +110,7 @@
             "measure": "File Size",
             "audited": false,
             "readOnly": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "colorDepth": {
             "type": "varchar",
@@ -125,8 +118,7 @@
             "trim": true,
             "audited": false,
             "readOnly": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "colorSpace": {
             "type": "varchar",
@@ -134,8 +126,7 @@
             "trim": true,
             "audited": false,
             "readOnly": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "orientation": {
             "type": "varchar",
@@ -143,8 +134,7 @@
             "trim": true,
             "audited": false,
             "readOnly": false,
-            "tooltip": false,
-            "isCustom": true
+            "tooltip": false
         },
         "asset": {
             "type": "link"
@@ -154,8 +144,7 @@
             "layoutDetailDisabled": true,
             "layoutMassUpdateDisabled": true,
             "noLoad": true,
-            "importDisabled": true,
-            "isCustom": true
+            "importDisabled": true
         },
         "nameOfFile": {
             "type": "varchar",
@@ -166,8 +155,7 @@
             "layoutDetailDisabled": true,
             "layoutMassUpdateDisabled": true,
             "noLoad": true,
-            "importDisabled": true,
-            "isCustom": true
+            "importDisabled": true
         }
     },
     "links": {
@@ -203,22 +191,19 @@
             "type": "belongsTo",
             "foreign": "renditions",
             "entity": "Asset",
-            "audited": false,
-            "isCustom": true
+            "audited": false
         },
         "assetMetaDatas": {
             "type": "hasMany",
             "foreign": "rendition",
             "entity": "AssetMetaData",
-            "audited": false,
-            "isCustom": true
+            "audited": false
         },
         "renditionVersions": {
             "type": "hasMany",
             "foreign": "rendition",
             "entity": "RenditionVersion",
-            "audited": false,
-            "isCustom": true
+            "audited": false
         }
     },
     "collection": {

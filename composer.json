@@ -7,12 +7,12 @@
     }
   ],
   "require": {
-    "treolabs/treocore": "~3.24.0",
+    "treolabs/treocore": "~3.23.0",
     "ext-gd": "*",
     "ext-exif": "*",
     "ext-imagick": "*",
     "gumlet/php-image-resize" : "1.9.2",
-    "treo-module/coloredfields": "~1.7.6"
+    "treo-module/coloredfields": "*"
   },
   "autoload": {
     "psr-4": {

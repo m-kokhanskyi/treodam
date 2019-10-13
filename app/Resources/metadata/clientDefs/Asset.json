@@ -23,7 +23,9 @@
     ]
   },
   "modalViews": {
-    "select": "dam:views/asset/modals/select-records"
+    "select": "dam:views/asset/modals/select-records",
+    "edit" : "dam:views/asset/modals/multi-create",
+    "quickEdit" : "views/modals/edit"
   },
   "views": {
     "list": "dam:views/asset/list",
@@ -32,7 +34,8 @@
   "recordViews": {
     "plate": "dam:views/asset/record/plate",
     "plateItem": "dam:views/asset/record/plate-item",
-    "detail": "dam:views/asset/record/detail"
+    "detail": "dam:views/asset/record/detail",
+    "list" : "dam:views/asset/record/list"
   },
   "menu": {
     "list": {

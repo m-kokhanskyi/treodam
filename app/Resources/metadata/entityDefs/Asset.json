@@ -1,5 +1,45 @@
 {
   "fields": {
+    "height": {
+      "type": "int",
+      "required": false,
+      "readOnly": true,
+      "disableFormatting": false,
+      "audited": false,
+      "tooltip": false
+    },
+    "width": {
+      "type": "int",
+      "required": false,
+      "readOnly": true,
+      "disableFormatting": false,
+      "audited": false,
+      "tooltip": false
+    },
+    "colorSpace": {
+      "type": "varchar",
+      "required": false,
+      "trim": true,
+      "readOnly": true,
+      "audited": false,
+      "tooltip": false
+    },
+    "colorDepth": {
+      "type": "varchar",
+      "required": false,
+      "trim": true,
+      "readOnly": true,
+      "audited": false,
+      "tooltip": false
+    },
+    "orientation": {
+      "type": "varchar",
+      "required": false,
+      "trim": true,
+      "readOnly": true,
+      "audited": false,
+      "tooltip": false
+    },
     "isActive": {
       "notNull": true,
       "type": "bool",

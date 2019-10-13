@@ -89,13 +89,13 @@ class AssetEntity extends AbstractListener
         //rename file
         if (!$entity->isNew() && $entity->isAttributeChanged("nameOfFile")) {
             $this->getService("Attachment")->changeName($entity->get('image') ?? $entity->get('file'), $entity->get('nameOfFile'), $entity);
+            $this->getService("Rendition")->rebuildNames($entity);
         }
 
         //deactivate asset
         if ($this->isDeactivateAsset($entity) && $this->getService("Asset")->getRelationsCount($entity)) {
             throw new BadRequest("You can't deactivate this asset");
         }
-
     }
 
     /**
@@ -125,7 +125,7 @@ class AssetEntity extends AbstractListener
     public function beforeRelate(Event $event)
     {
         $foreign = $event->getArgument('foreign');
-        $entity = $event->getArgument('entity');
+        $entity  = $event->getArgument('entity');
 
         if ($event->getArgument("relationName") === "assetCategories") {
             if ($this->isLast($event, $foreign)) {
@@ -148,7 +148,7 @@ class AssetEntity extends AbstractListener
     {
         $collection = $entity->get('collection');
 
-        $route = $foreign->get('categoryRoute');
+        $route   = $foreign->get('categoryRoute');
         $routeEl = array_filter(explode("|", $route ?? ''), function ($item) {
             return !empty($item);
         });
@@ -165,7 +165,7 @@ class AssetEntity extends AbstractListener
         $sql = "SELECT 1 FROM collection_asset_category WHERE asset_category_id IN ('" . implode("','", $categories) . "') AND collection_id = '{$collectionId}'";
 
         $prepare = $pdo->query($sql);
-        $res = $prepare->fetch(PDO::FETCH_ASSOC);
+        $res     = $prepare->fetch(PDO::FETCH_ASSOC);
 
         return $res ? true : false;
     }

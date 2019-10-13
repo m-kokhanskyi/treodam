@@ -86,23 +86,29 @@ class Asset extends Base
      */
     public function getImageInfo(\Dam\Entities\Asset $asset)
     {
-        $type = ConfigManager::getType($asset->get('type'));
+        $type   = ConfigManager::getType($asset->get('type'));
         $nature = $this->getConfigManager()->get([$type, "nature"]);
 
         $attachment = $nature === "image" ? $asset->get("image") : $asset->get("file");
-        $imageInfo = $this->getService("Attachment")->getImageInfo($attachment);
+        $imageInfo  = $this->getService("Attachment")->getImageInfo($attachment);
 
         $asset->set([
-            "size" => round($imageInfo['size'] / 1024, 1),
+            "size"     => round($imageInfo['size'] / 1024, 1),
             "sizeUnit" => "kb",
         ]);
 
-        $attributesList = $this->getConfigManager()->get([$type, "attributes"]);
+        if ($nature === "image") {
+            $this->updateAttributes($asset, $imageInfo);
+        }
+    }
 
-//        $asset->set("attributes", json_encode(array_merge(
-//                json_decode(($asset->get("attributes") ?? "{}"), true),
-//                array_intersect_key($imageInfo, $attributesList))
-//        ));
+    public function updateAttributes(\Dam\Entities\Asset $asset, array $imageInfo)
+    {
+        $asset->set("height", ($imageInfo['height'] ?? false) ? $imageInfo['height'] : null);
+        $asset->set("width", ($imageInfo['width'] ?? false) ? $imageInfo['width'] : null);
+        $asset->set("colorSpace", ($imageInfo['color-space'] ?? false) ? $imageInfo['color-space'] : null);
+        $asset->set("colorDepth", ($imageInfo['color-depth'] ?? false) ? $imageInfo['color-depth'] : null);
+        $asset->set("orientation", ($imageInfo['orientation'] ?? false) ? $imageInfo['orientation'] : null);
     }
 
     public function getRelationsCount(Entity $entity)
@@ -172,7 +178,7 @@ class Asset extends Base
             if ($relation['type'] === "belongsTo" && $entity->isAttributeChanged($relation['key'])) {
                 $list[] = [
                     "entityName" => $relation['entity'],
-                    "entityId" => $entity->get($relation['key'])
+                    "entityId"   => $entity->get($relation['key']),
                 ];
             }
         }

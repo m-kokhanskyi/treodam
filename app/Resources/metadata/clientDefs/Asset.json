@@ -1,15 +1,15 @@
 {
-  "bottomPanels": {
+  "bottomPanels"        : {
     "detail": [
       {
-        "name": "relations",
+        "name" : "relations",
         "label": "Relations",
-        "view": "dam:views/asset/record/panels/asset_relations"
+        "view" : "dam:views/asset/record/panels/asset_relations"
       }
     ]
   },
-  "controller": "dam:controllers/asset",
-  "boolFilterList": [
+  "controller"          : "dam:controllers/asset",
+  "boolFilterList"      : [
     "onlyMy",
     "notSelectAssets"
   ],
@@ -22,38 +22,38 @@
       "onlyActive"
     ]
   },
-  "modalViews": {
-    "select": "dam:views/asset/modals/select-records",
-    "edit" : "dam:views/asset/modals/multi-create",
-    "quickEdit" : "views/modals/edit"
+  "modalViews"          : {
+    "select"   : "dam:views/asset/modals/select-records",
+    "edit"     : "dam:views/asset/modals/multi-create",
+    "quickEdit": "views/modals/edit"
   },
-  "views": {
-    "list": "dam:views/asset/list",
+  "views"               : {
+    "list" : "dam:views/asset/list",
     "plate": "dam:views/asset/plate"
   },
-  "recordViews": {
-    "plate": "dam:views/asset/record/plate",
+  "recordViews"         : {
+    "plate"    : "dam:views/asset/record/plate",
     "plateItem": "dam:views/asset/record/plate-item",
-    "detail": "dam:views/asset/record/detail",
-    "list" : "dam:views/asset/record/list"
+    "detail"   : "dam:views/asset/record/detail",
+    "list"     : "dam:views/asset/record/list"
   },
-  "menu": {
-    "list": {
+  "menu"                : {
+    "list" : {
       "buttons": [
         {
-          "acl": "read",
-          "label": "",
-          "link": "#Asset/list",
-          "style": "primary",
-          "title": "List",
+          "acl"     : "read",
+          "label"   : "",
+          "link"    : "#Asset/list",
+          "style"   : "primary",
+          "title"   : "List",
           "iconHtml": "<span class=\"fa fa-list\"></span>"
         },
         {
-          "acl": "read",
-          "label": "",
-          "link": "#Asset/plate",
-          "style": "default",
-          "title": "Plate",
+          "acl"     : "read",
+          "label"   : "",
+          "link"    : "#Asset/plate",
+          "style"   : "default",
+          "title"   : "Plate",
           "iconHtml": "<span class=\"fa fa-th\"></span>"
         }
       ]
@@ -61,103 +61,153 @@
     "plate": {
       "buttons": [
         {
-          "acl": "read",
-          "label": "",
-          "link": "#Asset/list",
-          "style": "default",
-          "title": "List",
+          "acl"     : "read",
+          "label"   : "",
+          "link"    : "#Asset/list",
+          "style"   : "default",
+          "title"   : "List",
           "iconHtml": "<span class=\"fa fa-list\"></span>"
         },
         {
-          "acl": "read",
-          "label": "",
-          "link": "#Asset/plate",
-          "style": "primary",
-          "title": "Plate",
+          "acl"     : "read",
+          "label"   : "",
+          "link"    : "#Asset/plate",
+          "style"   : "primary",
+          "title"   : "Plate",
           "iconHtml": "<span class=\"fa fa-th\"></span>"
         }
       ]
     }
   },
-  "iconClass": "fas fa-archive",
-  "dynamicLogic": {
+  "iconClass"           : "fas fa-archive",
+  "dynamicLogic"        : {
     "fields": {
-      "type": {
+      "height"     : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "isNotEmpty",
+              "attribute": "height"
+            }
+          ]
+        }
+      },
+      "width"      : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "isNotEmpty",
+              "attribute": "width"
+            }
+          ]
+        }
+      },
+      "colorSpace" : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "isNotEmpty",
+              "attribute": "colorSpace"
+            }
+          ]
+        }
+      },
+      "colorDepth" : {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "isNotEmpty",
+              "attribute": "colorDepth"
+            }
+          ]
+        }
+      },
+      "orientation": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type"     : "isNotEmpty",
+              "attribute": "colorDepth"
+            }
+          ]
+        }
+      },
+      "type"       : {
         "readOnly": {
           "conditionGroup": [
             {
-              "type": "isNotEmpty",
+              "type"     : "isNotEmpty",
               "attribute": "id"
             }
           ]
         }
       },
-      "size": {
+      "size"       : {
         "visible": {
           "conditionGroup": [
             {
-              "type": "isNotEmpty",
+              "type"     : "isNotEmpty",
               "attribute": "id"
             }
           ]
         }
       },
-      "file": {
+      "file"       : {
         "visible": {
           "conditionGroup": [
             {
-              "type": "and",
+              "type" : "and",
               "value": [
                 {
-                  "type": "notEquals",
+                  "type"     : "notEquals",
                   "attribute": "type",
-                  "value": "Image"
+                  "value"    : "Image"
                 },
                 {
-                  "type": "notEquals",
+                  "type"     : "notEquals",
                   "attribute": "type",
-                  "value": "Description Image"
+                  "value"    : "Description Image"
                 },
                 {
-                  "type": "notEquals",
+                  "type"     : "notEquals",
                   "attribute": "type",
-                  "value": "Gallery Image"
+                  "value"    : "Gallery Image"
                 },
                 {
-                  "type": "notEquals",
+                  "type"     : "notEquals",
                   "attribute": "type",
-                  "value": "Icon"
+                  "value"    : "Icon"
                 }
               ]
             }
           ]
         }
       },
-      "image": {
+      "image"      : {
         "visible": {
           "conditionGroup": [
             {
-              "type": "or",
+              "type" : "or",
               "value": [
                 {
-                  "type": "equals",
+                  "type"     : "equals",
                   "attribute": "type",
-                  "value": "Image"
+                  "value"    : "Image"
                 },
                 {
-                  "type": "equals",
+                  "type"     : "equals",
                   "attribute": "type",
-                  "value": "Icon"
+                  "value"    : "Icon"
                 },
                 {
-                  "type": "equals",
+                  "type"     : "equals",
                   "attribute": "type",
-                  "value": "Gallery Image"
+                  "value"    : "Gallery Image"
                 },
                 {
-                  "type": "equals",
+                  "type"     : "equals",
                   "attribute": "type",
-                  "value": "Description Image"
+                  "value"    : "Description Image"
                 }
               ]
             }
@@ -166,20 +216,20 @@
       }
     }
   },
-  "relationshipPanels": {
+  "relationshipPanels"  : {
     "assetCategories": {
       "selectBoolFilterList": [
         "onlyChildCategory",
         "notSelectCategories",
         "byCollection"
       ],
-      "view": "dam:views/asset/record/panels/asset_category",
-      "selectAction": "selectRelatedEntity"
+      "view"                : "dam:views/asset/record/panels/asset_category",
+      "selectAction"        : "selectRelatedEntity"
     },
-    "renditions": {
+    "renditions"     : {
       "select": false
     },
-    "assetMetaDatas": {
+    "assetMetaDatas" : {
       "select": false,
       "create": false
     }

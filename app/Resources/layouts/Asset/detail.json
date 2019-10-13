@@ -30,15 +30,13 @@
             ],
             [
                 {
-                    "name": "collection"
-                },
-                {
-                    "name": "size"
+                    "name": "tags",
+                    "fullWidth": true
                 }
             ],
             [
                 {
-                    "name": "tags"
+                    "name": "collection"
                 },
                 {
                     "name": "isActive"
@@ -47,5 +45,36 @@
         ],
         "style": "default",
         "label": "Overview"
+    },
+    {
+        "rows": [
+            [
+                {
+                    "name": "size"
+                },
+                {
+                    "name": "orientation"
+                }
+            ],
+            [
+                {
+                    "name": "width"
+                },
+                {
+                    "name": "height"
+                }
+            ],
+            [
+                {
+                    "name": "colorDepth"
+                },
+                {
+                    "name": "colorSpace"
+                }
+            ]
+        ],
+        "style": "default",
+        "dynamicLogicVisible": null,
+        "customLabel": "Attributes"
     }
 ]

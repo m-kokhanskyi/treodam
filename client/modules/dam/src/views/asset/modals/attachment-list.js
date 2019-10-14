@@ -11,20 +11,21 @@ Espo.define('dam:views/asset/modals/attachment-list', 'view', function (Dep) {
         
         setup() {
             this.items = [];
-            this.collection.forEach((attachment) => {
+            for (let i=0; i < this.collection.length; i++) {
+                let attachment = this.collection.models[i];
+                
                 let name = `attachment-${attachment.get('id')}`;
+                this.items.push(name);
                 this.createView(name, "dam:views/asset/modals/attachment-item", {
                     el   : this.options.el + ` tr[data-name="${name}"]`,
                     model: attachment,
                     type : this.model.get('type')
                 }, view => {
-                    this.items.push(name);
                     view.listenTo(view, "attachment:remove", () => {
-                    debugger;
                         this.reRender();
                     });
                 });
-            });
+            }
         }
     });
 });

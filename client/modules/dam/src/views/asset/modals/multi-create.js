@@ -15,8 +15,8 @@ Espo.define('dam:views/asset/modals/multi-create', 'views/modal', function (Dep)
             this.getCollectionFactory().create("Attachments", collection => {
                 this.collection = collection;
                 this.collection.listenTo(this.collection, "upload:done", () => {
-                    this._renderAttachmentList();
                     this._afterUploadDone();
+                    this._renderAttachmentList();
                 });
             });
             
@@ -40,6 +40,7 @@ Espo.define('dam:views/asset/modals/multi-create', 'views/modal', function (Dep)
         },
         
         _renderAttachmentList() {
+            console.log(1);
             this.createView("attachmentList", "dam:views/asset/modals/attachment-list", {
                 el        : this.options.el + " .attachment-list",
                 collection: this.collection,
@@ -61,6 +62,7 @@ Espo.define('dam:views/asset/modals/multi-create', 'views/modal', function (Dep)
             this.getModelFactory().create("CreateAssets", model => {
                 let data = this.getMetadata().get("entityDefs.Asset.fields.type.options");
                 model.set("type", data[0]);
+                model.set("private", this.getMetadata().get("entityDefs.Asset.fields.private.default"));
                 this.model = model;
                 this.createView("type", "views/fields/enum", {
                     model: this.model,

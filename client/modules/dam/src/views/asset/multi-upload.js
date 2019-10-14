@@ -1,4 +1,4 @@
-Espo.define('dam:views/asset/multi-upload', 'view', function (Dep) {
+Espo.define('dam:views/asset/multi-upload', "view", function (Dep) {
     return Dep.extend({
         template: "dam:asset/multi-upload",
         events  : _.extend({
@@ -16,7 +16,9 @@ Espo.define('dam:views/asset/multi-upload', 'view', function (Dep) {
             Promise.all(pList).then(r => {
                 this.collection.trigger("upload:done", r);
             }).catch(r => {
-            
+                if (this.collection.length > 0) {
+                    this.collection.trigger("upload:done", r);
+                }
             });
         },
         
@@ -32,7 +34,7 @@ Espo.define('dam:views/asset/multi-upload', 'view', function (Dep) {
                         model.set('relatedType', "Asset");
                         model.set('file', e.target.result);
                         model.set('field', "image");
-            
+                        model.set('modelAttributes', this.model);
                         model.save({}, {timeout: 0}).then(function () {
                             this.collection.push(model);
                             resolve();

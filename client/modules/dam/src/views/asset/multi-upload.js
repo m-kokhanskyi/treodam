@@ -27,13 +27,16 @@ Espo.define('dam:views/asset/multi-upload', "view", function (Dep) {
                 this.getModelFactory().create('Attachment', function (model) {
                     let fileReader    = new FileReader();
                     fileReader.onload = function (e) {
+                        let type = this.model.get("type").replace(" ", "-").toLowerCase();
+                        let field = this.getMetadata().get(`app.config.types.custom.${type}.nature`);
+                    
                         model.set('name', file.name);
                         model.set('type', file.type || 'text/plain');
                         model.set('role', 'Attachment');
                         model.set('size', file.size);
                         model.set('relatedType', "Asset");
                         model.set('file', e.target.result);
-                        model.set('field', "image");
+                        model.set('field', field);
                         model.set('modelAttributes', this.model);
                         model.save({}, {timeout: 0}).then(function () {
                             this.collection.push(model);

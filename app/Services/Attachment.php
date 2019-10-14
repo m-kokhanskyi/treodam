@@ -54,7 +54,7 @@ class Attachment extends \Treo\Services\Attachment
     }
 
     /**
-     * @param $attachment
+     * @param      $attachment
      * @param null $path
      * @return array
      * @throws \ImagickException
@@ -62,21 +62,23 @@ class Attachment extends \Treo\Services\Attachment
      */
     public function getImageInfo($attachment, $path = null): array
     {
-        $path = $path ?? $this->getPath($attachment);
+        $path   = $path ?? $this->getPath($attachment);
         $result = [];
 
-        $image = new Imagick($path);
+        if ($attachment->get("field") === "image") {
+            $image = new Imagick($path);
 
-        if ($imageInfo = getimagesize($path)) {
-            $orientation = $image->getImageOrientation() ? $image->getImageOrientation() : null;
-            $result = [
-                "width" => $image->getImageWidth(),
-                "height" => $image->getImageHeight(),
-                "color-space" => Util::getColorSpace($image),
-                "color-depth" => $image->getImageDepth(),
-                'orientation' => $orientation ?? $this->getPosition($image->getImageWidth(), $image->getImageHeight()),
-                'mime' => $image->getImageMimeType(),
-            ];
+            if ($imageInfo = getimagesize($path)) {
+                $orientation = $image->getImageOrientation() ? $image->getImageOrientation() : null;
+                $result      = [
+                    "width"       => $image->getImageWidth(),
+                    "height"      => $image->getImageHeight(),
+                    "color-space" => Util::getColorSpace($image),
+                    "color-depth" => $image->getImageDepth(),
+                    'orientation' => $orientation ?? $this->getPosition($image->getImageWidth(), $image->getImageHeight()),
+                    'mime'        => $image->getImageMimeType(),
+                ];
+            }
         }
 
         if ($pathInfo = pathinfo($path)) {
@@ -130,7 +132,7 @@ class Attachment extends \Treo\Services\Attachment
         $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
 
         $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
-        $attachment = $this->getEntity($attachmentId);
+        $attachment   = $this->getEntity($attachmentId);
 
 //        if ($attachment->get('sourceId')) {
 //            return $this->copyDuplicate($asset);
@@ -141,7 +143,7 @@ class Attachment extends \Treo\Services\Attachment
         }
 
         $sourcePath = $attachment->get("tmpPath");
-        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path') . "/" . $attachment->get('name');
+        $destPath   = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path') . "/" . $attachment->get('name');
 
         if ($this->getFileManager()->move($sourcePath, $destPath, false)) {
             return $this->getEntityManager()->getRepository("Attachment")->updateStorage($attachment,
@@ -177,14 +179,15 @@ class Attachment extends \Treo\Services\Attachment
         $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
 
         $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
-        $attachment = $this->getEntity($attachmentId);
+        $attachment   = $this->getEntity($attachmentId);
 
         $sourcePath = $this->getFileStorageManager()->getLocalFilePath($attachment);
-        $destPath = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path');
+        $destPath   = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path');
 
         if ($this->getFileManager()->copy($sourcePath, $destPath, false, null, true)) {
             $attachment->set("storageFilePath", $asset->get('path'));
             $attachment->set('sourceId', null);
+
             return $this->getEntityManager()->getRepository("Attachment")->save($attachment);
         }
 
@@ -200,24 +203,24 @@ class Attachment extends \Treo\Services\Attachment
     public function changeAccess(Entity $entity)
     {
         $source = ($entity->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->getMainFolder()}/" . $entity->getFetched("path");
-        $dest = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->getMainFolder()}/" . $entity->get("path");
+        $dest   = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->getMainFolder()}/" . $entity->get("path");
 
         $nature = $this->getConfigManager()->get([ConfigManager::getType($entity->get('type')), "nature"]);
 
         $attachmentId = $nature === "image" ? $entity->get("imageId") : $entity->get("fileId");
-        $attachment = $this->getEntity($attachmentId);
+        $attachment   = $this->getEntity($attachmentId);
 
         if ($this->getFileManager()->moveFolder($source, $dest)) {
             return $this->getEntityManager()
-                ->getRepository("Attachment")
-                ->updateStorage($attachment, $entity->get('path'));
+                        ->getRepository("Attachment")
+                        ->updateStorage($attachment, $entity->get('path'));
         }
     }
 
     /**
      * @param \Dam\Entities\Attachment $attachment
-     * @param string $newName
-     * @param Entity $entity
+     * @param string                   $newName
+     * @param Entity                   $entity
      * @return mixed
      */
     public function changeName(\Dam\Entities\Attachment $attachment, string $newName, Entity $entity = null)
@@ -257,6 +260,7 @@ class Attachment extends \Treo\Services\Attachment
 
         $imagick = new \Imagick();
         $imagick->readImage($path);
+
         return $imagick->getImageProperties();
     }
 
@@ -269,18 +273,18 @@ class Attachment extends \Treo\Services\Attachment
     protected function validateAttachment($attachment, $entity)
     {
         if (!empty($attachment->file)) {
-            $arr = explode(',', $attachment->file);
+            $arr      = explode(',', $attachment->file);
             $contents = '';
             if (count($arr) > 1) {
                 $contents = $arr[1];
             }
 
-            $contents = base64_decode($contents);
+            $contents             = base64_decode($contents);
             $attachment->contents = $contents;
 
             $relatedEntityType = null;
-            $field = null;
-            $role = 'Attachment';
+            $field             = null;
+            $role              = 'Attachment';
             if (isset($attachment->parentType)) {
                 $relatedEntityType = $attachment->parentType;
             } elseif (isset($attachment->relatedType)) {
@@ -317,9 +321,9 @@ class Attachment extends \Treo\Services\Attachment
 
                 if (isset($attachment->modelAttributes)) {
 
-                    $model = $attachment->modelAttributes;
+                    $model   = $attachment->modelAttributes;
                     $private = $model->private ? "private" : "public";
-                    $type = ConfigManager::getType($model->type);
+                    $type    = ConfigManager::getType($model->type);
 
                     $config = $this->getConfigManager()->get([$type]);
 

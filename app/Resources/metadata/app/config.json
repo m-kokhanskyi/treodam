@@ -367,6 +367,7 @@
                             "application/x-tar",
                             "application/x-bzip2",
                             "application/gzip",
+                            "application/x-gzip",
                             "application/x-lzip",
                             "application/x-lzma",
                             "application/x-lzop",

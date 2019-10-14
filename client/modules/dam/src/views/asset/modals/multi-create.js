@@ -40,7 +40,6 @@ Espo.define('dam:views/asset/modals/multi-create', 'views/modal', function (Dep)
         },
         
         _renderAttachmentList() {
-            console.log(1);
             this.createView("attachmentList", "dam:views/asset/modals/attachment-list", {
                 el        : this.options.el + " .attachment-list",
                 collection: this.collection,

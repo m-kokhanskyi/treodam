@@ -2,6 +2,7 @@ Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields
     return Dep.extend({
         template: "dam:asset/modals/attachment-item",
         type    : null,
+        field   : "",
         
         events: {
             'click span[data-action="collapsePanel"]'   : function (e) {
@@ -21,21 +22,29 @@ Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields
             }
         },
         data() {
-            return {
-                'preview': `?entryPoint=image&size=small&id=${this.model.id}`,
-                'name'   : this.model.get("name"),
-                'size'   : (
+            let data = {
+                'name': this.model.get("name"),
+                'size': (
                     parseInt(this.model.get("size")) / 1024
                 ).toFixed(2) + " kb"
             };
+            
+            if (this.field === "image") {
+                data.preview = `?entryPoint=image&size=small&id=${this.model.id}`;
+            }
+            
+            return data;
         },
         setup() {
-            this.type = this.options.type || null;
+            this.type  = this.options.type || null;
+            let type   = this.type.replace(" ", "-").toLowerCase();
+            this.field = this.getMetadata().get(`app.config.types.custom.${type}.nature`);
             
             this.getModelFactory().create("Asset", model => {
+                
                 model.set("type", this.type);
-                model.set("imageId", this.model.id);
-                model.set("imageName", this.model.get("name"));
+                model.set(`${this.field}Id`, this.model.id);
+                model.set(`${this.field}Name`, this.model.get("name"));
                 model.set("name", this._getFileName(this.model.get("name")));
                 model.set("nameOfFile", this._getFileName(this.model.get("name")));
                 model.set("code", Code.prototype.transformToPattern.call(this, this._getFileName(this.model.get("name"))));

@@ -1,5 +1,5 @@
 <td class="preview">
-    <img src="{{preview}}" class="image-preview">
+    {{#if preview}}<img src="{{preview}}" class="image-preview">{{/if}}
 </td>
 <td>
     <div class="media-body">

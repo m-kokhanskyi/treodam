@@ -1,18 +1,12 @@
 {
   "name": "treolabs/dam",
-  "authors": [
-    {
-      "name": "Roman Ratsun",
-      "email": "r.ratsun@treolabs.com"
-    }
-  ],
   "require": {
     "treolabs/treocore": "~3.23.0",
+    "treolabs/colored-fields": "*",
     "ext-gd": "*",
     "ext-exif": "*",
     "ext-imagick": "*",
-    "gumlet/php-image-resize" : "1.9.2",
-    "treo-module/coloredfields": "*"
+    "gumlet/php-image-resize" : "1.9.2"
   },
   "autoload": {
     "psr-4": {

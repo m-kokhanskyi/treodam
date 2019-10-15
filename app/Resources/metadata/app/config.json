@@ -27,12 +27,12 @@
                     },
                     "size": {
                         "private": {
-                            "min": 100,
-                            "max": 100000000
+                            "min": 0,
+                            "max": 5000
                         },
                         "public": {
-                            "min": 100,
-                            "max": 100000000
+                            "min": 0,
+                            "max": 5000
                         }
                     },
                     "quality": {
@@ -83,11 +83,11 @@
                     },
                     "size": {
                         "private": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         },
                         "public": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         }
                     },
@@ -132,11 +132,11 @@
                 "validations": {
                     "size": {
                         "private": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         },
                         "public": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         }
                     },
@@ -274,11 +274,11 @@
                     },
                     "size": {
                         "private": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         },
                         "public": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         }
                     }
@@ -289,11 +289,11 @@
                 "validations": {
                     "size": {
                         "private": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         },
                         "public": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         }
                     },
@@ -320,11 +320,11 @@
                 "validations": {
                     "size": {
                         "private": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         },
                         "public": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         }
                     },
@@ -349,11 +349,11 @@
                 "validations": {
                     "size": {
                         "private": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         },
                         "public": {
-                            "min": 100,
+                            "min": 0,
                             "max": 100000000
                         }
                     },

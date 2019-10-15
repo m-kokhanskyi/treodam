@@ -11,5 +11,6 @@
         "folderDepth": 5,
         "folderNameLength": 5,
         "maxFilesInFolder": 5
-    }
+    },
+    "maxUploadFiles" : 5
 }

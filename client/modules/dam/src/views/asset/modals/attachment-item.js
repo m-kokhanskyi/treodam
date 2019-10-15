@@ -1,8 +1,7 @@
 Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields/code-from-name"], function (Dep, Code) {
     return Dep.extend({
         template: "dam:asset/modals/attachment-item",
-        type    : null,
-        field   : "",
+        field   : null,
         
         events: {
             'click span[data-action="collapsePanel"]'   : function (e) {
@@ -36,13 +35,16 @@ Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields
             return data;
         },
         setup() {
-            this.type  = this.options.type || null;
-            let type   = this.type.replace(" ", "-").toLowerCase();
-            this.field = this.getMetadata().get(`app.config.types.custom.${type}.nature`);
+            let type   = this.options.type || null;
+            let access = this.options.private;
+            
+            let typeCode = type.replace(" ", "-").toLowerCase();
+            this.field   = this.getMetadata().get(`app.config.types.custom.${typeCode}.nature`);
             
             this.getModelFactory().create("Asset", model => {
                 
-                model.set("type", this.type);
+                model.set("type", type);
+                model.set("private", access);
                 model.set(`${this.field}Id`, this.model.id);
                 model.set(`${this.field}Name`, this.model.get("name"));
                 model.set("name", this._getFileName(this.model.get("name")));

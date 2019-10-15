@@ -21,7 +21,7 @@ class Size extends Base
             return true;
         }
         
-        $imageSize = filesize($this->attachment->get('tmpPath'));
+        $imageSize = (filesize($this->attachment->get('tmpPath')) / 1024);
 
         if ($imageSize >= $this->params['min'] && $imageSize <= $this->params['max']) {
             return true;

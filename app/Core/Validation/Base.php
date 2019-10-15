@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Dam\Core\Validation;
 
 use Treo\Core\Container;
@@ -57,6 +58,11 @@ abstract class Base
         }
 
         return false;
+    }
+
+    protected function translate(string $label, string $category, string $scope)
+    {
+        $this->container->get("language")->translate($label, $category, $scope);
     }
 
 }

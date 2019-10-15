@@ -3,12 +3,6 @@ Espo.define('dam:views/asset/modals/multi-create', 'views/modal', function (Dep)
         saved   : false,
         template: "dam:asset/modals/multi-create",
         
-        events: _.extend({
-            'change .field[data-name="type"] > select': function (e) {
-                this.model.set("type", $(e.currentTarget).val());
-            }
-        }, Dep.prototype.events),
-        
         setup() {
             this.header = this.getLanguage().translate("Create Assets", 'labels', this.scope);
             
@@ -20,7 +14,7 @@ Espo.define('dam:views/asset/modals/multi-create', 'views/modal', function (Dep)
                 });
             });
             
-            this._renderType();
+            this._renderInfoPanel();
             this._renderUpload();
             
             this.listenTo(this, "close", () => {
@@ -57,22 +51,12 @@ Espo.define('dam:views/asset/modals/multi-create', 'views/modal', function (Dep)
             });
         },
         
-        _renderType() {
+        _renderInfoPanel() {
             this.getModelFactory().create("CreateAssets", model => {
-                let data = this.getMetadata().get("entityDefs.Asset.fields.type.options");
-                model.set("type", data[0]);
-                model.set("private", this.getMetadata().get("entityDefs.Asset.fields.private.default"));
                 this.model = model;
-                this.createView("type", "views/fields/enum", {
+                this.createView("assetInfoPanel", "dam:views/asset/modals/info-panel", {
                     model: this.model,
-                    el   : this.options.el + ' .field[data-name="type"]',
-                    defs : {
-                        name  : 'type',
-                        params: {
-                            options: this.getMetadata().get("entityDefs.Asset.fields.type.options")
-                        }
-                    },
-                    mode : 'edit'
+                    el   : this.options.el + " .info-panel"
                 });
             });
         },
@@ -88,8 +72,7 @@ Espo.define('dam:views/asset/modals/multi-create', 'views/modal', function (Dep)
                 name : "cancel",
                 label: "Cancel"
             });
-            
-            this.getView("type").hide();
+            this.getView("assetInfoPanel").remove();
         },
         
         actionSave() {

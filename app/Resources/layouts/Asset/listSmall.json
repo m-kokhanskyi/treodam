@@ -10,6 +10,12 @@
         "name": "private"
     },
     {
-        "name": "fileType"
+        "name": "image"
+    },
+    {
+        "name": "file"
+    },
+    {
+        "name": "nameOfFile"
     }
 ]

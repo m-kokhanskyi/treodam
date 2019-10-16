@@ -45,6 +45,7 @@ class Event extends AbstractEvent
     protected $menuItems = [
         'Asset',
         'AssetCategory',
+        'Collection'
     ];
 
     /**

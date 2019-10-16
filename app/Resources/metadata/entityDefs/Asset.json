@@ -239,60 +239,71 @@
       "type": "hasMany",
       "foreign": "asset",
       "entity": "Rendition",
-      "audited": false
+      "audited": false,
+      "entityAsset" : false
     },
     "collection": {
       "type": "belongsTo",
       "foreign": "assets",
       "entity": "Collection",
-      "audited": false
+      "audited": false,
+      "entityAsset" : false
     },
     "assetMetaDatas": {
       "type": "hasMany",
       "foreign": "asset",
       "entity": "AssetMetaData",
-      "audited": false
+      "audited": false,
+      "entityAsset" : false
     },
     "assetVersions": {
       "type": "hasMany",
       "foreign": "asset",
       "entity": "AssetVersion",
-      "audited": false
+      "audited": false,
+      "entityAsset" : false
     },
     "createdBy": {
       "type": "belongsTo",
-      "entity": "User"
+      "entity": "User",
+      "entityAsset" : false
     },
     "modifiedBy": {
       "type": "belongsTo",
-      "entity": "User"
+      "entity": "User",
+      "entityAsset" : false
     },
     "assignedUser": {
       "type": "belongsTo",
-      "entity": "User"
+      "entity": "User",
+      "entityAsset" : false
     },
     "teams": {
       "type": "hasMany",
       "entity": "Team",
       "relationName": "EntityTeam",
-      "layoutRelationshipsDisabled": true
+      "layoutRelationshipsDisabled": true,
+      "entityAsset" : false
     },
     "image": {
       "type": "belongsTo",
       "entity": "Attachment",
-      "skipOrmDefs": true
+      "skipOrmDefs": true,
+      "entityAsset" : false
     },
     "file": {
       "type": "belongsTo",
       "entity": "Attachment",
-      "skipOrmDefs": true
+      "skipOrmDefs": true,
+      "entityAsset" : false
     },
     "assetCategories": {
       "type": "hasMany",
       "relationName": "assetCategoryAsset",
       "foreign": "assets",
       "entity": "AssetCategory",
-      "audited": false
+      "audited": false,
+      "entityAsset" : false
     }
   },
   "collection": {

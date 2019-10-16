@@ -175,7 +175,15 @@ class Asset extends Base
         $list = [];
 
         foreach ($entity->getRelations() as $key => $relation) {
-            if ($relation['type'] === "belongsTo" && $entity->isAttributeChanged($relation['key'])) {
+            if (
+                $relation['type'] === "belongsTo"
+                &&
+                $entity->isAttributeChanged($relation['key'])
+                &&
+                $key !== "ownerUser"
+                &&
+                !$this->skipEntityAssets($key)
+            ) {
                 $list[] = [
                     "entityName" => $relation['entity'],
                     "entityId"   => $entity->get($relation['key']),
@@ -184,5 +192,10 @@ class Asset extends Base
         }
 
         return $list;
+    }
+
+    protected function skipEntityAssets(string $key)
+    {
+        return !$this->getMetadata()->get(['entityDefs', 'Asset', 'links', $key, 'entityAsset']);
     }
 }

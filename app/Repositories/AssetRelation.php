@@ -79,7 +79,7 @@ class AssetRelation extends Base
 
     public function getAvailableEntities($assetId)
     {
-        return $this->getData("SELECT entity_name as entityName FROM asset_relation where deleted = 0 AND asset_id = ? GROUP BY entity_name", [$assetId]);
+        return $this->getData("SELECT entity_name as name FROM asset_relation where deleted = 0 AND asset_id = ? GROUP BY entity_name", [$assetId]);
     }
 
 

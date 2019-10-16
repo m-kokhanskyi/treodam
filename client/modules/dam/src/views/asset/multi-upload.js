@@ -45,7 +45,7 @@ Espo.define('dam:views/asset/multi-upload', "view", function (Dep) {
         },
         
         _createFile(file) {
-            let sizeValidate = this._sizeValidate(file.size);
+            let sizeValidate = this._sizeValidate((file.size / 1024));
             
             if (!sizeValidate) {
                 this.notify("Size limit", "error");

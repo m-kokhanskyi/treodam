@@ -53,7 +53,7 @@ class AssetRelation extends Base
 
             $tableName = $this->getDamQuery()->toDb($type);
 
-            $sql = "    SELECT {$select}, {$tableName}.name as name
+            $sql = "    SELECT {$select}, {$tableName}.name as relatedEntityName
                     FROM asset_relation
                     INNER JOIN {$tableName} ON ({$tableName}.id = asset_relation.entity_id)
                     WHERE asset_relation.asset_id = ?
@@ -61,7 +61,7 @@ class AssetRelation extends Base
                         AND asset_relation.deleted = '0'";
             $data = [$entityId];
         } else {
-            $sql = "    SELECT {$select}, CONCAT(asset.name, ' / ', asset.size) as name
+            $sql = "    SELECT {$select}, CONCAT(asset.name, ' / ', asset.size) as relatedEntityName
                     FROM asset_relation
                     INNER JOIN asset ON (asset.id = asset_relation.asset_id)
                     WHERE asset_relation.entity_id = ?

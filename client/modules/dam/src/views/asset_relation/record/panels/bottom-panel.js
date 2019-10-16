@@ -74,7 +74,13 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         },
 
         actionCreateRelation() {
-            this.createView("createAssetRelation", "dam:views/asset_relation/record/modals/create-asset-relation", {}, (view) => {
+            let link = "assets";
+            this.createView("createAssetRelation", "dam:views/asset_relation/modals/create-assets", {
+                relate: {
+                    model: this.model,
+                    link: this.model.defs['links'][link].foreign,
+                },
+            }, (view) => {
                 view.render();
             });
         },

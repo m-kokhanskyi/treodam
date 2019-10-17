@@ -32,6 +32,10 @@ class Entity extends AbstractListener
         $entity = $event->getArgument("entity");
         $userId = $this->getUser()->id;
 
+        if (!$userId) {
+            return false;
+        }
+
         if (is_a($entity, Asset::class)) {
             $this->getService("Asset")->assetRelation($entity, $userId);
         } else {

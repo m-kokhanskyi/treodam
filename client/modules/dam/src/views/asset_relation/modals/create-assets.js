@@ -1,5 +1,7 @@
 Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/multi-create',
     Dep => Dep.extend({
+        entityAssetModels : {},
+        
         _renderAttachmentList() {
             this.createView("attachmentList", "dam:views/asset_relation/modals/attachment-list", {
                 el        : this.options.el + " .attachment-list",
@@ -41,9 +43,11 @@ Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/m
             });
         },
         _getEntityAssetModel(model) {
-            let entityAssetModel = model.get("EntityAsset");
-            model.unset("EntityAsset");
-            return entityAssetModel;
+            if (!this.entityAssetModels[model.id]) {
+                this.entityAssetModels[model.id] = model.get("EntityAsset");
+                model.unset("EntityAsset");
+            }
+            return this.entityAssetModels[model.id];
         }
     })
 );

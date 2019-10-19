@@ -2,6 +2,8 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
     Dep => Dep.extend({
         template: "dam:asset_relation/record/panels/asset-relations",
         blocks  : [],
+        link    : null,
+        sort    : false,
         
         data() {
             return {
@@ -10,8 +12,12 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         },
         
         setup() {
+            this.link = this._getAssetLink();
+            
             this.getGroupsInfo();
-            this.actionButtonList();
+            if (this.link) {
+                this.actionButtonList();
+            }
         },
         
         getGroupsInfo() {
@@ -34,7 +40,8 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
                             
                             let params = {
                                 model: model,
-                                el   : this.options.el + ' .group[data-name="' + model.get("name") + '"]'
+                                el   : this.options.el + ' .group[data-name="' + model.get("name") + '"]',
+                                sort : this.sort
                             };
                             
                             if (showFirst) {
@@ -74,13 +81,12 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         },
         
         actionCreateRelation() {
-            let link = "assets";
             this.createView("createAssetRelation", "dam:views/asset_relation/modals/create-assets", {
                 relate: {
                     model: this.model,
-                    link : this.model.defs['links'][link].foreign
+                    link : this.model.defs['links'][this.link].foreign
                 },
-                scope: this.model.urlRoot
+                scope : this.model.urlRoot
             }, (view) => {
                 view.render();
             });
@@ -88,6 +94,18 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         
         selectRelation() {
         
+        },
+        
+        _getAssetLink() {
+            let links = this.model.defs.links;
+            for (let key in links) {
+                if (links[key].type === "hasMany" && links[key].entity === "Asset") {
+                    this.sort = true;
+                    return key;
+                }
+            }
+            
+            return false;
         }
     })
 );

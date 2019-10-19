@@ -2,8 +2,10 @@ Espo.define('dam:views/modals/multi-create', 'views/modal', function (Dep) {
     return Dep.extend({
         saved   : false,
         template: "dam:modals/multi-create",
+        scope   : null,
         
         setup() {
+            this.scope  = this.options.scope || null;
             this.header = this.getLanguage().translate("Create Assets", 'labels', this.scope);
             
             this.getCollectionFactory().create("Attachments", collection => {

@@ -3,13 +3,16 @@
 namespace Dam\Controllers;
 
 use Espo\Core\Exceptions;
+use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\Error;
+use Espo\Core\Exceptions\Forbidden;
 use Treo\Core\Slim\Http\Request;
 
 class AssetRelation extends AbstractController
 {
     /**
-     * @param $params
-     * @param $data
+     * @param         $params
+     * @param         $data
      * @param Request $request
      * @return mixed
      * @throws \Espo\Core\Exceptions\BadRequest
@@ -18,7 +21,7 @@ class AssetRelation extends AbstractController
     public function actionItemsInEntity($params, $data, Request $request)
     {
         $typesList = $this->getMetadata()->get(["entityDefs", "Asset", "fields", "type", "options"]);
-        $list = array_intersect($typesList, explode(',', $request->get("list")));
+        $list      = array_intersect($typesList, explode(',', $request->get("list")));
 
         if (!$this->isReadAction($request) || !$list) {
             throw new Exceptions\BadRequest("List can't be empty");
@@ -27,8 +30,8 @@ class AssetRelation extends AbstractController
         $list = $this->getRecordService()->getItemsInList($list, $params['entity_name'], $params['entity_id']);
 
         return [
-            "list" => $list,
-            "count" => count($list)
+            "list"  => $list,
+            "count" => count($list),
         ];
     }
 
@@ -41,8 +44,8 @@ class AssetRelation extends AbstractController
         $list = $this->getRecordService()->getItems($params['entity_id'], $params['entity_name'], $request->get("type"));
 
         return [
-            'list' => $list,
-            'total' => count($list)
+            'list'  => $list,
+            'total' => count($list),
         ];
     }
 
@@ -66,8 +69,8 @@ class AssetRelation extends AbstractController
         $list = $this->getRecordService()->getAvailableEntities($params['asset_id']);
 
         return [
-            'list' => $list,
-            'count' => count($list)
+            'list'  => $list,
+            'count' => count($list),
         ];
     }
 
@@ -80,8 +83,31 @@ class AssetRelation extends AbstractController
         $list = $this->getRecordService()->getItems($params['asset_id'], "Asset", $request->get("entity"));
 
         return [
-            'list' => $list,
-            'total' => count($list)
+            'list'  => $list,
+            'total' => count($list),
         ];
+    }
+
+    public function actionUpdateBy($params, $data, Request $request)
+    {
+        if (!$request->isPost() && !$request->isPatch()) {
+            throw new BadRequest();
+        }
+
+        if (!$this->getAcl()->check($this->name, 'edit')) {
+            throw new Forbidden();
+        }
+
+        $model = $this->getRecordService()->getItem([
+            "entityName" => (string)$request->get("entityName"),
+            "entityId"   => (string)$request->get("entityId"),
+            "assetId"    => (string)$request->get("assetId"),
+        ]);
+
+        if ($entity = $this->getRecordService()->updateEntity($model->id, $data)) {
+            return $entity->getValueMap();
+        }
+
+        throw new BadRequest();
     }
 }

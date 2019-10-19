@@ -9,5 +9,41 @@ Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/m
                 view.render();
             });
         },
+        
+        actionSave() {
+            let Promises = [];
+            this.collection.forEach(model => {
+                let entityAssetModel = this._getEntityAssetModel(model.get("assetModel"));
+                let assetModel       = model.get("assetModel");
+                
+                assetModel.setRelate(this.options.relate);
+                
+                Promises.push(new Promise((resolve, rejected) => {
+                    assetModel.save().then(() => {
+                        let entityId = this.getParentView().model.id;
+                        entityAssetModel.url = `AssetRelation/update/by?entityName=${this.scope}&entityId=${entityId}&assetId=${assetModel.id}`;
+                        entityAssetModel.save().then(() => {
+                            resolve();
+                        }).fail(() => {
+                            rejected();
+                        });
+                    }).fail(() => {
+                        rejected();
+                    });
+                }));
+            });
+            Promise.all(Promises).then(r => {
+                this._afterSave();
+                this.saved = true;
+                this.dialog.close();
+            }).catch(r => {
+            
+            });
+        },
+        _getEntityAssetModel(model) {
+            let entityAssetModel = model.get("EntityAsset");
+            model.unset("EntityAsset");
+            return entityAssetModel;
+        }
     })
 );

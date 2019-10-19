@@ -38,5 +38,13 @@
       "controller": "AssetRelation",
       "action": "byAsset"
     }
+  },
+  {
+    "route": "/AssetRelation/update/by",
+    "method": "POST",
+    "params": {
+      "controller": "AssetRelation",
+      "action": "updateBy"
+    }
   }
 ]

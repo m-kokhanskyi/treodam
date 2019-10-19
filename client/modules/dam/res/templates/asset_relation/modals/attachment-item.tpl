@@ -7,9 +7,9 @@
         <p class="by-author">{{size}}</p>
         <div class="row">
             <div class="col-md-12 edit-form">
-                {{{edit}}}
-                <h5>Asset&nbsp;&nbsp;&nbsp;&nbsp;<span class="collapser fas fa-chevron-up" data-action="collapseAssetPanel"></span></h5>
+                {{{entityAssetEdit}}}
                 <div class="col-md-12 asset-edit-form">
+                    <h5>Asset&nbsp;&nbsp;&nbsp;&nbsp;<span class="collapser fas fa-chevron-up" data-action="collapseAssetPanel"></span></h5>
                     {{{assetEdit}}}
                 </div>
             </div>
@@ -27,6 +27,9 @@
     }
     .row h5 {
         margin-left: 8px;
+    }
+    .edit-form .panel {
+        margin-bottom: 0;
     }
 </style>
 

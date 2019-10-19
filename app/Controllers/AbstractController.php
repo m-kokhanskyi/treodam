@@ -52,4 +52,17 @@ class AbstractController extends Base
 
         return true;
     }
+
+    public function isPostAction($request)
+    {
+        if (!$request->isPost()) {
+            throw new Exceptions\BadRequest();
+        }
+
+        if (!$this->getAcl()->check($this->name, 'edit')) {
+            throw new Exceptions\Forbidden();
+        }
+
+        return true;
+    }
 }

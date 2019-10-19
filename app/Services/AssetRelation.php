@@ -61,6 +61,11 @@ class AssetRelation extends Base
             ->getItemsByEntity($entityId, $entityName, $type);
     }
 
+    public function getItem(array $where)
+    {
+        return $this->getRepository()->where($where)->findOne();
+    }
+
     public function updateSortOrder(string $entityName, string $entityId, array $data): bool
     {
         $result = false;

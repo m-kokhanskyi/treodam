@@ -209,6 +209,10 @@ class Rendition extends \Espo\Core\Templates\Services\Base
                 'type'    => $key,
             ])->findOne();
 
+            if (!$rendition) {
+                continue;
+            }
+
             $attachment  = $rendition->get("image") ?? $rendition->get("file");
             $newFileName = Util::createName($rules['fileNameMask'], [
                 "original"  => $asset->get("nameOfFile"),

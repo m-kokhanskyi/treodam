@@ -13,14 +13,14 @@ class AssetRelation extends Base
     public function createLink($entity1, $entity2, $assignedUserId)
     {
         if (is_a($entity1, Asset::class)) {
-            $assetEntity = $entity1;
+            $assetEntity   = $entity1;
             $relatedEntity = $entity2;
         } else {
-            $assetEntity = $entity2;
+            $assetEntity   = $entity2;
             $relatedEntity = $entity1;
         }
 
-        if (!$this->checkDuplicate($assetEntity, $relatedEntity)) {
+        if ($this->checkRules($relatedEntity) && !$this->checkDuplicate($assetEntity, $relatedEntity)) {
             $this->deleteBelongsRelations($assetEntity, $relatedEntity);
             $this->getRepository()->createLink($assetEntity, $relatedEntity, $assignedUserId);
         }
@@ -29,7 +29,7 @@ class AssetRelation extends Base
     public function checkDuplicate(Entity $assetEntity, Entity $relatedEntity)
     {
         return $this->getRepository()
-            ->getEntityAssetsById($assetEntity->id, $relatedEntity->getEntityName(), $relatedEntity->id);
+                    ->getEntityAssetsById($assetEntity->id, $relatedEntity->getEntityName(), $relatedEntity->id);
     }
 
     public function getItemsInList(array $list, string $entityName, string $entityId)
@@ -39,7 +39,7 @@ class AssetRelation extends Base
             ->getItemsInList($list, $entityName, $entityId);
 
         $resItems = [];
-        $res = [];
+        $res      = [];
 
         foreach ($items as $item) {
             $resItems[$item['type']] = $item['count'];
@@ -47,7 +47,7 @@ class AssetRelation extends Base
 
         foreach ($list as $listItem) {
             $res[] = [
-                "name" => $listItem,
+                "name"    => $listItem,
                 "hasItem" => $resItems[$listItem] ?? false,
             ];
         }
@@ -58,7 +58,7 @@ class AssetRelation extends Base
     public function getItems(string $entityId, string $entityName, string $type)
     {
         return $this->getRepository()
-            ->getItemsByEntity($entityId, $entityName, $type);
+                    ->getItemsByEntity($entityId, $entityName, $type);
     }
 
     public function getItem(array $where)
@@ -73,7 +73,7 @@ class AssetRelation extends Base
         if (!empty($data)) {
             $template = "UPDATE asset_relation SET sort_order = %s 
                       WHERE entity_name = '%s' AND entity_id = '%s' AND id = '%s';";
-            $sql = '';
+            $sql      = '';
             foreach ($data as $k => $id) {
                 $sql .= sprintf($template, $k, $entityName, $entityId, $id);
             }
@@ -90,7 +90,7 @@ class AssetRelation extends Base
     public function getRelationsLinks(Entity $entity)
     {
         return $this->getRepository()->where([
-            "assetId" => $entity->id
+            "assetId" => $entity->id,
         ])->find();
     }
 
@@ -108,14 +108,14 @@ class AssetRelation extends Base
         if ($assetTo === "belongsTo") {
             $item = $repository->where([
                 'entityName' => $entity->getEntityType(),
-                "assetId" => $asset->id
+                "assetId"    => $asset->id,
             ])->findOne();
         }
 
         if ($entityTo === "belongsTo") {
             $item = $repository->where([
                 'entityName' => $entity->getEntityType(),
-                "entityId" => $entity->id
+                "entityId"   => $entity->id,
             ])->findOne();
         }
         if (!isset($item)) {
@@ -127,7 +127,7 @@ class AssetRelation extends Base
 
     public function deleteRelation(Entity $entity)
     {
-        $asset = $this->getEntityManager()->getEntity("Asset", $entity->getFetched("assetId"));
+        $asset   = $this->getEntityManager()->getEntity("Asset", $entity->getFetched("assetId"));
         $fEntity = $this->getEntityManager()->getEntity($entity->getFetched("entityName"), $entity->getFetched("entityId"));
 
         list($assetTo, $entityTo) = $this->getRelationType($asset, $fEntity);
@@ -176,6 +176,7 @@ class AssetRelation extends Base
         foreach ($entity->getRelations() as $key => $relation) {
             if ($relation['entity'] === $entityName) {
                 $relation['relationIndex'] = $key;
+
                 return $relation;
             }
         }
@@ -201,7 +202,7 @@ class AssetRelation extends Base
 
         return [
             $assetTo ?? null,
-            $entityTo ?? null
+            $entityTo ?? null,
         ];
     }
 
@@ -212,6 +213,20 @@ class AssetRelation extends Base
     protected function getService($name)
     {
         return $this->getServiceFactory()->create($name);
+    }
+
+    protected function checkRules(Entity $entity)
+    {
+        $assetLinks = $this->getMetadata()->get("entityDefs.Asset.links");
+        $entityName = $entity->getEntityName();
+
+        foreach ($assetLinks as $link) {
+            if ($link['entity'] === $entityName && !$link['entityAsset']) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

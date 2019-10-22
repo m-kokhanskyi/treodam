@@ -23,6 +23,15 @@ class Entity extends Base
         }
     }
 
+    public function deleteLinks(\Espo\Core\ORM\Entity $entity)
+    {
+        if (!$this->checkIssetAssetLink($entity)) {
+            return false;
+        }
+
+        return $this->getService("AssetRelation")->deleteLinks($entity->getEntityName(), $entity->id);
+    }
+
     protected function checkAsset(\Espo\Core\ORM\Entity $entity)
     {
         $list = [];
@@ -34,6 +43,17 @@ class Entity extends Base
         }
 
         return $list;
+    }
+
+    protected function checkIssetAssetLink(\Espo\Core\ORM\Entity $entity)
+    {
+        foreach ($entity->getRelations() as $relation) {
+            if ($relation['entity'] === "Asset") {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

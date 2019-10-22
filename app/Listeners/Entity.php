@@ -10,20 +10,35 @@ use Treo\Listeners\AbstractListener;
 
 class Entity extends AbstractListener
 {
-    public function beforeRelate(Event $events)
+    public function beforeRelate(Event $event)
     {
-        $entity = $events->getArgument('entity');
-        $foreign = $events->getArgument('foreign');
+        $entity  = $event->getArgument('entity');
+        $foreign = $event->getArgument('foreign');
 
-        if (is_string($foreign) && $relationName = $events->getArgument("relationName")) {
+        if (is_string($foreign) && $relationName = $event->getArgument("relationName")) {
             $entityName = $entity->getRelations()[$relationName]['entity'];
-            $foreign = $this->getEntityManager()->getEntity($entityName, $foreign);
+            $foreign    = $this->getEntityManager()->getEntity($entityName, $foreign);
         }
 
         $userId = $this->getUser()->id;
 
         if (is_a($entity, Asset::class) || is_a($foreign, Asset::class)) {
             $this->getService("AssetRelation")->createLink($entity, $foreign, $userId);
+        }
+    }
+
+    public function afterUnrelate(Event $event)
+    {
+        $entity  = $event->getArgument('entity');
+        $foreign = $event->getArgument('foreign');
+
+        if (is_string($foreign) && $relationName = $event->getArgument("relationName")) {
+            $entityName = $entity->getRelations()[$relationName]['entity'];
+            $foreign    = $this->getEntityManager()->getEntity($entityName, $foreign);
+        }
+
+        if (is_a($entity, Asset::class) || is_a($foreign, Asset::class)) {
+            $this->getService("AssetRelation")->deleteLink($entity, $foreign);
         }
     }
 
@@ -40,6 +55,17 @@ class Entity extends AbstractListener
             $this->getService("Asset")->assetRelation($entity, $userId);
         } else {
             $this->getService("Entity")->assetRelation($entity, $userId);
+        }
+    }
+
+    public function afterRemove(Event $event)
+    {
+        $entity = $event->getArgument("entity");
+
+        if (is_a($entity, Asset::class)) {
+            $this->getService("Asset")->deleteLinks($entity);
+        } else {
+            $this->getService("Entity")->deleteLinks($entity);
         }
     }
 

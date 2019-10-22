@@ -14,23 +14,55 @@ class AssetRelation extends Base
         $entity = $this->get();
 
         $entity->set([
-            "name" => $asset->get("name") . " / " . $asset->get("size"),
-            "entityName" => $related->getEntityName(),
-            "entityId" => $related->id,
-            "assetId" => $asset->id,
-            "assetType" => $asset->type,
-            "assignedUserId" => $assignedUserId
+            "name"           => $asset->get("name") . " / " . $asset->get("size"),
+            "entityName"     => $related->getEntityName(),
+            "entityId"       => $related->id,
+            "assetId"        => $asset->id,
+            "assetType"      => $asset->type,
+            "assignedUserId" => $assignedUserId,
         ]);
 
         $this->save($entity);
     }
 
+    public function deleteLink(Entity $asset, Entity $related)
+    {
+        $entities = $this->where([
+            'assetId'    => $asset->id,
+            "entityName" => $related->getEntityName(),
+            "entityId"   => $related->id,
+        ])->find();
+
+        if (!$entities) {
+            return false;
+        }
+
+        foreach ($entities as $entity) {
+            $this->deleteFromDb($entity->id);
+        }
+
+        return true;
+    }
+
+    public function deleteLinks(string $entityName, string $entityId)
+    {
+        if ($entityName === "Asset") {
+            $where = "asset_id='{$entityId}'";
+        } else {
+            $where = "entity_name='{$entityName}' AND entity_id='{$entityId}'";
+        }
+
+        $pdo = $this->getPDO();
+
+        return $pdo->exec("DELETE FROM `asset_relation` WHERE {$where}");
+    }
+
     public function getEntityAssetsById(string $assetId, string $entityName, string $entityId)
     {
         return $this->where([
-            "assetId" => $assetId,
+            "assetId"    => $assetId,
             "entityName" => $entityName,
-            "entityId" => $entityId
+            "entityId"   => $entityId,
         ])->findOne();
     }
 
@@ -39,7 +71,7 @@ class AssetRelation extends Base
         return $this->getData($this->getSqlItemsInList($list), [$entityId, $entityName]);
     }
 
-    public function getItemsByEntity($entityId, $entityName, $type)
+    public function getItemsByType($entityId, $entityName, $type)
     {
         $entity = $this->getEntityManager()->getEntity("AssetRelation");
 
@@ -53,7 +85,7 @@ class AssetRelation extends Base
 
             $tableName = $this->getDamQuery()->toDb($type);
 
-            $sql = "    SELECT {$select}, {$tableName}.name as relatedEntityName
+            $sql  = "    SELECT {$select}, {$tableName}.name as relatedEntityName
                     FROM asset_relation
                     INNER JOIN {$tableName} ON ({$tableName}.id = asset_relation.entity_id)
                     WHERE asset_relation.asset_id = ?
@@ -61,7 +93,7 @@ class AssetRelation extends Base
                         AND asset_relation.deleted = '0'";
             $data = [$entityId];
         } else {
-            $sql = "    SELECT {$select}, CONCAT(asset.name, ' / ', asset.size) as relatedEntityName
+            $sql  = "    SELECT {$select}, CONCAT(asset.name, ' / ', asset.size) as relatedEntityName
                     FROM asset_relation
                     INNER JOIN asset ON (asset.id = asset_relation.asset_id)
                     WHERE asset_relation.entity_id = ?
@@ -75,6 +107,32 @@ class AssetRelation extends Base
 
         return $this->getData($sql, $data);
 
+    }
+
+    public function getItemsByAssetIds(string $entityName, string $entityId, array $assetIds)
+    {
+        $entity = $this->getEntityManager()->getEntity("AssetRelation");
+
+        $fieldsList = array_filter($entity->getAttributeList(), function ($item) {
+            return !in_array($item, $this->skipAttributeList());
+        });
+
+        $select = $this->getDamQuery()->createSelectStatement($entity, $fieldsList);
+
+        $sql  = "   SELECT {$select}, 
+                        asset.name as assetName, 
+                        asset.size as assetSize, 
+                        asset.type as assetType
+                    FROM asset_relation
+                    INNER JOIN asset ON (asset.id = asset_relation.asset_id)
+                    WHERE asset_relation.entity_id = ?
+                        AND asset_relation.entity_name = ?
+                        AND asset.deleted = '0'
+                        AND asset_relation.deleted = '0'
+                        AND asset_relation.asset_id IN (\"" . implode('","', $assetIds) . "\")";
+        $data = [$entityId, $entityName];
+
+        return $this->getData($sql, $data);
     }
 
     public function getAvailableEntities($assetId)

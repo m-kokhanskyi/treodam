@@ -4,6 +4,11 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         blocks  : [],
         link    : null,
         sort    : false,
+        scope   : null,
+        
+        selectRelatedFilters    : {},
+        selectPrimaryFilterNames: {},
+        selectBoolFilterLists   : [],
         
         data() {
             return {
@@ -12,7 +17,8 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         },
         
         setup() {
-            this.link = this._getAssetLink();
+            this.link  = this._getAssetLink();
+            this.scope = this.model.urlRoot;
             
             this.getGroupsInfo();
             if (this.link) {
@@ -86,14 +92,103 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
                     model: this.model,
                     link : this.model.defs['links'][this.link].foreign
                 },
-                scope : this.model.urlRoot
+                scope : this.scope
             }, (view) => {
                 view.render();
             });
         },
         
-        selectRelation() {
-        
+        actionSelectRelation(data) {
+            if (!this.model.defs['links'][this.link]) {
+                throw new Error('Link ' + this.link + ' does not exist.');
+            }
+            
+            var scope   = this.model.defs['links'][this.link].entity;
+            var foreign = this.model.defs['links'][this.link].foreign;
+            
+            var massRelateEnabled = false;
+            if (foreign) {
+                var foreignType = this.getMetadata().get('entityDefs.' + scope + '.links.' + foreign + '.type');
+                if (foreignType == 'hasMany') {
+                    massRelateEnabled = true;
+                }
+            }
+            
+            var self       = this;
+            var attributes = {};
+            
+            var filters = Espo.Utils.cloneDeep(this.selectRelatedFilters[this.link]) || {};
+            for (var filterName in filters) {
+                if (typeof filters[filterName] == 'function') {
+                    var filtersData = filters[filterName].call(this);
+                    if (filtersData) {
+                        filters[filterName] = filtersData;
+                    } else {
+                        delete filters[filterName];
+                    }
+                }
+            }
+            
+            var primaryFilterName = data.primaryFilterName || this.selectPrimaryFilterNames[this.link] || null;
+            if (typeof primaryFilterName == 'function') {
+                primaryFilterName = primaryFilterName.call(this);
+            }
+            
+            var dataBoolFilterList = data.boolFilterList;
+            if (typeof data.boolFilterList == 'string') {
+                dataBoolFilterList = data.boolFilterList.split(',');
+            }
+            
+            var boolFilterList = dataBoolFilterList || Espo.Utils.cloneDeep(this.selectBoolFilterLists[this.link] || []);
+            
+            if (typeof boolFilterList == 'function') {
+                boolFilterList = boolFilterList.call(this);
+            }
+            
+            var viewName = this.getMetadata().get('clientDefs.' + scope + '.modalViews.select') || 'views/modals/select-records';
+            
+            this.notify('Loading...');
+            this.createView('dialog', viewName, {
+                scope            : scope,
+                multiple         : true,
+                createButton     : false,
+                filters          : filters,
+                massRelateEnabled: massRelateEnabled,
+                primaryFilterName: primaryFilterName,
+                boolFilterList   : boolFilterList
+            }, function (dialog) {
+                dialog.render();
+                this.notify(false);
+                dialog.once('select', function (selectObj) {
+                    var data = {};
+                    if (Object.prototype.toString.call(selectObj) === '[object Array]') {
+                        var ids = [];
+                        selectObj.forEach(function (model) {
+                            ids.push(model.id);
+                        });
+                        data.ids = ids;
+                    } else {
+                        if (selectObj.massRelate) {
+                            data.massRelate = true;
+                            data.where      = selectObj.where;
+                        } else {
+                            data.id = selectObj.id;
+                        }
+                    }
+                    
+                    $.ajax({
+                        url    : self.scope + '/' + self.model.id + '/' + this.link,
+                        type   : 'POST',
+                        data   : JSON.stringify(data),
+                        success: function () {
+                            this._updateAssetRelations(data);
+                        }.bind(this),
+                        error  : function () {
+                            this.notify('Error occurred', 'error');
+                        }.bind(this)
+                    });
+                }.bind(this));
+            }.bind(this));
         },
         
         _getAssetLink() {
@@ -106,6 +201,19 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
             }
             
             return false;
+        },
+        
+        _updateAssetRelations(assetIds) {
+            this.getCollectionFactory().create("AssetRelation", collection => {
+                collection.url = `AssetRelation/byEntity/${this.scope}/${this.model.id}?assetIds=${assetIds.ids.join(',')}`;
+                collection.fetch().then(() => {
+                    this.createView("EntityAssetList","dam:views/asset_relation/modals/entity-asset-list", {
+                        collection: collection
+                    }, view => {
+                        view.render();
+                    });
+                }).fail();
+            });
         }
     })
 );

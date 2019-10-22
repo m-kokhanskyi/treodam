@@ -41,7 +41,7 @@ class AssetRelation extends AbstractController
             throw new Exceptions\Error();
         }
 
-        $list = $this->getRecordService()->getItems($params['entity_id'], $params['entity_name'], $request->get("type"));
+        $list = $this->getRecordService()->getItems($params['entity_id'], $params['entity_name'], $request);
 
         return [
             'list'  => $list,

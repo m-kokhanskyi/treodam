@@ -7,6 +7,7 @@ namespace Dam\Services;
 use Dam\Entities\Asset;
 use Espo\Core\ORM\Entity;
 use Espo\Core\Templates\Services\Base;
+use Treo\Core\Slim\Http\Request;
 
 class AssetRelation extends Base
 {
@@ -24,6 +25,24 @@ class AssetRelation extends Base
             $this->deleteBelongsRelations($assetEntity, $relatedEntity);
             $this->getRepository()->createLink($assetEntity, $relatedEntity, $assignedUserId);
         }
+    }
+
+    public function deleteLink($entity1, $entity2)
+    {
+        if (is_a($entity1, Asset::class)) {
+            $assetEntity   = $entity1;
+            $relatedEntity = $entity2;
+        } else {
+            $assetEntity   = $entity2;
+            $relatedEntity = $entity1;
+        }
+
+        return $this->getRepository()->deleteLink($assetEntity, $relatedEntity);
+    }
+
+    public function deleteLinks(string $entityName, string $entityId)
+    {
+        return $this->getRepository()->deleteLinks($entityName, $entityId);
     }
 
     public function checkDuplicate(Entity $assetEntity, Entity $relatedEntity)
@@ -55,10 +74,16 @@ class AssetRelation extends Base
         return $res;
     }
 
-    public function getItems(string $entityId, string $entityName, string $type)
+    public function getItems(string $entityId, string $entityName, Request $request)
     {
-        return $this->getRepository()
-                    ->getItemsByEntity($entityId, $entityName, $type);
+        if ($request->get('type')) {
+            $res = $this->getRepository()->getItemsByType($entityId, $entityName, $request->get("type"));
+        } elseif ($request->get("assetIds")) {
+            $res = $this->getRepository()->getItemsByAssetIds($entityName, $entityId, explode(",", $request->get("assetIds")));
+        }
+
+        return $res ?? false;
+
     }
 
     public function getItem(array $where)
@@ -221,7 +246,7 @@ class AssetRelation extends Base
         $entityName = $entity->getEntityName();
 
         foreach ($assetLinks as $link) {
-            if ($link['entity'] === $entityName && !$link['entityAsset']) {
+            if ($link['entity'] === $entityName && isset ($link['entityAsset']) && !$link['entityAsset']) {
                 return false;
             }
         }

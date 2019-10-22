@@ -120,7 +120,7 @@ class Asset extends Base
 
     public function assetRelation(Entity $entity, $userId)
     {
-        if (!$list = $this->checkCreateLink($entity)) {
+        if (!$list = $this->checkIssetLink($entity)) {
             return false;
         }
 
@@ -135,6 +135,11 @@ class Asset extends Base
         }
 
         return true;
+    }
+
+    public function deleteLinks(Entity $entity)
+    {
+        return $this->getService("AssetRelation")->deleteLinks("Asset", $entity->id);
     }
 
     /**
@@ -170,20 +175,12 @@ class Asset extends Base
         return $this->getServiceFactory()->create($name);
     }
 
-    protected function checkCreateLink(Entity $entity)
+    protected function checkIssetLink(Entity $entity)
     {
         $list = [];
 
         foreach ($entity->getRelations() as $key => $relation) {
-            if (
-                $relation['type'] === "belongsTo"
-                &&
-                $entity->isAttributeChanged($relation['key'])
-                &&
-                $key !== "ownerUser"
-                &&
-                !$this->skipEntityAssets($key)
-            ) {
+            if ($this->isMulti($entity, $relation, $key)) {
                 $list[] = [
                     "entityName" => $relation['entity'],
                     "entityId"   => $entity->get($relation['key']),
@@ -197,5 +194,22 @@ class Asset extends Base
     protected function skipEntityAssets(string $key)
     {
         return !$this->getMetadata()->get(['entityDefs', 'Asset', 'links', $key, 'entityAsset']);
+    }
+
+    /**
+     * @param Entity $entity
+     * @param        $relation
+     * @param        $key
+     * @return bool
+     */
+    protected function isMulti(Entity $entity, $relation, $key): bool
+    {
+        return $relation['type'] === "belongsTo"
+            &&
+            $entity->isAttributeChanged($relation['key'])
+            &&
+            $key !== "ownerUser"
+            &&
+            !$this->skipEntityAssets($key);
     }
 }

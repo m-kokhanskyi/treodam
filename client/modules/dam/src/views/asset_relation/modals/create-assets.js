@@ -26,7 +26,7 @@ Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/m
                         entityAssetModel.url = `AssetRelation/update/by?entityName=${this.scope}&entityId=${entityId}&assetId=${assetModel.id}`;
                         entityAssetModel.save().then(() => {
                             resolve();
-                        }).fail(() => {
+                        }).fail((data) => {
                             rejected();
                         });
                     }).fail(() => {
@@ -39,7 +39,6 @@ Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/m
                 this.saved = true;
                 this.dialog.close();
             }).catch(r => {
-            
             });
         },
         _getEntityAssetModel(model) {

@@ -51,7 +51,7 @@ class AssetEntity extends AbstractListener
         /**@var $entity Asset* */
         $entity = $event->getArgument('entity');
 
-        if (!$entity->get("isActive") && $entity->isAttributeChanged("collectionId")) {
+        if (!$entity->isNew() && !$entity->get("isActive") && $entity->isAttributeChanged("collectionId")) {
             throw new BadRequest($this->getLanguage()->translate('You can not change collection', 'exceptions', 'Asset'));
         }
 
@@ -131,19 +131,39 @@ class AssetEntity extends AbstractListener
         $foreign = $event->getArgument('foreign');
         $entity  = $event->getArgument('entity');
 
+        //check any relation for inactive assets
         if (!$entity->get("isActive")) {
             throw new BadRequest($this->getLanguage()->translate("CantAddInActive", 'exceptions', 'Asset'));
         }
 
+        //create leftAsset relation
+        if (is_a($entity, Asset::class) && is_a($foreign, Asset::class)) {
+            $this->getService("Asset")->linkToAsset($entity, $foreign);
+        }
+
+        //check join with last (list) category
         if ($event->getArgument("relationName") === "assetCategories") {
             if ($this->isLast($event, $foreign)) {
                 throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
             }
         }
+
+        //check if this is collection category
         if ($event->getArgument("relationName") === "collection") {
             if ($this->isCollectionCatalog($entity, $foreign)) {
                 throw new BadRequest($this->getLanguage()->translate("Category is not set in collection", 'exceptions', 'Global'));
             }
+        }
+    }
+
+    public function beforeUnrelate(Event $event)
+    {
+        $foreign = $event->getArgument('foreign');
+        $entity  = $event->getArgument('entity');
+
+        //remove leftAsset relation
+        if (is_a($entity, Asset::class) && is_a($foreign, Asset::class)) {
+            $this->getService("Asset")->unlinkToAsset($entity, $foreign);
         }
     }
 

@@ -51,6 +51,10 @@ class AssetEntity extends AbstractListener
         /**@var $entity Asset* */
         $entity = $event->getArgument('entity');
 
+        if (!$entity->get("isActive") && $entity->isAttributeChanged("collectionId")) {
+            throw new BadRequest($this->getLanguage()->translate('You can not change collection', 'exceptions', 'Asset'));
+        }
+
         if (!$this->isValidCode($entity)) {
             throw new BadRequest($this->getLanguage()->translate('Code is invalid', 'exceptions', 'Global'));
         }
@@ -126,6 +130,10 @@ class AssetEntity extends AbstractListener
     {
         $foreign = $event->getArgument('foreign');
         $entity  = $event->getArgument('entity');
+
+        if (!$entity->get("isActive")) {
+            throw new BadRequest($this->getLanguage()->translate("CantAddInActive", 'exceptions', 'Asset'));
+        }
 
         if ($event->getArgument("relationName") === "assetCategories") {
             if ($this->isLast($event, $foreign)) {

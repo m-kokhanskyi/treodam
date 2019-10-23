@@ -5,6 +5,7 @@ namespace Dam\Listeners;
 
 
 use Dam\Entities\Asset;
+use Espo\Core\Exceptions\BadRequest;
 use Treo\Core\EventManager\Event;
 use Treo\Listeners\AbstractListener;
 
@@ -21,6 +22,10 @@ class Entity extends AbstractListener
         }
 
         $userId = $this->getUser()->id;
+        $assetEntity = is_a($entity, Asset::class) ? $entity : $foreign;
+        if (!$assetEntity->get("isActive")) {
+            throw new BadRequest($this->getLanguage()->translate("CantAddInActive", 'exceptions', 'Asset'));
+        }
 
         if (is_a($entity, Asset::class) || is_a($foreign, Asset::class)) {
             $this->getService("AssetRelation")->createLink($entity, $foreign, $userId);

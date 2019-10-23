@@ -1,6 +1,6 @@
 Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/multi-create',
     Dep => Dep.extend({
-        entityAssetModels : {},
+        entityAssetModels: {},
         
         _renderAttachmentList() {
             this.createView("attachmentList", "dam:views/asset_relation/modals/attachment-list", {
@@ -15,14 +15,15 @@ Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/m
         actionSave() {
             let Promises = [];
             this.collection.forEach(model => {
-                let entityAssetModel = this._getEntityAssetModel(model.get("assetModel"));
                 let assetModel       = model.get("assetModel");
+                let entityAssetModel = assetModel.get("EntityAsset");
+                assetModel.unset("EntityAsset");
                 
                 assetModel.setRelate(this.options.relate);
                 
                 Promises.push(new Promise((resolve, rejected) => {
                     assetModel.save().then(() => {
-                        let entityId = this.getParentView().model.id;
+                        let entityId         = this.getParentView().model.id;
                         entityAssetModel.url = `AssetRelation/update/by?entityName=${this.scope}&entityId=${entityId}&assetId=${assetModel.id}`;
                         entityAssetModel.save().then(() => {
                             resolve();
@@ -30,6 +31,7 @@ Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/m
                             rejected();
                         });
                     }).fail(() => {
+                        assetModel.set("EntityAsset", entityAssetModel);
                         rejected();
                     });
                 }));
@@ -40,13 +42,6 @@ Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/m
                 this.dialog.close();
             }).catch(r => {
             });
-        },
-        _getEntityAssetModel(model) {
-            if (!this.entityAssetModels[model.id]) {
-                this.entityAssetModels[model.id] = model.get("EntityAsset");
-                model.unset("EntityAsset");
-            }
-            return this.entityAssetModels[model.id];
         }
     })
 );

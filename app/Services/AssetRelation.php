@@ -66,6 +66,7 @@ class AssetRelation extends Base
 
         foreach ($list as $listItem) {
             $res[] = [
+                "id"      => $listItem,
                 "name"    => $listItem,
                 "hasItem" => $resItems[$listItem] ?? false,
             ];

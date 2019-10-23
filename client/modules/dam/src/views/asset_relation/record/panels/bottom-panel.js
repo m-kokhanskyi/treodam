@@ -18,7 +18,7 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         
         setup() {
             this.link  = this._getAssetLink();
-            this.scope = this.model.urlRoot;
+            this.scope = this.options.defs.entityName;
             
             this.getGroupsInfo();
             if (this.link) {
@@ -29,34 +29,18 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         getGroupsInfo() {
             this.wait(true);
             let items     = this.getMetadata().get("entityDefs.Asset.fields.type.options");
-            let url       = "AssetRelation/" + this.model.name + "/" + this.model.id + "/itemsInEntity?list=" + items.join(",");
             this.blocks   = [];
             let showFirst = true;
             
             this.getCollectionFactory().create("AssetRelation", (collection) => {
-                collection.url = url;
+                collection.url = `AssetRelation/${this.model.name}/${this.model.id}/itemsInEntity?list=${items.join(",")}`;
                 collection.fetch().then(() => {
                     this.collection = collection;
                     this.collection.forEach((model) => {
                         if (model.get("hasItem")) {
-                            model.set({
-                                entityName: this.defs.entityName,
-                                entityId  : this.model.id
-                            });
-                            
-                            let params = {
-                                model: model,
-                                el   : this.options.el + ' .group[data-name="' + model.get("name") + '"]',
-                                sort : this.sort
-                            };
-                            
-                            if (showFirst) {
-                                params.show = true;
-                                showFirst   = false;
-                            }
-                            
                             this.blocks.push(model.get("name"));
-                            this.createView(model.get('name'), "dam:views/asset_relation/record/panels/asset-type-block", params);
+                            this._createTypeBlock(model, showFirst);
+                            showFirst = false;
                         }
                     });
                     this.wait(false);
@@ -65,6 +49,15 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         },
         
         actionButtonList() {
+            
+            this.buttonList.push({
+                title   : this.translate('clickToRefresh', 'messages', 'Global'),
+                action  : 'refresh',
+                link    : this.link,
+                acl     : 'read',
+                aclScope: this.scope,
+                html    : '<span class="fas fa-sync"></span>'
+            });
             
             this.actionList.unshift({
                 label   : 'Select',
@@ -84,6 +77,24 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
                     link: this.link
                 }
             });
+            
+        },
+        
+        actionRefresh() {
+            if (this.collection) {
+                this.collection.fetch().then(() => {
+                    this.blocks = [];
+                    this.collection.forEach(model => {
+                        if (model.get("hasItem")) {
+                            this.blocks.push(model.get("name"));
+                        }
+                        if (model.get("hasItem") && !this.hasView(model.get("name"))) {
+                            this._createTypeBlock(model, false);
+                        }
+                    });
+                    this.reRender();
+                });
+            }
         },
         
         actionCreateRelation() {
@@ -95,6 +106,11 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
                 scope : this.scope
             }, (view) => {
                 view.render();
+                
+                view.listenTo(view, "after:save", () => {
+                    this.actionRefresh();
+                    this._refreshAssetPanel();
+                });
             });
         },
         
@@ -207,12 +223,45 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
             this.getCollectionFactory().create("AssetRelation", collection => {
                 collection.url = `AssetRelation/byEntity/${this.scope}/${this.model.id}?assetIds=${assetIds.ids.join(',')}`;
                 collection.fetch().then(() => {
-                    this.createView("EntityAssetList","dam:views/asset_relation/modals/entity-asset-list", {
+                    this.createView("EntityAssetList", "dam:views/asset_relation/modals/entity-asset-list", {
                         collection: collection
                     }, view => {
                         view.render();
+                        
+                        view.listenTo(view, "after:save", () => {
+                            this.actionRefresh();
+                        });
                     });
                 }).fail();
+            });
+        },
+        _refreshAssetPanel() {
+            let parent    = this.getParentView();
+            let panelName = this._getAssetPanelName();
+            
+            parent.getView(panelName).getView("list").collection.fetch();
+        },
+        
+        _getAssetPanelName() {
+            let links = this.getMetadata().get(`entityDefs.${this.scope}.links`);
+            for (let key in links) {
+                if (links[key].entity === "Asset") {
+                    return key;
+                }
+            }
+            return false;
+        },
+        _createTypeBlock(model, show, callback) {
+            model.set({
+                entityName: this.defs.entityName,
+                entityId  : this.model.id
+            });
+            
+            this.createView(model.get('name'), "dam:views/asset_relation/record/panels/asset-type-block", {
+                model: model,
+                el   : this.options.el + ' .group[data-name="' + model.get("name") + '"]',
+                sort : this.sort,
+                show : show
             });
         }
     })

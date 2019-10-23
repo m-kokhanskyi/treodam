@@ -43,6 +43,7 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-list', 'views/modal', 
             this.collection.forEach(model => {
                 model.save().then(() => {
                     this.notify('Linked', 'success');
+                    this.trigger("after:save");
                     this.dialog.close();
                 });
             })

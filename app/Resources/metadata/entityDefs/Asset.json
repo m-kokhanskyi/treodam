@@ -115,11 +115,12 @@
       "trim": true,
       "isMultilang": true,
       "view": "dam:views/fields/name-from-file"
-    },
+  },
     "nameOfFile": {
       "type": "varchar",
       "required": true,
-      "trim": true
+      "trim": true,
+      "view": "dam:views/fields/name-of-file"
     },
     "description": {
       "type": "text",

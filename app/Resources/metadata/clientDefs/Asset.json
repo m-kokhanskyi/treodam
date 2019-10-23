@@ -8,6 +8,15 @@
       }
     ]
   },
+  "sidePanels" : {
+    "detail" : [
+      {
+        "name" : "download",
+        "label": "Download",
+        "view" : "dam:views/asset/record/panels/side/download"
+      }
+    ]
+  },
   "controller"          : "dam:controllers/asset",
   "boolFilterList"      : [
     "onlyMy",
@@ -233,7 +242,7 @@
       "select": false,
       "create": false
     },
-    "relatedAssets" : {
+    "relatedAssets"  : {
       "selectBoolFilterList": [
         "notEntity",
         "onlyActive"

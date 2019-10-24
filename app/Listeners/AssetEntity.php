@@ -112,7 +112,7 @@ class AssetEntity extends AbstractListener
 
         if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
             //build Renditions
-            //$this->getService("Rendition")->buildRenditions($entity);
+            $this->getService("Rendition")->buildRenditions($entity);
         }
 
         //get meta data

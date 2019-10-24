@@ -10,11 +10,7 @@
   },
   "sidePanels" : {
     "detail" : [
-      {
-        "name" : "download",
-        "label": "Download",
-        "view" : "dam:views/asset/record/panels/side/download"
-      }
+
     ]
   },
   "controller"          : "dam:controllers/asset",

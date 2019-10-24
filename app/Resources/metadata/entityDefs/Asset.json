@@ -1,5 +1,12 @@
 {
   "fields": {
+    "relatedAssets": {
+      "type": "linkMultiple",
+      "layoutDetailDisabled": true,
+      "layoutMassUpdateDisabled": true,
+      "importDisabled": true,
+      "noLoad": true
+    },
     "height": {
       "type": "int",
       "required": false,
@@ -236,6 +243,16 @@
     }
   },
   "links": {
+    "relatedAssets": {
+      "type": "hasMany",
+      "relationName": "assetAsset",
+      "entity": "Asset",
+      "audited": false,
+      "midKeys": [
+        "leftId",
+        "rightId"
+      ]
+    },
     "renditions": {
       "type": "hasMany",
       "foreign": "asset",

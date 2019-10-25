@@ -36,8 +36,8 @@ Espo.define('dam:views/asset/multi-upload', "view", function (Dep) {
             let type       = this.model.get("type").replace(" ", "-").toLowerCase();
             let private    = this.model.get('private') ? "private" : "public";
             let sizeParams = this.getMetadata().get(`app.config.types.custom.${type}.validations.size.${private}`);
-            
-            if (size > sizeParams.max || size < sizeParams.min) {
+           
+            if (sizeParams && (size > sizeParams.max || size < sizeParams.min)) {
                 return false;
             }
             

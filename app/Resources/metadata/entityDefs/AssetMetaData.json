@@ -64,14 +64,12 @@
             "type": "belongsTo",
             "entity": "User"
         },
-        "links": {
-            "rendition": {
-                "type": "belongsTo",
-                "foreign": "assetMetaDatas",
-                "entity": "Rendition",
-                "audited": false,
-                "isCustom": true
-            }
+        "rendition": {
+            "type": "belongsTo",
+            "foreign": "assetMetaDatas",
+            "entity": "Rendition",
+            "audited": false,
+            "isCustom": true
         },
         "teams": {
             "type": "hasMany",

@@ -69,13 +69,12 @@ class Attachment extends \Treo\Services\Attachment
             $image = new Imagick($path);
 
             if ($imageInfo = getimagesize($path)) {
-                $orientation = $image->getImageOrientation() ? $image->getImageOrientation() : null;
-                $result      = [
+                $result = [
                     "width"       => $image->getImageWidth(),
                     "height"      => $image->getImageHeight(),
-                    "color-space" => Util::getColorSpace($image),
-                    "color-depth" => $image->getImageDepth(),
-                    'orientation' => $orientation ?? $this->getPosition($image->getImageWidth(), $image->getImageHeight()),
+                    "color_space" => Util::getColorSpace($image),
+                    "color_depth" => $image->getImageDepth(),
+                    'orientation' => $this->getPosition($image->getImageWidth(), $image->getImageHeight()),
                     'mime'        => $image->getImageMimeType(),
                 ];
             }
@@ -119,6 +118,16 @@ class Attachment extends \Treo\Services\Attachment
         }
 
         return $entity;
+    }
+
+    public function unRelateAsset(string $attachmentId)
+    {
+        $entity = $this->getEntity($attachmentId);
+
+        $entity->set("relatedId", null);
+        $entity->set("relatedType", null);
+
+        return $this->getRepository()->save($entity);
     }
 
     /**

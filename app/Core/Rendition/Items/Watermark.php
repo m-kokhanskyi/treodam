@@ -19,19 +19,19 @@ class Watermark extends Base
         $image->readImage($this->file);
 
         $watermark = new Imagick();
-        $watermark->readImage($this->params['watermark']);
+        $watermark->readImage($this->getWaterMarkImage());
 
         $watermarkResizeFactor = 6;
 
-        $img_Width = $image->getImageWidth();
-        $img_Height = $image->getImageHeight();
-        $watermark_Width = $watermark->getImageWidth();
+        $img_Width        = $image->getImageWidth();
+        $img_Height       = $image->getImageHeight();
+        $watermark_Width  = $watermark->getImageWidth();
         $watermark_Height = $watermark->getImageHeight();
 
         $watermark->scaleImage((int)($watermark_Width / $watermarkResizeFactor),
             (int)($watermark_Height / $watermarkResizeFactor));
 
-        $watermark_Width = $watermark->getImageWidth();
+        $watermark_Width  = $watermark->getImageWidth();
         $watermark_Height = $watermark->getImageHeight();
 
         switch ($this->params['position'] ?? "right-bottom") {
@@ -58,5 +58,12 @@ class Watermark extends Base
         $image->writeImage($this->file);
 
         return true;
+    }
+
+    protected function getWaterMarkImage()
+    {
+        $waterNameFileName = $this->params['watermark'];
+        $dir               = __DIR__;
+        $r                 = 1;
     }
 }

@@ -1,32 +1,34 @@
 [
-    {
-        "rows": [
-            [
-                {
-                    "name": "type",
-                    "fullWidth": true
-                }
-            ],
-            [
-                {
-                    "name": "file",
-                    "fullWidth": true
-                }
-            ],
-            [
-                {
-                    "name": "image",
-                    "fullWidth": true
-                }
-            ],
-            [
-                {
-                    "name": "private",
-                    "fullWidth": true
-                }
-            ]
-        ],
-        "style": "default",
-        "label": ""
-    }
+  {
+    "rows" : [
+      [
+        {
+          "name": "type"
+        },
+        {
+          "name": "name"
+        }
+      ],
+      [
+        {
+          "name"     : "file",
+          "fullWidth": true
+        }
+      ],
+      [
+        {
+          "name"     : "image",
+          "fullWidth": true
+        }
+      ],
+      [
+        {
+          "name"     : "private",
+          "fullWidth": true
+        }
+      ]
+    ],
+    "style": "default",
+    "label": ""
+  }
 ]

@@ -108,8 +108,8 @@ class Asset extends Base
     {
         $asset->set("height", ($imageInfo['height'] ?? false) ? $imageInfo['height'] : null);
         $asset->set("width", ($imageInfo['width'] ?? false) ? $imageInfo['width'] : null);
-        $asset->set("colorSpace", ($imageInfo['color-space'] ?? false) ? $imageInfo['color-space'] : null);
-        $asset->set("colorDepth", ($imageInfo['color-depth'] ?? false) ? $imageInfo['color-depth'] : null);
+        $asset->set("colorSpace", ($imageInfo['color_space'] ?? false) ? $imageInfo['color_space'] : null);
+        $asset->set("colorDepth", ($imageInfo['color_depth'] ?? false) ? $imageInfo['color_depth'] : null);
         $asset->set("orientation", ($imageInfo['orientation'] ?? false) ? $imageInfo['orientation'] : null);
     }
 

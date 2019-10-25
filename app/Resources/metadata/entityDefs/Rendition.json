@@ -64,7 +64,8 @@
             "isSorted": false,
             "audited": false,
             "readOnly": false,
-            "tooltip": false
+            "tooltip": false,
+            "view": "dam:views/rendition/fields/type"
         },
         "image": {
             "type": "image",

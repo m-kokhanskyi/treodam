@@ -167,6 +167,16 @@ class AssetEntity extends AbstractListener
         }
     }
 
+    public function afterRemove(Event $event)
+    {
+        $entity = $event->getArgument("entity");
+        $attachmentId = $entity->get("fileId") ?? $entity->get("imageId");
+
+        if ($attachmentId) {
+            $this->getService("Attachment")->unRelateAsset($attachmentId);
+        }
+    }
+
     /**
      * @param $entity
      * @param $foreign

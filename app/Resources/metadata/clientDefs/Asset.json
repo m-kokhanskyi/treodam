@@ -8,6 +8,11 @@
       }
     ]
   },
+  "sidePanels" : {
+    "detail" : [
+
+    ]
+  },
   "controller"          : "dam:controllers/asset",
   "boolFilterList"      : [
     "onlyMy",
@@ -232,6 +237,14 @@
     "assetMetaDatas" : {
       "select": false,
       "create": false
+    },
+    "relatedAssets"  : {
+      "selectBoolFilterList": [
+        "notEntity",
+        "onlyActive"
+      ],
+      "view"                : "dam:views/asset/record/panels/related-assets",
+      "selectAction"        : "selectRelatedEntity"
     }
   }
 }

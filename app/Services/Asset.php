@@ -24,6 +24,7 @@ namespace Dam\Services;
 
 use Dam\Core\ConfigManager;
 use Dam\Core\FileManager;
+use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Templates\Services\Base;
 use Espo\Core\Utils\Log;
 use Espo\ORM\Entity;
@@ -43,6 +44,7 @@ class Asset extends Base
         parent::__construct();
 
         $this->addDependency("DAMFileManager");
+        $this->addDependency("language");
         $this->addDependency("ConfigManager");
         $this->addDependency('log');
     }
@@ -142,6 +144,20 @@ class Asset extends Base
         return $this->getService("AssetRelation")->deleteLinks("Asset", $entity->id);
     }
 
+    public function linkToAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)
+    {
+        if ($main->id === $foreign->id) {
+            throw new BadRequest($this->getTranslate("JoinMainAsset", "exceptions", "Asset"));
+        }
+
+        return $this->getRepository()->linkAsset($main, $foreign);
+    }
+
+    public function unlinkToAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)
+    {
+        return $this->getRepository()->unlinkAsset($main, $foreign);
+    }
+
     /**
      * @return FileManager
      */
@@ -211,5 +227,10 @@ class Asset extends Base
             $key !== "ownerUser"
             &&
             !$this->skipEntityAssets($key);
+    }
+
+    private function getTranslate($label, $category, $scope)
+    {
+        $this->getInjection("language")->translate($label, $category, $scope);
     }
 }

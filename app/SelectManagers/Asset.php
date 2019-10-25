@@ -30,6 +30,24 @@ namespace Dam\SelectManagers;
 class Asset extends AbstractSelectManager
 {
     /**
+     * NotEntity filter
+     *
+     * @param array $result
+     */
+    protected function boolFilterNotEntity(&$result)
+    {
+        if ($value = $this->getBoolData('notEntity')) {
+            $value = (array)$value;
+
+            foreach ($value as $id) {
+                $result['whereClause'][] = [
+                    'id!=' => (string)$id,
+                ];
+            }
+        }
+    }
+
+    /**
      * @param $result
      */
     protected function boolFilterNotSelectAssets(&$result)

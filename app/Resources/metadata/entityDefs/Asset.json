@@ -1,5 +1,12 @@
 {
   "fields": {
+    "relatedAssets": {
+      "type": "linkMultiple",
+      "layoutDetailDisabled": true,
+      "layoutMassUpdateDisabled": true,
+      "importDisabled": true,
+      "noLoad": true
+    },
     "height": {
       "type": "int",
       "required": false,
@@ -115,11 +122,12 @@
       "trim": true,
       "isMultilang": true,
       "view": "dam:views/fields/name-from-file"
-    },
+  },
     "nameOfFile": {
       "type": "varchar",
       "required": true,
-      "trim": true
+      "trim": true,
+      "view": "dam:views/fields/name-of-file"
     },
     "description": {
       "type": "text",
@@ -235,6 +243,16 @@
     }
   },
   "links": {
+    "relatedAssets": {
+      "type": "hasMany",
+      "relationName": "assetAsset",
+      "entity": "Asset",
+      "audited": false,
+      "midKeys": [
+        "leftId",
+        "rightId"
+      ]
+    },
     "renditions": {
       "type": "hasMany",
       "foreign": "asset",

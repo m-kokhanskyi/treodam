@@ -1,14 +1,17 @@
 [
-    {
-        "name": "renditions"
-    },
-    {
-        "name": "assetCategories"
-    },
-    {
-        "name": "assetVersions"
-    },
-    {
-        "name": "assetMetaDatas"
-    }
+  {
+    "name": "relatedAssets"
+  },
+  {
+    "name": "renditions"
+  },
+  {
+    "name": "assetCategories"
+  },
+  {
+    "name": "assetVersions"
+  },
+  {
+    "name": "assetMetaDatas"
+  }
 ]

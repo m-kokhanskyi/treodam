@@ -65,10 +65,11 @@ Espo.define('dam:views/asset_relation/modals/attachment-item', ['view', "dam:vie
                 });
                 
                 this.getModelFactory().create("AssetRelation", entityAssetModel => {
-                    
                     assetModel.set("EntityAsset", entityAssetModel);
-                    
-                    entityAssetModel.set('name', `${assetModel.get("name")} / ${((this.model.get('size') / 1024).toFixed(1))}`);
+                    entityAssetModel.set({
+                        name: `${assetModel.get("name")} / ${((this.model.get('size') / 1024).toFixed(1))}`,
+                        entityName: this.options.entityName
+                    });
                     this.createView("entityAssetEdit", "dam:views/asset_relation/modals/entity-asset-form", {
                         model: entityAssetModel,
                         el   : this.options.el + " .edit-form"

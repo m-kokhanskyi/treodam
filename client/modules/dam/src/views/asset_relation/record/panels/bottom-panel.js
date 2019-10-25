@@ -239,7 +239,10 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
             let parent    = this.getParentView();
             let panelName = this._getAssetPanelName();
             
-            parent.getView(panelName).getView("list").collection.fetch();
+            const panelView = parent.getView(panelName);
+            if (panelView && panelView.getView("list")) {
+                panelView.getView("list").collection.fetch();
+            }
         },
         
         _getAssetPanelName() {

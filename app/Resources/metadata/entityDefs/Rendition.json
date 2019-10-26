@@ -149,7 +149,8 @@
         },
         "nameOfFile": {
             "type": "varchar",
-            "trim": true
+            "trim": true,
+            "view" : "dam:views/rendition/fields/name-of-file"
         },
         "renditionVersions": {
             "type": "linkMultiple",

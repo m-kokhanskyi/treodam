@@ -8,9 +8,8 @@
       }
     ]
   },
-  "sidePanels" : {
-    "detail" : [
-
+  "sidePanels"          : {
+    "detail": [
     ]
   },
   "controller"          : "dam:controllers/asset",
@@ -232,7 +231,8 @@
       "selectAction"        : "selectRelatedEntity"
     },
     "renditions"     : {
-      "select": false
+      "select": false,
+      "view"  : "dam:views/asset/record/panels/rendition"
     },
     "assetMetaDatas" : {
       "select": false,

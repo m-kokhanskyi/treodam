@@ -123,7 +123,9 @@ class Attachment extends \Treo\Services\Attachment
     public function unRelateAsset(string $attachmentId)
     {
         $entity = $this->getEntity($attachmentId);
-
+        if (!$entity) {
+            return false;
+        }
         $entity->set("relatedId", null);
         $entity->set("relatedType", null);
 

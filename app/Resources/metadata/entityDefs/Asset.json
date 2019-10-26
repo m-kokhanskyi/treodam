@@ -127,7 +127,7 @@
       "type": "varchar",
       "required": true,
       "trim": true,
-      "view": "dam:views/fields/name-of-file"
+      "view": "dam:views/asset/fields/name-of-file"
     },
     "description": {
       "type": "text",

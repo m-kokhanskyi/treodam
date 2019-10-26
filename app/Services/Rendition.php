@@ -19,6 +19,12 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         $this->addDependency("ConfigManager");
         $this->addDependency("filePathBuilder");
         $this->addDependency("language");
+        $this->addDependency("queueManager");
+    }
+
+    public function createQueue($entity)
+    {
+        return $this->getQueueManager()->push("Create Rendition", "QueueRenditions", ['entityId' => $entity->id]);
     }
 
     public function buildRenditions($entity)
@@ -111,6 +117,8 @@ class Rendition extends \Espo\Core\Templates\Services\Base
                 }
             }
         }
+
+        return true;
     }
 
     public function updateMetaData(\Dam\Entities\Rendition $entity)
@@ -223,7 +231,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
             if ($this->getService("Attachment")->changeName($attachment, $newFileName, $rendition)) {
                 $rendition->set("nameOfFile", $newFileName);
                 $renditionRepository->save($rendition, [
-                    "skipAll" => true
+                    "skipAll" => true,
                 ]);
             }
         }
@@ -296,6 +304,11 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     protected function getService($name)
     {
         return $this->getServiceFactory()->create($name);
+    }
+
+    protected function getQueueManager()
+    {
+        return $this->getInjection("queueManager");
     }
 }
 

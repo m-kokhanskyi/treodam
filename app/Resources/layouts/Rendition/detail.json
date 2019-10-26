@@ -7,14 +7,14 @@
                 },
                 {
                     "name": "image"
+                },
+                {
+                    "name": "file"
                 }
             ],
             [
                 {
                     "name": "private"
-                },
-                {
-                    "name": "file"
                 },
                 {
                     "name": "nameOfFile"

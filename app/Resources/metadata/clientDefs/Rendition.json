@@ -11,5 +11,14 @@
   },
   "modalViews"    : {
     "edit": "dam:views/rendition/modals/edit"
+  },
+  "sidePanels" : {
+    "detail" : [
+      {
+        "name" : "download",
+        "label": "Download",
+        "view" : "dam:views/rendition/record/panels/side/download"
+      }
+    ]
   }
 }

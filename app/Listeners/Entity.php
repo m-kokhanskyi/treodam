@@ -23,7 +23,7 @@ class Entity extends AbstractListener
 
         $userId = $this->getUser()->id;
         $assetEntity = is_a($entity, Asset::class) ? $entity : $foreign;
-        if (!$assetEntity->get("isActive")) {
+        if (!$assetEntity->get("isActive") && is_a($assetEntity, Asset::class)) {
             throw new BadRequest($this->getLanguage()->translate("CantAddInActive", 'exceptions', 'Asset'));
         }
 

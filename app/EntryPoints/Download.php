@@ -101,7 +101,7 @@ class Download extends \Espo\EntryPoints\Download
 
     protected function quality()
     {
-        $this->image->setImageCompressionQuality((int)$_GET['quality']);
+        //$this->image->setImageCompressionQuality((int)$_GET['quality']);
 
         return $this;
     }

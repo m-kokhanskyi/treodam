@@ -7,7 +7,7 @@
     <div class="panel-group text-center">
         <div class="btn-group category-buttons">
             <button type="button" class="btn btn-default active" data-action="selectAll">{{translate 'All'}}</button>
-            <button type="button" class="btn btn-default" data-action="selectWithoutCategory">{{translate 'withoutAnyCategory' category='labels' scope=scope}}</button>
+            <button type="button" class="btn btn-default" data-action="selectWithoutCategory">{{translate 'Without Any Category' category='labels' scope=scope}}</button>
         </div>
     </div>
     <div class="panel-group category-search">

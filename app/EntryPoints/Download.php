@@ -11,7 +11,7 @@ use Imagick;
 
 class Download extends \Espo\EntryPoints\Download
 {
-    /**@var Imagick **/
+    /**@var Imagick * */
     protected $image = null;
 
     public function run()
@@ -26,7 +26,7 @@ class Download extends \Espo\EntryPoints\Download
                 throw new NotFound();
             }
 
-            $file = $this->initRun($filePath)->resize();
+            $file = $this->initRun($filePath)->resize()->quality();
 
             $outputFileName = $attachment->get('name');
             $outputFileName = str_replace("\"", "\\\"", $outputFileName);
@@ -48,7 +48,7 @@ class Download extends \Espo\EntryPoints\Download
             header('Pragma: public');
             header('Content-Length: ' . filesize($filePath));
 
-            readfile($filePath);
+            readfile($file->getImage());
             exit;
         } else {
             parent::run();
@@ -86,13 +86,35 @@ class Download extends \Espo\EntryPoints\Download
     {
         switch ($_GET['scale']) {
             case "resize":
-//                $this->image->resizeImage();
+                $this->image->resizeImage((int)$_GET['width'], (int)$_GET['height'], Imagick::FILTER_HAMMING, 1, false);
                 break;
             case "byWidth":
+                $this->image->resizeImage((int)$_GET['width'], 1000000000, Imagick::FILTER_HAMMING, 1, true);
                 break;
-            case "byHeigth" :
+            case "byHeight" :
+                $this->image->resizeImage(1000000000, (int)$_GET['height'], Imagick::FILTER_HAMMING, 1, true);
                 break;
         }
+
+        return $this;
+    }
+
+    protected function quality()
+    {
+        $this->image->setImageCompressionQuality((int)$_GET['quality']);
+
+        return $this;
+    }
+
+    protected function getImage()
+    {
+        $string_temp = tempnam(sys_get_temp_dir(), '');
+
+        //$this->image->setImageFormat($_GET['format']);
+
+        $this->image->writeImage($string_temp);
+
+        return $string_temp;
     }
 
 }

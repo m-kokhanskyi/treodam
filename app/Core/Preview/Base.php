@@ -30,7 +30,7 @@ abstract class Base
     public static function init(Attachment $attachment, string $size, Container $container)
     {
         $mime = $attachment->get('type');
-        $className = self::MAPPING[$mime] ?? "File";
+        $className = self::MAPPING[$mime] ?? "Dam\Core\Preview\File";
 
         return (new $className($attachment, $size, $container))->show();
     }

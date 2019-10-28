@@ -243,6 +243,10 @@
       "select": false,
       "create": false
     },
+    "assetVersions" : {
+      "select": false,
+      "create": false
+    },
     "relatedAssets"  : {
       "selectBoolFilterList": [
         "notEntity",

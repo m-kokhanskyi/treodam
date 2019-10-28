@@ -12,6 +12,8 @@ use Espo\Core\Exceptions\NotFound;
 
 class Preview extends Base
 {
+    public static $authRequired = true;
+
     /**
      * @throws BadRequest
      */
@@ -32,7 +34,7 @@ class Preview extends Base
 
     public function show($id, $size)
     {
-        $asset = $this->getEntityManager()->getEntity("Asset", $id);
+        $asset      = $this->getEntityManager()->getEntity("Asset", $id);
         $attachment = $asset->get("fileId") ? $asset->get("file") : $asset->get("image");
 
         if (!$attachment) {

@@ -40,6 +40,10 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-list', 'views/modal', 
         },
         
         actionSave() {
+            if (this.validate()) {
+                this.notify('Not valid', 'error');
+                return;
+            };
             this.collection.forEach(model => {
                 model.save().then(() => {
                     this.notify('Linked', 'success');
@@ -47,6 +51,17 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-list', 'views/modal', 
                     this.dialog.close();
                 });
             })
+        },
+
+        validate() {
+            let notValid = false;
+            for (let key in this.nestedViews) {
+                const view = this.nestedViews[key];
+                if (view && typeof view.validate === 'function') {
+                    notValid = view.validate() || notValid;
+                }
+            }
+            return notValid
         }
     });
 });

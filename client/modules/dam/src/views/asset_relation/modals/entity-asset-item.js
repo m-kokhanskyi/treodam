@@ -23,6 +23,17 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', 'view', functio
                 model: this.model,
                 el   : this.options.el + " .edit-form"
             });
+        },
+
+        validate() {
+            let notValid = false;
+            for (let key in this.nestedViews) {
+                const view = this.nestedViews[key];
+                if (view && typeof view.validate === 'function') {
+                    notValid = view.validate() || notValid;
+                }
+            }
+            return notValid
         }
     });
 });

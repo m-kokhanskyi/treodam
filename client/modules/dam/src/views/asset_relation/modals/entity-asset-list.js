@@ -52,7 +52,7 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-list', 'views/modal', 
                 });
             })
         },
-
+        
         validate() {
             let notValid = false;
             for (let key in this.nestedViews) {

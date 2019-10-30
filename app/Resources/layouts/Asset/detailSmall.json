@@ -28,6 +28,18 @@
                 {
                     "name": "private"
                 }
+            ],
+            [
+                {
+                    "name": "nameOfFile",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name" : "collection",
+                    "fullWidth" : true
+                }
             ]
         ],
         "style": "default",

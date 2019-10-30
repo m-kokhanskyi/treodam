@@ -230,7 +230,8 @@
       "selectBoolFilterList": [
         "onlyChildCategory",
         "notSelectCategories",
-        "byCollection"
+        "byCollection",
+        "onlyActive"
       ],
       "view"                : "dam:views/asset/record/panels/asset_category",
       "selectAction"        : "selectRelatedEntity"

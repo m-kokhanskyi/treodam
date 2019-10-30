@@ -24,7 +24,7 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', 'view', functio
                 el   : this.options.el + " .edit-form"
             });
         },
-
+        
         validate() {
             let notValid = false;
             for (let key in this.nestedViews) {

@@ -123,7 +123,7 @@
       "required"   : true,
       "trim"       : true,
       "isMultilang": true,
-      "view"       : "dam:views/fields/name-from-file"
+      "view"       : "dam:views/asset/fields/name"
     },
     "nameOfFile"     : {
       "type"    : "varchar",

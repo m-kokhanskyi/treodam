@@ -9,11 +9,23 @@
     ]
   },
   "sidePanels" : {
+    "edit" : [
+      {
+        "name" : "preview",
+        "label": "",
+        "view" : "dam:views/asset/record/panels/side/preview/edit"
+      }
+    ],
     "detail" : [
       {
         "name" : "custom_download",
         "label": "Custom Download",
         "view" : "dam:views/asset/record/panels/side/download/main"
+      },
+      {
+        "name" : "preview",
+        "label": "",
+        "view" : "dam:views/asset/record/panels/side/preview/detail"
       }
     ]
   },

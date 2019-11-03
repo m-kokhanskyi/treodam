@@ -16,26 +16,28 @@ class Preview extends Base
 
     /**
      * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotFound
      */
     public function run()
     {
         if (empty($_GET['id'])) {
             throw new BadRequest();
         }
-        $id = $_GET['id'];
+        $id   = $_GET['id'];
+        $type = $_GET['type'] ?? "asset";
 
         $size = null;
         if (!empty($_GET['size'])) {
             $size = $_GET['size'];
         }
 
-        $this->show($id, $size);
+        $this->show($id, $type, $size);
     }
 
-    public function show($id, $size)
+    public function show($id, $type, $size)
     {
-        $asset      = $this->getEntityManager()->getEntity("Asset", $id);
-        $attachment = $asset->get("file");
+        $attachment = $this->getAttachment($type, $id);
 
         if (!$attachment) {
             throw new NotFound();
@@ -46,6 +48,20 @@ class Preview extends Base
         }
 
         return \Dam\Core\Preview\Base::init($attachment, $size, $this->getContainer())->show();
+    }
+
+    private function getAttachment($type, $id)
+    {
+        switch ($type) {
+            case "attachment" :
+                return $this->getEntityManager()->getEntity("Attachment", $id);
+                break;
+            case "asset":
+            default:
+                $asset = $this->getEntityManager()->getEntity("Asset", $id);
+                return $asset->get("file");
+        }
+
     }
 
 }

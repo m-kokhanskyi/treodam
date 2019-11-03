@@ -17,12 +17,6 @@
       ],
       [
         {
-          "name"     : "image",
-          "fullWidth": true
-        }
-      ],
-      [
-        {
           "name"     : "private",
           "fullWidth": true
         }

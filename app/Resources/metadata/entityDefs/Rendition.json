@@ -67,13 +67,6 @@
             "tooltip": false,
             "view": "dam:views/rendition/fields/type"
         },
-        "image": {
-            "type": "image",
-            "required": false,
-            "previewSize": "small",
-            "audited": false,
-            "tooltip": false
-        },
         "file": {
             "type": "file",
             "required": false,
@@ -178,11 +171,6 @@
             "entity": "Team",
             "relationName": "EntityTeam",
             "layoutRelationshipsDisabled": true
-        },
-        "image": {
-            "type": "belongsTo",
-            "entity": "Attachment",
-            "skipOrmDefs": true
         },
         "file": {
             "type": "belongsTo",

@@ -66,7 +66,7 @@ class RenditionEntity extends AbstractListener
             }
         }
 
-        $attachment = $entity->get("image") ?? $entity->get("file");
+        $attachment = $entity->get("file");
         if ($attachment->get("tmpPath")) {
             $this->getService("Attachment")->moveToRendition($entity, $attachment);
         }
@@ -102,7 +102,7 @@ class RenditionEntity extends AbstractListener
 
     protected function changeAttachment(Entity $entity)
     {
-        return $entity->isAttributeChanged("fileId") || $entity->isAttributeChanged("imageId");
+        return $entity->isAttributeChanged("fileId");
     }
 
     protected function getConfigManager(): ConfigManager

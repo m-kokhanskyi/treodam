@@ -61,9 +61,7 @@ class Asset extends Base
             return true;
         }
 
-        $nature = $this->getConfigManager()->get([$type, "nature"]);
-
-        $attachmentId = $nature === "image" ? $asset->getFetched("imageId") : $asset->getFetched("fileId");
+        $attachmentId = $asset->getFetched("fileId");
 
         $attachment = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
 
@@ -76,7 +74,7 @@ class Asset extends Base
      */
     public function updateMetaData(\Dam\Entities\Asset $asset)
     {
-        $attachment = $asset->get('image') ?? $asset->get('file');
+        $attachment = $asset->get('file');
 
         $metaData = $this->getServiceFactory()->create("Attachment")->getFileMetaData($attachment);
 
@@ -86,20 +84,20 @@ class Asset extends Base
     /**
      * @param \Dam\Entities\Asset $asset
      */
-    public function getImageInfo(\Dam\Entities\Asset $asset)
+    public function getFileInfo(\Dam\Entities\Asset $asset)
     {
         $type   = ConfigManager::getType($asset->get('type'));
         $nature = $this->getConfigManager()->get([$type, "nature"]);
 
-        $attachment = $nature === "image" ? $asset->get("image") : $asset->get("file");
-        $imageInfo  = $this->getService("Attachment")->getImageInfo($attachment);
+        $fileInfo = $this->getService("Attachment")->getFileInfo($asset->get("file"));
 
         $asset->set([
-            "size"     => round($imageInfo['size'] / 1024, 1),
+            "size"     => round($fileInfo['size'] / 1024, 1),
             "sizeUnit" => "kb",
         ]);
 
         if ($nature === "image") {
+            $imageInfo = $this->getService("Attachment")->getImageInfo($asset->get("file"));
             $this->updateAttributes($asset, $imageInfo);
         }
     }

@@ -87,7 +87,7 @@
     "collection"     : {
       "type"    : "link",
       "required": true,
-      "view" : "dam:views/asset/fields/collection"
+      "view"    : "dam:views/asset/fields/collection"
     },
     "assetMetaDatas" : {
       "type"                    : "linkMultiple",
@@ -216,15 +216,6 @@
       "readOnly"    : false,
       "tooltip"     : false
     },
-    "image"          : {
-      "type"                    : "image",
-      "required"                : true,
-      "previewSize"             : "small",
-      "audited"                 : false,
-      "tooltip"                 : false,
-      "layoutMassUpdateDisabled": true,
-      "view"                    : "dam:views/fields/image"
-    },
     "file"           : {
       "type"                    : "file",
       "required"                : true,
@@ -303,12 +294,6 @@
       "relationName"               : "EntityTeam",
       "layoutRelationshipsDisabled": true,
       "entityAsset"                : false
-    },
-    "image"          : {
-      "type"       : "belongsTo",
-      "entity"     : "Attachment",
-      "skipOrmDefs": true,
-      "entityAsset": false
     },
     "file"           : {
       "type"       : "belongsTo",

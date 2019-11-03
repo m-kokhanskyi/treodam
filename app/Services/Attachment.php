@@ -62,23 +62,31 @@ class Attachment extends \Treo\Services\Attachment
      */
     public function getImageInfo($attachment, $path = null): array
     {
-        $path   = $path ?? $this->getPath($attachment);
-        $result = [];
+        $path = $path ?? $this->getPath($attachment);
 
-        if ($attachment->get("field") === "image") {
-            $image = new Imagick($path);
+        $image = new Imagick($path);
 
-            if ($imageInfo = getimagesize($path)) {
-                $result = [
-                    "width"       => $image->getImageWidth(),
-                    "height"      => $image->getImageHeight(),
-                    "color_space" => Util::getColorSpace($image),
-                    "color_depth" => $image->getImageDepth(),
-                    'orientation' => $this->getPosition($image->getImageWidth(), $image->getImageHeight()),
-                    'mime'        => $image->getImageMimeType(),
-                ];
-            }
+        if ($imageInfo = getimagesize($path)) {
+            $result = [
+                "width"       => $image->getImageWidth(),
+                "height"      => $image->getImageHeight(),
+                "color_space" => Util::getColorSpace($image),
+                "color_depth" => $image->getImageDepth(),
+                'orientation' => $this->getPosition($image->getImageWidth(), $image->getImageHeight()),
+                'mime'        => $image->getImageMimeType(),
+            ];
         }
+
+        return $result ?? [];
+    }
+
+    /**
+     * @param $attachment
+     * @return array
+     */
+    public function getFileInfo($attachment): array
+    {
+        $path = $this->getPath($attachment);
 
         if ($pathInfo = pathinfo($path)) {
             $result['extension'] = $pathInfo['extension'];
@@ -140,10 +148,7 @@ class Attachment extends \Treo\Services\Attachment
      */
     public function moveToMaster(\Dam\Entities\Asset $asset)
     {
-        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
-
-        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
-        $attachment   = $this->getEntity($attachmentId);
+        $attachment   = $this->getEntity( $asset->get("fileId"));
 
 //        if ($attachment->get('sourceId')) {
 //            return $this->copyDuplicate($asset);
@@ -187,10 +192,7 @@ class Attachment extends \Treo\Services\Attachment
 
     public function copyDuplicate(\Dam\Entities\Asset $asset)
     {
-        $nature = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "nature"]);
-
-        $attachmentId = $nature === "image" ? $asset->get("imageId") : $asset->get("fileId");
-        $attachment   = $this->getEntity($attachmentId);
+        $attachment   = $this->getEntity($asset->get("fileId"));
 
         $sourcePath = $this->getFileStorageManager()->getLocalFilePath($attachment);
         $destPath   = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path');
@@ -216,10 +218,7 @@ class Attachment extends \Treo\Services\Attachment
         $source = ($entity->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->getMainFolder()}/" . $entity->getFetched("path");
         $dest   = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->getMainFolder()}/" . $entity->get("path");
 
-        $nature = $this->getConfigManager()->get([ConfigManager::getType($entity->get('type')), "nature"]);
-
-        $attachmentId = $nature === "image" ? $entity->get("imageId") : $entity->get("fileId");
-        $attachment   = $this->getEntity($attachmentId);
+        $attachment   = $this->getEntity($entity->get("fileId"));
 
         if ($this->getFileManager()->moveFolder($source, $dest)) {
             return $this->getEntityManager()

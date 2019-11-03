@@ -6,9 +6,6 @@
                     "name": "name"
                 },
                 {
-                    "name": "image"
-                },
-                {
                     "name": "file"
                 }
             ],

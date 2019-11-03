@@ -60,7 +60,6 @@ class Asset extends Base implements PathInfo
             'modifiedBy',
             'assignedUser',
             'teams',
-            'image',
             'file',
             'assetCategories',
             'ownerUser'

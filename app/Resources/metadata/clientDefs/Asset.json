@@ -160,68 +160,6 @@
             }
           ]
         }
-      },
-      "file"       : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type" : "and",
-              "value": [
-                {
-                  "type"     : "notEquals",
-                  "attribute": "type",
-                  "value"    : "Image"
-                },
-                {
-                  "type"     : "notEquals",
-                  "attribute": "type",
-                  "value"    : "Description Image"
-                },
-                {
-                  "type"     : "notEquals",
-                  "attribute": "type",
-                  "value"    : "Gallery Image"
-                },
-                {
-                  "type"     : "notEquals",
-                  "attribute": "type",
-                  "value"    : "Icon"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "image"      : {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type" : "or",
-              "value": [
-                {
-                  "type"     : "equals",
-                  "attribute": "type",
-                  "value"    : "Image"
-                },
-                {
-                  "type"     : "equals",
-                  "attribute": "type",
-                  "value"    : "Icon"
-                },
-                {
-                  "type"     : "equals",
-                  "attribute": "type",
-                  "value"    : "Gallery Image"
-                },
-                {
-                  "type"     : "equals",
-                  "attribute": "type",
-                  "value"    : "Description Image"
-                }
-              ]
-            }
-          ]
-        }
       }
     }
   },

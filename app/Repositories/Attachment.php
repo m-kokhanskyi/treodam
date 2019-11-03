@@ -25,7 +25,7 @@ use Dam\Core\FileManager;
 use Dam\Core\FileStorage\DAMUploadDir;
 use Dam\Core\PathInfo;
 use Espo\Core\Exceptions\Error;
-use Espo\Core\ORM\Entity;
+use Espo\ORM\Entity;
 
 /**
  * Class Attachment

@@ -35,8 +35,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
             return true;
         }
 
-        $attachment           = $info['nature'] === "image" ? $entity->get('image') : $entity->get('file');
-        $pathToMainAttachment = $this->getEntityManager()->getRepository("Attachment")->getFilePath($attachment);
+        $pathToMainAttachment = $this->getEntityManager()->getRepository("Attachment")->getFilePath($entity->get('file'));
 
         foreach ($info['renditions'] as $renditionKey => $renditionParams) {
 
@@ -72,7 +71,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
 
             $newPath = ($private ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$renditionKey}/{$path}/" . $fileName;
             if ($this->getFileManager()->move($tmp, $newPath, false)) {
-                $fileFieldName        = $info['nature'] === "image" ? "imageId" : "fileId";
+                $fileFieldName        = "fileId";
                 $attachmentRepository = $this->getEntityManager()->getRepository("Attachment");
 
                 $renditionEntity  = $this->renditionEntity($entity->id, $renditionKey);

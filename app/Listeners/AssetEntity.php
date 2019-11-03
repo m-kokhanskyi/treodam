@@ -70,7 +70,7 @@ class AssetEntity extends AbstractListener
 
         //After update image
         if ($this->changeAttachment($entity)) {
-            $this->getService("Asset")->getImageInfo($entity);
+            $this->getService("Asset")->getFileInfo($entity);
         }
 
         //After create new asset
@@ -92,7 +92,7 @@ class AssetEntity extends AbstractListener
 
         //rename file
         if (!$entity->isNew() && $entity->isAttributeChanged("nameOfFile")) {
-            $this->getService("Attachment")->changeName($entity->get('image') ?? $entity->get('file'), $entity->get('nameOfFile'), $entity);
+            $this->getService("Attachment")->changeName($entity->get('file'), $entity->get('nameOfFile'), $entity);
             $this->getService("Rendition")->rebuildNames($entity);
         }
 
@@ -110,7 +110,7 @@ class AssetEntity extends AbstractListener
         /** @var $entity Asset */
         $entity = $event->getArgument("entity");
 
-        if ($entity->isAttributeChanged("imageId") || $entity->isAttributeChanged("fileId")) {
+        if ($entity->isAttributeChanged("fileId")) {
             //build Renditions
             //$this->getService("Rendition")->buildRenditions($entity);
             $this->getService("Rendition")->createQueue($entity);
@@ -171,7 +171,7 @@ class AssetEntity extends AbstractListener
     public function afterRemove(Event $event)
     {
         $entity = $event->getArgument("entity");
-        $attachmentId = $entity->get("fileId") ?? $entity->get("imageId");
+        $attachmentId = $entity->get("fileId");
 
         if ($attachmentId) {
             $this->getService("Attachment")->unRelateAsset($attachmentId);
@@ -249,7 +249,7 @@ class AssetEntity extends AbstractListener
 
     private function changeAttachment(Entity $entity)
     {
-        return $entity->isAttributeChanged('fileId') || $entity->isAttributeChanged('imageId');
+        return $entity->isAttributeChanged('fileId');
     }
 
     /**

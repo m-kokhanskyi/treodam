@@ -35,7 +35,7 @@ class Preview extends Base
     public function show($id, $size)
     {
         $asset      = $this->getEntityManager()->getEntity("Asset", $id);
-        $attachment = $asset->get("fileId") ? $asset->get("file") : $asset->get("image");
+        $attachment = $asset->get("file");
 
         if (!$attachment) {
             throw new NotFound();

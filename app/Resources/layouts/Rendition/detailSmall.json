@@ -1,6 +1,6 @@
 [
   {
-    "rows" : [
+    "rows": [
       [
         {
           "name": "type"
@@ -11,14 +11,10 @@
       ],
       [
         {
-          "name"     : "file",
-          "fullWidth": true
-        }
-      ],
-      [
+          "name": "private"
+        },
         {
-          "name"     : "private",
-          "fullWidth": true
+          "name": "file"
         }
       ]
     ],

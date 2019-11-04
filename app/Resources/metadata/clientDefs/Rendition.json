@@ -17,8 +17,23 @@
       {
         "name" : "download",
         "label": "Download",
-        "view" : "dam:views/rendition/record/panels/side/download"
+        "view" : "dam:views/rendition/record/panels/side/download/main"
+      },
+      {
+        "name" : "preview",
+        "label": "",
+        "view" : "dam:views/rendition/record/panels/side/preview/detail"
       }
     ]
+  },
+  "relationshipPanels"  : {
+    "assetMetaDatas" : {
+      "select": false,
+      "create": false
+    },
+    "renditionVersions" : {
+      "select": false,
+      "create": false
+    }
   }
 }

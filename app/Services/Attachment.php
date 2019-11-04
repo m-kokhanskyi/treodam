@@ -81,12 +81,13 @@ class Attachment extends \Treo\Services\Attachment
     }
 
     /**
-     * @param $attachment
+     * @param      $attachment
+     * @param null $path
      * @return array
      */
-    public function getFileInfo($attachment): array
+    public function getFileInfo($attachment, $path = null): array
     {
-        $path = $this->getPath($attachment);
+        $path = $path ?? $this->getPath($attachment);
 
         if ($pathInfo = pathinfo($path)) {
             $result['extension'] = $pathInfo['extension'];
@@ -148,7 +149,7 @@ class Attachment extends \Treo\Services\Attachment
      */
     public function moveToMaster(\Dam\Entities\Asset $asset)
     {
-        $attachment   = $this->getEntity( $asset->get("fileId"));
+        $attachment = $this->getEntity($asset->get("fileId"));
 
 //        if ($attachment->get('sourceId')) {
 //            return $this->copyDuplicate($asset);
@@ -192,7 +193,7 @@ class Attachment extends \Treo\Services\Attachment
 
     public function copyDuplicate(\Dam\Entities\Asset $asset)
     {
-        $attachment   = $this->getEntity($asset->get("fileId"));
+        $attachment = $this->getEntity($asset->get("fileId"));
 
         $sourcePath = $this->getFileStorageManager()->getLocalFilePath($attachment);
         $destPath   = ($asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/" . $asset->get('path');
@@ -218,7 +219,7 @@ class Attachment extends \Treo\Services\Attachment
         $source = ($entity->getFetched("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->getMainFolder()}/" . $entity->getFetched("path");
         $dest   = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->getMainFolder()}/" . $entity->get("path");
 
-        $attachment   = $this->getEntity($entity->get("fileId"));
+        $attachment = $this->getEntity($entity->get("fileId"));
 
         if ($this->getFileManager()->moveFolder($source, $dest)) {
             return $this->getEntityManager()

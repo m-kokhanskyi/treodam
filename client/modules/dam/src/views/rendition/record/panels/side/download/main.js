@@ -1,4 +1,4 @@
-Espo.define('dam:views/rendition/record/panels/side/download', 'view',
+Espo.define('dam:views/rendition/record/panels/side/download/main', 'view',
     Dep => Dep.extend({
         template: "dam:rendition/record/panels/side/download",
         data() {

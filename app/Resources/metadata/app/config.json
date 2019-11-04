@@ -320,6 +320,7 @@
       },
       "pdf-document"     : {
         "nature"     : "file",
+        "preview"    : true,
         "validations": {
           "size"         : {
             "private": {

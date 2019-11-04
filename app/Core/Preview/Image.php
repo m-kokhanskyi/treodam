@@ -40,16 +40,15 @@ class Image extends Base
                 }
                 $filePath = $thumbFilePath;
 
+            } elseif ($this->size === "original") {
+
             } else {
                 throw new Error();
             }
         }
 
-        if (!empty($size)) {
-            $fileName = $this->size . '-' . $this->attachment->get('name');
-        } else {
-            $fileName = $this->attachment->get('name');
-        }
+        $fileName = $this->attachment->get('name');
+
         header('Content-Disposition:inline;filename="' . $fileName . '"');
         if (!empty($fileType)) {
             header('Content-Type: ' . ($fileType === "application/pdf" ? "image/png" : $fileType));

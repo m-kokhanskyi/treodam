@@ -1,18 +1,21 @@
 [
-    {
-        "name": "name",
-        "link": true
-    },
-    {
-        "name": "code"
-    },
-    {
-        "name": "private"
-    },
-    {
-        "name": "file"
-    },
-    {
-        "name": "nameOfFile"
-    }
+  {
+    "name": "name",
+    "link": true
+  },
+  {
+    "name": "type"
+  },
+  {
+    "name": "code"
+  },
+  {
+    "name": "private"
+  },
+  {
+    "name": "file"
+  },
+  {
+    "name": "nameOfFile"
+  }
 ]

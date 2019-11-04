@@ -176,21 +176,33 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     public function updateAttachmentInfo($entity)
     {
         $attachmentService = $this->getServiceFactory()->create("Attachment");
-        $attachmentEntity  = $entity->get("image") ?? $entity->get("file");
+        $attachmentEntity  = $entity->get("file");
+        $nature            = $this->getMetadata()->get(['app', 'config', 'renditions', $entity->get("type"), "nature"]);
 
         $path = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->get("type")}/" . $entity->get("path") . "/" . $attachmentEntity->get("name");
 
-        $imageInfo = $attachmentService->getImageInfo($attachmentEntity, $path);
+        $fileInfo = $attachmentService->getFileInfo($attachmentEntity, $path);
 
-        $entity->set([
-            "width"       => $imageInfo['width'],
-            "height"      => $imageInfo['height'],
-            "colorSpace"  => $imageInfo['color_space'],
-            "colorDepth"  => $imageInfo['color_depth'],
-            "orientation" => $imageInfo['orientation'],
-            "size"        => round($imageInfo['size'] / 1024, 2),
-            "sizeUnit"    => "kb",
-        ]);
+        if ($fileInfo) {
+            $entity->set([
+                "size"     => round($fileInfo['size'] / 1024, 2),
+                "sizeUnit" => "kb",
+            ]);
+        }
+
+        if ($nature === "image") {
+            $imageInfo = $attachmentService->getImageInfo($attachmentEntity, $path);
+            if ($imageInfo) {
+                $entity->set([
+                    "width"       => $imageInfo['width'],
+                    "height"      => $imageInfo['height'],
+                    "colorSpace"  => $imageInfo['color_space'],
+                    "colorDepth"  => $imageInfo['color_depth'],
+                    "orientation" => $imageInfo['orientation'],
+                ]);
+            }
+
+        }
     }
 
     public function createNameOfFile($entity)

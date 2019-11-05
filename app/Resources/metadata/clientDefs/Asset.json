@@ -13,7 +13,7 @@
       {
         "name" : "preview",
         "label": "",
-        "view" : "dam:views/asset/record/panels/side/preview/edit"
+        "view" : "dam:views/asset/record/panels/side/preview/main"
       }
     ],
     "detail" : [
@@ -25,7 +25,7 @@
       {
         "name" : "preview",
         "label": "",
-        "view" : "dam:views/asset/record/panels/side/preview/detail"
+        "view" : "dam:views/asset/record/panels/side/preview/main"
       }
     ]
   },
@@ -196,7 +196,8 @@
     },
     "assetVersions" : {
       "select": false,
-      "create": false
+      "create": false,
+      "rowActionsView"  : "dam:views/asset/record/panels/relations/asset-version/row"
     },
     "relatedAssets"  : {
       "selectBoolFilterList": [

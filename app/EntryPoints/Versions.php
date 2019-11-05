@@ -27,15 +27,12 @@
  * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
  ************************************************************************/
 declare(strict_types=1);
+
 namespace Dam\EntryPoints;
 
 use Dam\Core\FileStorage\DAMUploadDir;
 use Espo\Core\EntryPoints\Base;
 use Espo\Core\Exceptions\BadRequest;
-use Espo\Core\Exceptions\Error;
-use Espo\Core\Exceptions\Forbidden;
-use Espo\Core\ORM\Entity;
-use Espo\Custom\Entities\VariantVersion;
 
 class Versions extends Base
 {
@@ -43,79 +40,93 @@ class Versions extends Base
 
     /**
      * @throws BadRequest
-     * @throws Error
-     * @throws Forbidden
      */
     public function run()
     {
-        if (!$entity = $_GET['entity']) {
-            throw new BadRequest("'entity' is required");
+        if (!$type = $_GET['type']) {
+            throw new BadRequest("'type' is required");
         }
 
         if (!$id = $_GET['id']) {
             throw new BadRequest("'id' is required");
         }
 
-        if (!$time = $_GET['time']) {
-            throw new BadRequest("'time' is required");
+        if (!$event = $_GET['event']) {
+            throw new BadRequest("'event' is required");
         }
 
-        if ($entity == "asset") {
-            $version = $this->getEntityManager()->getRepository("AssetVersion")->where([
-                'name' => $time,
-                'assetId' => $id
-            ])->findOne();
+        list($filePath, $fileName) = $this->getAttachmentInfo($id, $type);
 
-            $asset = $version->get('asset');
+        switch ($event) {
+            case "download":
+                return $this->download($filePath, $fileName);
+                break;
+            case "preview" :
+                return $this->preview($filePath);
+                break;
         }
 
-        if ($entity == "assetVariant") {
-            $version = $this->getEntityManager()->getRepository("VariantVersion")->where([
-                'name' => $time,
-                'assetVariantId' => $id
-            ])->findOne();
-
-            $asset = $version->get('assetVariant')->get('asset');
-        }
-
-        if (!$this->getAcl()->checkEntity($asset)) {
-            throw new Forbidden();
-        }
-
-        $filePath = $this->getFilePath($version, $asset);
-
-        if (!file_exists($filePath)) {
-            throw new Error("File not found");
-        }
-
-        $outputFileName = $version->get('fileName');
-        $outputFileName = str_replace("\"", "\\\"", $outputFileName);
-
-        $disposition = 'attachment';
-
-        header('Content-Description: File Transfer');
-        header("Content-Disposition: " . $disposition . ";filename=\"" . $outputFileName . "\"");
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($filePath));
-
-        readfile($filePath);
         exit;
     }
 
-    protected function getFilePath(Entity $entity, $asset)
+    protected function getAttachmentInfo($id, $type)
     {
-        $path = $asset->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH;
-
-        if (is_a($entity, VariantVersion::class)) {
-            $assetVariant = $entity->get('assetVariant');
-
-            return $path . $asset->get('path') ."/variant/{$assetVariant->get('type')}/versions/{$entity->get('name')}/{$entity->get('fileName')}";
+        switch ($type) {
+            case "asset":
+                return $this->getAssetVersion($id);
+                break;
+            case "rendition" :
+                break;
         }
 
-        return $path . $asset->get('path') . '/versions/' . $entity->get('name') . "/" . $entity->get('fileName');
+        return false;
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    protected function getAssetVersion($id)
+    {
+        $entity = $this->getEntityManager()->getEntity("AssetVersion", $id);
+
+        $asset = $entity->get("asset");
+
+        $path = $asset->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH;
+
+        return [
+            $path . "master/" . $asset->get("path") . "/" . $entity->get("name") . "/" . $entity->get("fileName"),
+            $entity->get("fileName"),
+        ];
+    }
+
+    protected function download(string $path, string $fileName)
+    {
+        $outputFileName = str_replace("\"", "\\\"", $fileName);
+
+        header('Content-Description: File Transfer');
+
+        header("Content-Disposition: attachment;filename=\"" . $outputFileName . "\"");
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+
+        readfile($path);
+        exit;
     }
 
 
+    protected function preview(string $path, string $fileName)
+    {
+        header('Content-Disposition:inline;filename="' . $fileName . '"');
+        header('Pragma: public');
+        header('Cache-Control: max-age=360000, must-revalidate');
+        $fileSize = filesize($path);
+        if ($fileSize) {
+            header('Content-Length: ' . $fileSize);
+        }
+        readfile($path);
+        exit;
+    }
 }

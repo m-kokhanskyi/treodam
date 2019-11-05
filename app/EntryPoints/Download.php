@@ -4,6 +4,7 @@
 namespace Dam\EntryPoints;
 
 
+use Dam\Core\FileStorage\DAMUploadDir;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\Core\Exceptions\NotFound;
@@ -16,43 +17,49 @@ class Download extends \Espo\EntryPoints\Download
 
     public function run()
     {
-        if ($_GET['type'] === "custom") {
-
-            $attachment = $this->getAttachment();
-
-            $filePath = $this->getEntityManager()->getRepository('Attachment')->getFilePath($attachment);
-
-            if (!file_exists($filePath)) {
-                throw new NotFound();
-            }
-
-            $file = $this->initRun($filePath)->resize()->quality();
-
-            $outputFileName = $attachment->get('name');
-            $outputFileName = str_replace("\"", "\\\"", $outputFileName);
-
-            $type = $attachment->get('type');
-
-            $disposition = 'attachment';
-            if (in_array($type, $this->fileTypesToShowInline)) {
-                $disposition = 'inline';
-            }
-
-            header('Content-Description: File Transfer');
-            if ($type) {
-                header('Content-Type: ' . $type);
-            }
-            header("Content-Disposition: " . $disposition . ";filename=\"" . $outputFileName . "\"");
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($filePath));
-
-            readfile($file->getImage());
-            exit;
-        } else {
-            parent::run();
+        switch ($_GET['type']) {
+            case "custom" :
+                $this->custom();
+                break;
+            default:
+                parent::run();
         }
+    }
+
+    protected function custom()
+    {
+        $attachment = $this->getAttachment();
+
+        $filePath = $this->getEntityManager()->getRepository('Attachment')->getFilePath($attachment);
+
+        if (!file_exists($filePath)) {
+            throw new NotFound();
+        }
+
+        $file = $this->initRun($filePath)->resize()->quality();
+
+        $outputFileName = $attachment->get('name');
+        $outputFileName = str_replace("\"", "\\\"", $outputFileName);
+
+        $type = $attachment->get('type');
+
+        $disposition = 'attachment';
+        if (in_array($type, $this->fileTypesToShowInline)) {
+            $disposition = 'inline';
+        }
+
+        header('Content-Description: File Transfer');
+        if ($type) {
+            header('Content-Type: ' . $type);
+        }
+        header("Content-Disposition: " . $disposition . ";filename=\"" . $outputFileName . "\"");
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($filePath));
+
+        readfile($file->getImage());
+        exit;
     }
 
     protected function getAttachment()

@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace Dam\Services;
 
-use Dam\Core\ConfigManager;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Templates\Services\Base;
 use Treo\Core\FileStorage\Manager;
@@ -51,15 +50,16 @@ class AssetVersion extends Base
 
         $filePath = $this->getFileStoreManager()->getLocalFilePath($attachment);
 
-        $path = pathinfo($filePath);
+        $path     = pathinfo($filePath);
         $destPath = $this->buildDestPath($path['dirname'], $attachment);
 
         if ($this->getFileManager()->copy($filePath, $destPath, false, null, true)) {
             return parent::createEntity((object)[
-                'name' => $this->createNameFromDate($attachment->get('createdAt')),
-                'assetId' => $asset->id,
-                "fileName" => $attachment->get('name'),
-                "assignedUserId" => $asset->get("assignedUserId")
+                'name'           => $this->createNameFromDate($attachment->get('createdAt')),
+                'assetId'        => $asset->id,
+                "fileName"       => $attachment->get('name'),
+                "assignedUserId" => $asset->get("assignedUserId"),
+                "modifiedById"   => $asset->get("assignedUserId"),
             ]);
         }
 
@@ -76,7 +76,7 @@ class AssetVersion extends Base
 
     /**
      * @param string $dirname
-     * @param $entity
+     * @param        $entity
      * @return string
      */
     protected function buildDestPath(string $dirname, $entity)

@@ -3,9 +3,9 @@
         "name": "name"
     },
     {
-        "name": "modifiedBy"
+        "name": "createdBy"
     },
     {
-        "name": "modifiedAt"
+        "name": "createdAt"
     }
 ]

@@ -45,8 +45,8 @@ Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields
                 
                 model.set("type", type);
                 model.set("private", access);
-                model.set(`${this.field}Id`, this.model.id);
-                model.set(`${this.field}Name`, this.model.get("name"));
+                model.set(`fileId`, this.model.id);
+                model.set(`fileName`, this.model.get("name"));
                 model.set("name", this._getFileName(this.model.get("name")));
                 model.set("nameOfFile", this._getFileName(this.model.get("name")));
                 model.set("code", Code.prototype.transformToPattern.call(this, this._getFileName(this.model.get("name"))));

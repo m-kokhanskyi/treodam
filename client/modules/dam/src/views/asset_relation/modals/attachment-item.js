@@ -50,8 +50,8 @@ Espo.define('dam:views/asset_relation/modals/attachment-item', ['view', "dam:vie
                 
                 assetModel.set("type", type);
                 assetModel.set("private", access);
-                assetModel.set(`${this.field}Id`, this.model.id);
-                assetModel.set(`${this.field}Name`, this.model.get("name"));
+                assetModel.set(`fileId`, this.model.id);
+                assetModel.set(`fileName`, this.model.get("name"));
                 assetModel.set("name", this._getFileName(this.model.get("name")));
                 assetModel.set("nameOfFile", this._getFileName(this.model.get("name")));
                 assetModel.set("code", Code.prototype.transformToPattern.call(this, this._getFileName(this.model.get("name"))));

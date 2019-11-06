@@ -27,6 +27,13 @@
         "label": "",
         "view" : "dam:views/asset/record/panels/side/preview/main"
       }
+    ],
+    "detailSmall" : [
+      {
+        "name" : "preview",
+        "label": "",
+        "view" : "dam:views/asset/record/panels/side/preview/main"
+      }
     ]
   },
   "controller"          : "dam:controllers/asset",

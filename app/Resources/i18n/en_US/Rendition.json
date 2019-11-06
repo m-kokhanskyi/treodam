@@ -11,13 +11,15 @@
         "colorSpace": "Color Space",
         "orientation": "Orientation",
         "asset": "Asset",
-        "assetMetaDatas": "AssetMetaDatas",
-        "renditionVersions": "RenditionVersions"
+        "assetMetaDatas": "Asset Meta Datas",
+        "nameOfFile": "File Name",
+        "renditionVersions": "Rendition Versions",
+        "sizeUnit": "Unit Size"
     },
     "links": {
         "asset": "Asset",
-        "assetMetaDatas": "AssetMetaDatas",
-        "renditionVersions": "RenditionVersions"
+        "assetMetaDatas": "Asset Meta Datas",
+        "renditionVersions": "Rendition Versions"
     },
     "labels": {
         "Create Rendition": "Create Rendition"

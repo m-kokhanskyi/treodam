@@ -1,11 +1,15 @@
 {
-  "scopeNames": {
+  "scopeNames"      : {
     "Asset": "Vermögenswert"
   },
   "scopeNamesPlural": {
     "Asset": "Vermögenswerte"
   },
-  "exceptions": {
+  "exceptions"      : {
     "Code is invalid": "Code ist ungültig. Der Code sollte eindeutig sein. Es werden nur Buchstaben, Zahlen und Zeichen \"_\" erwartet."
+  },
+  "labels"          : {
+    "Preview" : "Vorschau",
+    "Download": "Herunterladen"
   }
 }

@@ -222,7 +222,7 @@
       "sourceList"              : [],
       "audited"                 : false,
       "tooltip"                 : false,
-      "view"                    : "dam:views/fields/file",
+      "view"                    : "dam:views/asset/fields/file",
       "layoutMassUpdateDisabled": true
     },
     "size"           : {

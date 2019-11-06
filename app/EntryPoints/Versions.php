@@ -62,7 +62,7 @@ class Versions extends Base
                 return $this->download($filePath, $fileName);
                 break;
             case "preview" :
-                return $this->preview($filePath);
+                return $this->preview($filePath, $fileName);
                 break;
         }
 
@@ -76,6 +76,7 @@ class Versions extends Base
                 return $this->getAssetVersion($id);
                 break;
             case "rendition" :
+                return $this->getRenditionVersion($id);
                 break;
         }
 
@@ -96,6 +97,20 @@ class Versions extends Base
 
         return [
             $path . "master/" . $asset->get("path") . "/" . $entity->get("name") . "/" . $entity->get("fileName"),
+            $entity->get("fileName"),
+        ];
+    }
+
+    protected function getRenditionVersion($id)
+    {
+        $entity = $this->getEntityManager()->getEntity("RenditionVersion", $id);
+
+        $rendition = $entity->get("rendition");
+
+        $path = $rendition->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH;
+
+        return [
+            $path . $rendition->get("type") . "/" . $rendition->get("path") . "/" . $entity->get("name") . "/" . $entity->get("fileName"),
             $entity->get("fileName"),
         ];
     }

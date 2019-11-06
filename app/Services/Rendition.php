@@ -29,13 +29,14 @@ class Rendition extends \Espo\Core\Templates\Services\Base
 
     public function buildRenditions($entity)
     {
+        $res  = true;
         $info = $this->getConfigManager()->get([ConfigManager::getType($entity->get("type"))]);
 
         if (!$info['renditions']) {
             return true;
         }
-
-        $pathToMainAttachment = $this->getEntityManager()->getRepository("Attachment")->getFilePath($entity->get('file'));
+        $attachment           = $entity->get('file');
+        $pathToMainAttachment = $this->getEntityManager()->getRepository("Attachment")->getFilePath($attachment);
 
         foreach ($info['renditions'] as $renditionKey => $renditionParams) {
 
@@ -67,57 +68,51 @@ class Rendition extends \Espo\Core\Templates\Services\Base
                     "rendition" => $renditionKey,
                 ]) . ".{$pathInfo['extension']}";
 
-            $path = $this->buildPath($private, $renditionKey);
+            $renditionEntity = $this->renditionEntity($entity->id, $renditionKey);
 
-            $newPath = ($private ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$renditionKey}/{$path}/" . $fileName;
-            if ($this->getFileManager()->move($tmp, $newPath, false)) {
-                $fileFieldName        = "fileId";
-                $attachmentRepository = $this->getEntityManager()->getRepository("Attachment");
+            $fileFieldName        = "fileId";
+            $attachmentRepository = $this->getEntityManager()->getRepository("Attachment");
 
-                $renditionEntity  = $this->renditionEntity($entity->id, $renditionKey);
-                $attachmentEntity = $attachmentRepository->get();
+            $attachmentEntity = $attachmentRepository->get();
 
-                if (!$renditionEntity->has("id")) {
-                    $renditionEntity->set("id", Util::generateId());
-                }
-                $attachmentEntity->set("id", Util::generateId());
+            if (!$renditionEntity->has("id")) {
+                $renditionEntity->set("id", Util::generateId());
+            }
+            $attachmentEntity->set("id", Util::generateId());
 
-                $attachmentEntity->set([
-                    "role"            => "Attachment",
-                    "storageFilePath" => $path,
-                    "storage"         => "DAMUploadDir",
-                    "relatedId"       => $renditionEntity->id,
-                    "relatedType"     => "Rendition",
-                    "field"           => $info['nature'],
-                    "type"            => mime_content_type($newPath),
-                    "size"            => filesize($newPath),
-                    "name"            => $fileName,
-                ]);
+            $attachmentEntity->set([
+                "role"        => "Attachment",
+                "tmpPath"     => $tmp,
+                "storage"     => "DAMUploadDir",
+                "relatedId"   => $renditionEntity->id,
+                "relatedType" => "Rendition",
+                "field"       => "file",
+                "name"        => $fileName,
+                "type"        => $attachment->get("type"),
+            ]);
 
-                $renditionEntity->set([
-                    "name"           => $this->getLanguage()->get(['Rendition', 'options', 'type', $renditionKey]),
-                    "type"           => $renditionKey,
-                    "private"        => $private,
-                    $fileFieldName   => $attachmentEntity->id,
-                    "assetId"        => $entity->id,
-                    "nameOfFile"     => $this->getFileName($attachmentEntity->get("name")),
-                    "path"           => $path,
-                    "assignedUserId" => $entity->get("assignedUserId"),
-                ]);
+            $renditionEntity->set([
+                "name"           => $this->getLanguage()->get(['Rendition', 'options', 'type', $renditionKey]),
+                "type"           => $renditionKey,
+                "private"        => $private,
+                $fileFieldName   => $attachmentEntity->id,
+                "assetId"        => $entity->id,
+                "nameOfFile"     => $this->getFileName($attachmentEntity->get("name")),
+                "assignedUserId" => $entity->get("assignedUserId"),
+            ]);
 
-                $renditionEntity->isAutoCreated = true;
+            $renditionEntity->isAutoCreated = true;
 
-                if (!$attachmentRepository->save($attachmentEntity)) {
-                    throw new Error("Can't save 'Attachment'");
-                }
+            if (!$attachmentRepository->save($attachmentEntity)) {
+                throw new Error("Can't save 'Attachment'");
+            }
 
-                if (!$this->getEntityManager()->saveEntity($renditionEntity)) {
-                    throw new Error("Can't save 'Rendition'");
-                }
+            if (!$this->getEntityManager()->saveEntity($renditionEntity)) {
+                throw new Error("Can't save 'Rendition'");
             }
         }
 
-        return true;
+        return $res;
     }
 
     public function updateMetaData(\Dam\Entities\Rendition $entity)

@@ -1,19 +1,19 @@
 {
-  "controller"    : "controllers/record",
-  "boolFilterList": [
+  "controller"        : "controllers/record",
+  "boolFilterList"    : [
     "onlyMy"
   ],
-  "recordViews"   : {
+  "recordViews"       : {
     "detail": "dam:views/rendition/record/detail"
   },
-  "views"         : {
+  "views"             : {
     "detail": "dam:views/rendition/detail"
   },
-  "modalViews"    : {
+  "modalViews"        : {
     "edit": "dam:views/rendition/modals/edit"
   },
-  "sidePanels" : {
-    "detail" : [
+  "sidePanels"        : {
+    "detail": [
       {
         "name" : "download",
         "label": "Download",
@@ -26,14 +26,15 @@
       }
     ]
   },
-  "relationshipPanels"  : {
-    "assetMetaDatas" : {
+  "relationshipPanels": {
+    "assetMetaDatas"   : {
       "select": false,
       "create": false
     },
-    "renditionVersions" : {
-      "select": false,
-      "create": false
+    "renditionVersions": {
+      "select"        : false,
+      "create"        : false,
+      "rowActionsView": "dam:views/rendition/record/panels/relations/rendition-version/row"
     }
   }
 }

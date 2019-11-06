@@ -29,17 +29,15 @@ class RenditionVersion extends \Espo\Core\Templates\Services\Base
 
         $filePath = $this->getFileStoreManager()->getLocalFilePath($attachment);
 
-        $path = pathinfo($filePath);
-        $destPath = $this->buildDestPath($path['dirname'], $attachment);
+        $path     = pathinfo($filePath);
+        $destPath = $this->buildDestPath($path['dirname'], $attachment) . "/" . $attachment->get("name");
 
-        $filePath = $this->getFileStoreManager()->getLocalFilePath($attachment);
-
-        if ($this->getFileManager()->copy($filePath, $destPath, false, null, true)) {
+        if ($this->getFileManager()->move($filePath, $destPath, false)) {
             return parent::createEntity((object)[
-                'name' => $this->createNameFromDate($attachment->get('createdAt')),
-                'renditionId' => $rendition->id,
-                "fileName" => $attachment->get('name'),
-                "assignedUserId" => $rendition->get("assignedUserId")
+                'name'           => $this->createNameFromDate($attachment->get('createdAt')),
+                'renditionId'    => $rendition->id,
+                "fileName"       => $attachment->get('name'),
+                "assignedUserId" => $rendition->get("assignedUserId"),
             ]);
         }
 
@@ -56,7 +54,7 @@ class RenditionVersion extends \Espo\Core\Templates\Services\Base
 
     /**
      * @param string $dirname
-     * @param $entity
+     * @param        $entity
      * @return string
      */
     protected function buildDestPath(string $dirname, $entity)

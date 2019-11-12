@@ -1,5 +1,5 @@
 {
-    "controller": "controllers/record",
+    "controller": "dam:controllers/block-show-list",
     "boolFilterList": [
         "onlyMy"
     ]

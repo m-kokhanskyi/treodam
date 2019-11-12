@@ -7,9 +7,21 @@ use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
 use Treo\Core\Slim\Http\Request;
+use Espo\Core\Exceptions\NotFound;
 
 class AssetRelation extends AbstractController
 {
+    /**
+     * @param $params
+     * @param $data
+     * @param $request
+     * @throws NotFound
+     */
+    public function actionList($params, $data, $request)
+    {
+        throw new NotFound();
+    }
+
     /**
      * @param         $params
      * @param         $data

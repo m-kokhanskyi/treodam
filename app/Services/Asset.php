@@ -78,7 +78,7 @@ class Asset extends Base
 
         $metaData = $this->getServiceFactory()->create("Attachment")->getFileMetaData($attachment);
 
-        return $this->getServiceFactory()->create("AssetMetaData")->insertData("asset", $asset->id, $metaData);
+        return $this->getService("AssetMetaData")->insertData("asset", $asset->id, $metaData);
     }
 
     /**

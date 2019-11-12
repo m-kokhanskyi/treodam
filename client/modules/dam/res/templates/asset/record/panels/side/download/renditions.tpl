@@ -2,7 +2,7 @@
     <input name="downloadType" type="radio" value="renditions">
     <span class="control-label">Rendition</span>
 </div>
-<div class="additional-panel" style="display: none">
+<div class="additional-panel mt-5" style="display: none">
     <div class="col-sm-12">
         <div class="field" data-name="type">
             <select name="type" class="form-control main-element">

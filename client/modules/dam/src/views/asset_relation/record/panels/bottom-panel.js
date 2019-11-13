@@ -257,9 +257,9 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         _createTypeBlock(model, show, callback) {
             model.set({
                 entityName: this.defs.entityName,
-                entityId  : this.model.id
+                entityId  : this.model.id,
+                entityModel  : this.model
             });
-            
             this.createView(model.get('name'), "dam:views/asset_relation/record/panels/asset-type-block", {
                 model: model,
                 el   : this.options.el + ' .group[data-name="' + model.get("name") + '"]',

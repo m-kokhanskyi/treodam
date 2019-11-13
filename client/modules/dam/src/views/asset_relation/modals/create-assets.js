@@ -14,6 +14,10 @@ Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/m
         },
         
         actionSave() {
+            if (this.validate()) {
+                this.notify('Not valid', 'error');
+                return;
+            }
             let Promises = [];
             this.collection.forEach(model => {
                 let assetModel       = model.get("assetModel");
@@ -43,6 +47,17 @@ Espo.define('dam:views/asset_relation/modals/create-assets', 'dam:views/modals/m
                 this.dialog.close();
             }).catch(r => {
             });
+        },
+
+        validate() {
+            let notValid = false;
+            for (let key in this.nestedViews) {
+                const view = this.nestedViews[key];
+                if (view && typeof view.validate === 'function') {
+                    notValid = view.validate() || notValid;
+                }
+            }
+            return notValid
         }
     })
 );

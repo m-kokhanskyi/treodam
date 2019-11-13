@@ -51,13 +51,14 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
                         view.listenTo(collection, "sync", () => {
                             $(view.el).find('.list').slideDown("fast");
                         });
-    
+                        view.listenTo(collection, "listSorted", () => {
+                            this.model.get('entityModel').fetch();
+                        });
                         view.listenTo(view, "after:model-remove", () => {
                             let parent = this.getParentView();
                             parent.actionRefresh();
                             parent._refreshAssetPanel();
                         });
-                        
                         collection.fetch();
                     });
                 });

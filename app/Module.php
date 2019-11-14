@@ -22,12 +22,15 @@ declare(strict_types=1);
 
 namespace Dam;
 
+use Espo\Core\Utils\DataUtil;
+use Treo\Core\Utils\Metadata;
 use Treo\Core\ModuleManager\AbstractModule;
 
 /**
  * Class Module
  *
  * @author r.ratsun <r.ratsun@treolabs.com>
+ * @author d.talko <d.talko@treolabs.com>
  */
 class Module extends AbstractModule
 {
@@ -37,5 +40,32 @@ class Module extends AbstractModule
     public static function getLoadOrder(): int
     {
         return 5119;
+    }
+
+    /**
+     * Get Metadata
+     * @return Metadata
+     */
+    protected function getMetadata(): Metadata
+    {
+        return $this->container->get('metadata');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadMetadata(\stdClass &$data)
+    {
+        $metadata = $this
+            ->getObjUnifier()
+            ->unify('metadata', $this->path . 'app/Resources/metadata', true);
+
+        // checking if module PIM installed
+        if ($this->getMetadata()->isModuleInstalled('PIM')) {
+            unset($metadata->themes);
+        }
+
+        $data = DataUtil::merge($data, $metadata);
+
     }
 }

@@ -250,7 +250,8 @@
       "foreign"    : "asset",
       "entity"     : "Rendition",
       "audited"    : false,
-      "entityAsset": false
+      "entityAsset": false,
+      "disableMassRelation": true
     },
     "collection"     : {
       "type"       : "belongsTo",
@@ -264,14 +265,16 @@
       "foreign"    : "asset",
       "entity"     : "AssetMetaData",
       "audited"    : false,
-      "entityAsset": false
+      "entityAsset": false,
+      "disableMassRelation": true
     },
     "assetVersions"  : {
       "type"       : "hasMany",
       "foreign"    : "asset",
       "entity"     : "AssetVersion",
       "audited"    : false,
-      "entityAsset": false
+      "entityAsset": false,
+      "disableMassRelation": true
     },
     "createdBy"      : {
       "type"       : "belongsTo",
@@ -307,7 +310,8 @@
       "foreign"     : "assets",
       "entity"      : "AssetCategory",
       "audited"     : false,
-      "entityAsset" : false
+      "entityAsset" : false,
+      "disableMassRelation": true
     }
   },
   "collection": {

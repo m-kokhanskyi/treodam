@@ -71,7 +71,14 @@
             ]
         ],
         "style": "default",
-        "dynamicLogicVisible": null,
+        "dynamicLogicVisible": {
+            "conditionGroup": [
+                {
+                    "type": "isNotEmpty",
+                    "attribute": "id"
+                }
+            ]
+        },
         "customLabel": "Attributes"
     }
 ]

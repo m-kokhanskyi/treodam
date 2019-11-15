@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace Dam;
 
 use Treo\Core\ModuleManager\AbstractEvent;
+use Treo\Core\Utils\Metadata;
 
 /**
  * Class Event
@@ -62,6 +63,9 @@ class Event extends AbstractEvent
 
         // add units
         $this->addUnit();
+
+        // set applicationName
+        $this->setApplicationName();
     }
 
     /**
@@ -74,6 +78,9 @@ class Event extends AbstractEvent
 
         // delete menu items
         $this->deleteMenuItems();
+
+        // remove applicationName
+        $this->removeApplicationName();
     }
 
     /**
@@ -218,4 +225,46 @@ class Event extends AbstractEvent
         // save
         $config->save();
     }
+
+    /**
+     * Set ApplicationName
+     */
+    protected function setApplicationName()
+    {
+        // get config
+        $config = $this->getContainer()->get('config');
+
+        if (!$this->getMetadata()->isModuleInstalled('PIM')) {
+            $config->set('applicationName', 'TreoDAM');
+        }
+
+        // save
+        $config->save();
+    }
+
+    /**
+     * Remove ApplicationName
+     */
+    protected function removeApplicationName()
+    {
+        // get config
+        $config = $this->getContainer()->get('config');
+
+        if (!$this->getMetadata()->isModuleInstalled('PIM')) {
+            $config->set('applicationName', 'TreoCore');
+        }
+
+        // save
+        $config->save();
+    }
+
+    /**
+     * Get Metadata
+     * @return Metadata
+     */
+    protected function getMetadata(): Metadata
+    {
+        return $this->container->get('metadata');
+    }
+
 }

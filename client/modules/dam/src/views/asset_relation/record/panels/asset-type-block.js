@@ -36,7 +36,7 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
                     collection.url = `AssetRelation/byEntity/${this.model.get('entityName')}/${this.model.get('entityId')}?type=${this.model.get('name')}`;
                     
                     this.collection = collection;
-                    this.createView('list', "dam:views/record/list", {
+                    this.createView('list', "dam:views/asset_relation/record/list", {
                         collection          : this.collection,
                         model               : this.model,
                         buttonsDisabled     : true,

@@ -17,24 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-Espo.define('dam:views/record/detail', 'views/record/detail',
-    Dep => Dep.extend({
-
-        setup() {
-            this.bottomView = this.getMetadata().get(`clientDefs.${this.scope}.bottomView.${this.type}`) || this.bottomView;
-
-            Dep.prototype.setup.call(this);
-        },
-
-        afterRender() {
-            Dep.prototype.afterRender.call(this);
-
-            let parentView = this.getParentView();
-            if (parentView.options.params && parentView.options.params.setEditMode) {
-                this.actionEdit();
+Espo.define('dam:controllers/block-show-list', 'controllers/record',
+    Dep => {
+        return Dep.extend({
+            beforeList() {
+                throw new Espo.Exceptions.NotFound("Action is not found");
             }
-        },
-
-    })
+        });
+    }
 );
-

@@ -1,4 +1,4 @@
-/*
+/**
  * Dam
  * Free Extension
  * Copyright (c) TreoLabs GmbH
@@ -17,24 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-Espo.define('dam:views/record/detail', 'views/record/detail',
+Espo.define('dam:views/login', 'class-replace!dam:views/login',
     Dep => Dep.extend({
 
-        setup() {
-            this.bottomView = this.getMetadata().get(`clientDefs.${this.scope}.bottomView.${this.type}`) || this.bottomView;
-
-            Dep.prototype.setup.call(this);
-        },
-
-        afterRender() {
-            Dep.prototype.afterRender.call(this);
-
-            let parentView = this.getParentView();
-            if (parentView.options.params && parentView.options.params.setEditMode) {
-                this.actionEdit();
+        getLogoSrc: function () {
+            const companyLogoId = this.getConfig().get('companyLogoId');
+            if (!companyLogoId) {
+                return this.getBasePath() + 'client/modules/dam/img/treo_dam_logo_white.png';
             }
-        },
+            return this.getBasePath() + '?entryPoint=LogoImage&id='+companyLogoId+'&t=' + companyLogoId;
+        }
 
     })
 );
-

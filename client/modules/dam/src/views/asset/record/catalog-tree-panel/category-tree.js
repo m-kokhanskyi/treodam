@@ -1,5 +1,5 @@
 /*
- * Pim
+ * Dam
  * Free Extension
  * Copyright (c) TreoLabs GmbH
  *

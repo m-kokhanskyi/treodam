@@ -3,8 +3,7 @@
 
 namespace Dam\EntryPoints;
 
-
-use Dam\Core\FileStorage\DAMUploadDir;
+use Dam\Core\Download\Custom;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\Core\Exceptions\NotFound;
@@ -36,29 +35,24 @@ class Download extends \Espo\EntryPoints\Download
             throw new NotFound();
         }
 
-        $file = $this->initRun($filePath)->resize()->quality();
+        $file = (new Custom($filePath))
+            ->setAttachment($attachment)
+            ->setParams($_GET)
+            ->convert();
 
-        $outputFileName = $attachment->get('name');
-        $outputFileName = str_replace("\"", "\\\"", $outputFileName);
-
-        $type = $attachment->get('type');
-
-        $disposition = 'attachment';
-        if (in_array($type, $this->fileTypesToShowInline)) {
-            $disposition = 'inline';
-        }
+        $type = $file->getType();
 
         header('Content-Description: File Transfer');
         if ($type) {
             header('Content-Type: ' . $type);
         }
-        header("Content-Disposition: " . $disposition . ";filename=\"" . $outputFileName . "\"");
+        header("Content-Disposition: attachment;filename=\"" . $file->getName() . "\"");
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
-        header('Content-Length: ' . filesize($filePath));
+        header('Content-Length: ' . $file->getImageSize());
 
-        readfile($file->getImage());
+        echo $file->getImage();
         exit;
     }
 
@@ -80,48 +74,6 @@ class Download extends \Espo\EntryPoints\Download
         }
 
         return $attachment;
-    }
-
-    protected function initRun($fileName)
-    {
-        $this->image = new \Imagick($fileName);
-
-        return $this;
-    }
-
-    protected function resize()
-    {
-        switch ($_GET['scale']) {
-            case "resize":
-                $this->image->resizeImage((int)$_GET['width'], (int)$_GET['height'], Imagick::FILTER_HAMMING, 1, false);
-                break;
-            case "byWidth":
-                $this->image->resizeImage((int)$_GET['width'], 1000000000, Imagick::FILTER_HAMMING, 1, true);
-                break;
-            case "byHeight" :
-                $this->image->resizeImage(1000000000, (int)$_GET['height'], Imagick::FILTER_HAMMING, 1, true);
-                break;
-        }
-
-        return $this;
-    }
-
-    protected function quality()
-    {
-        //$this->image->setImageCompressionQuality((int)$_GET['quality']);
-
-        return $this;
-    }
-
-    protected function getImage()
-    {
-        $string_temp = tempnam(sys_get_temp_dir(), '');
-
-        //$this->image->setImageFormat($_GET['format']);
-
-        $this->image->writeImage($string_temp);
-
-        return $string_temp;
     }
 
 }

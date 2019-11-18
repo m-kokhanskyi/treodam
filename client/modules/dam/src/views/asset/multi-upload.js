@@ -1,12 +1,19 @@
-Espo.define('dam:views/asset/multi-upload', "view", function (Dep) {
+Espo.define('dam:views/asset/multi-upload', ["view", "dam:config"], function (Dep, Config) {
     return Dep.extend({
-        template: "dam:asset/multi-upload",
-        size    : {},
-        events  : _.extend({
+        template : "dam:asset/multi-upload",
+        size     : {},
+        damConfig: null,
+        
+        events: _.extend({
             'change input[data-name="upload"]': function (e) {
                 this._uploadFiles(e.currentTarget.files);
             }
         }, Dep.prototype.events),
+        
+        setup() {
+            this.damConfig = Config.prototype.setup.call(this);
+            Dep.prototype.setup.call(this);
+        },
         
         _uploadFiles(files) {
             let maxUploadCount = this.getMetadata().get("app.fileStorage.maxUploadFiles");
@@ -33,9 +40,9 @@ Espo.define('dam:views/asset/multi-upload', "view", function (Dep) {
         },
         
         _sizeValidate(size) {
-            let type       = this.model.get("type").replace(" ", "-").toLowerCase();
+            let type       = this.damConfig.getType(this.model.get("type"));
             let private    = this.model.get('private') ? "private" : "public";
-            let sizeParams = this.getMetadata().get(`app.config.types.custom.${type}.validations.size.${private}`);
+            let sizeParams = this.damConfig.getByType(`${type}.validations.size.${private}`);
             
             if (sizeParams && (
                 size > sizeParams.max || size < sizeParams.min

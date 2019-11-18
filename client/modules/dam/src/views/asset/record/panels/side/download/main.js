@@ -1,9 +1,10 @@
-Espo.define('dam:views/asset/record/panels/side/download/main', 'view',
-    Dep => {
+Espo.define('dam:views/asset/record/panels/side/download/main', ['view', "dam:config"],
+    (Dep, Config) => {
         return Dep.extend({
             template  : "dam:asset/record/panels/side/download/main",
             active    : "original",
             viewsLists: ["original", "renditions", "custom"],
+            damConfig : null,
             
             events: {
                 'change input[name="downloadType"]': function (e) {
@@ -19,17 +20,18 @@ Espo.define('dam:views/asset/record/panels/side/download/main', 'view',
             
             setup() {
                 Dep.prototype.setup.call(this);
+                this.damConfig = Config.prototype.init.call(this);
                 
                 if (this.model.get("type")) {
-                    let type   = this.model.get("type").replace(" ", "-").toLowerCase();
-                    let nature = this.getMetadata().get(`app.config.types.custom.${type}.nature`);
+                    let type   = this.damConfig.getType(this.model.get("type"));
+                    let nature = this.damConfig.getByType(`${type}.nature`);
                     
                     this._buildViews(nature);
                 } else {
                     this.listenToOnce(this.model, "sync", () => {
                         if (this.model.get("type")) {
-                            let type   = this.model.get("type").replace(" ", "-").toLowerCase();
-                            let nature = this.getMetadata().get(`app.config.types.custom.${type}.nature`);
+                            let type   = this.damConfig.getType(this.model.get("type"));
+                            let nature = this.damConfig.getByType(`${type}.nature`);
                             
                             this._buildViews(nature);
                             this.reRender();

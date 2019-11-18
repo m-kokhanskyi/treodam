@@ -64,16 +64,7 @@
             "createVersion": true,
             "auto"         : false
           }
-        },
-        "attributes"   : [
-          "width",
-          "height",
-          "alt",
-          "title",
-          "color-space",
-          "color-depth",
-          "orientation"
-        ]
+        }
       },
       "description-image": {
         "nature"     : "image",
@@ -117,16 +108,7 @@
           "githumb3" : {},
           "githumb4" : {},
           "watermark": {}
-        },
-        "attributes" : [
-          "width",
-          "height",
-          "alt",
-          "title",
-          "color-space",
-          "color-depth",
-          "orientation"
-        ]
+        }
       },
       "office-document"  : {
         "nature"     : "file",
@@ -474,7 +456,7 @@
       }
     }
   },
-  "attributes": {
+  "attributesMapping": {
     "width"      : {
       "type"    : "integer",
       "label"   : "width",

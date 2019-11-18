@@ -57,13 +57,12 @@ class Event extends AbstractEvent
     {
         // add global search
         $this->addGlobalSearchEntities();
-
         // add menu items
         $this->addMenuItems();
-
         // add units
         $this->addUnit();
-
+        //init DAM configs
+        $this->installConfig();
         // set applicationName
         $this->setApplicationName();
     }
@@ -75,10 +74,8 @@ class Event extends AbstractEvent
     {
         // delete global search
         $this->deleteGlobalSearchEntities();
-
         // delete menu items
         $this->deleteMenuItems();
-
         // remove applicationName
         $this->removeApplicationName();
     }
@@ -224,6 +221,11 @@ class Event extends AbstractEvent
 
         // save
         $config->save();
+    }
+
+    protected function installConfig()
+    {
+        (new \Dam\Core\ConfigManager($this->getContainer()))->convert()->run();
     }
 
     /**

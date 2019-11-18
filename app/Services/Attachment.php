@@ -334,9 +334,8 @@ class Attachment extends \Treo\Services\Attachment
 
                     $model   = $attachment->modelAttributes;
                     $private = $model->private ? "private" : "public";
-                    $type    = ConfigManager::getType($model->type);
 
-                    $config = $this->getConfigManager()->get([$type]);
+                    $config = $this->getConfigManager()->getByType([ConfigManager::getType($model->type)]);
 
                     foreach ($config['validations'] as $type => $value) {
                         $this->getValidator()->validate($type, $entity, ($value[$private] ?? $value));

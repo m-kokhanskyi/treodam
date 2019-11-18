@@ -30,7 +30,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     public function buildRenditions($entity)
     {
         $res  = true;
-        $info = $this->getConfigManager()->get([ConfigManager::getType($entity->get("type"))]);
+        $info = $this->getConfigManager()->getByType([ConfigManager::getType($entity->get("type"))]);
 
         if (!$info['renditions']) {
             return true;
@@ -130,7 +130,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     {
         $asset = $entity->get('asset');
 
-        $info = $this->getConfigManager()->get([ConfigManager::getType($asset->get("type")), "renditions"]);
+        $info = $this->getConfigManager()->getByType([ConfigManager::getType($asset->get("type")), "renditions"]);
 
         if (!$info) {
             throw new Error("This asset can't have any renditions");
@@ -152,7 +152,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     public function createVersion($entity)
     {
         $asset = $entity->get('asset');
-        $info  = $this->getConfigManager()->get([
+        $info  = $this->getConfigManager()->getByType([
             ConfigManager::getType($asset->get('type')),
             "renditions",
             $entity->get("type"),
@@ -209,7 +209,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
 
     public function rebuildNames(\Dam\Entities\Asset $asset)
     {
-        $renditionRules = $this->getConfigManager()->get([ConfigManager::getType($asset->get('type')), "renditions"]);
+        $renditionRules = $this->getConfigManager()->getByType([ConfigManager::getType($asset->get('type')), "renditions"]);
 
         foreach ($renditionRules as $key => $rules) {
             if (!$rules['auto'] || stripos(($rules['fileNameMask'] ?? ""), "{{original}}") === false) {

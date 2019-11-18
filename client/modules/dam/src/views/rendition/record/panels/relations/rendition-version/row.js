@@ -1,6 +1,18 @@
-Espo.define('dam:views/rendition/record/panels/relations/rendition-version/row', 'views/record/row-actions/relationship',
-    Dep => {
+Espo.define('dam:views/rendition/record/panels/relations/rendition-version/row',
+    ["views/record/row-actions/relationship", "dam:config"],
+    (Dep, Config) => {
         return Dep.extend({
+            assetType    : null,
+            renditionType: null,
+            damConfig    : null,
+            actionList   : [],
+            
+            setup() {
+                this.damConfig = Config.prototype.init.call(this);
+                Dep.prototype.setup.call(this);
+                
+                this.initActionList();
+            },
             
             events: _.extend(Dep.prototype.events, {
                 'click .action': function (e) {
@@ -14,10 +26,10 @@ Espo.define('dam:views/rendition/record/panels/relations/rendition-version/row',
                 }
             }),
             
-            getActionList: function () {
-                let list = [];
+            initActionList() {
+                this.actionList = [];
                 
-                list.push({
+                this.actionList.push({
                     action: 'removeRelated',
                     label : 'Remove',
                     data  : {
@@ -25,7 +37,7 @@ Espo.define('dam:views/rendition/record/panels/relations/rendition-version/row',
                     }
                 });
                 
-                list.push({
+                this.actionList.push({
                     action: "downloadVersion",
                     label : "Download",
                     data  : {
@@ -33,14 +45,13 @@ Espo.define('dam:views/rendition/record/panels/relations/rendition-version/row',
                     }
                 });
                 
-                if (this._hasPreview()) {
-                    list.push({
-                        action: "showPreview",
-                        label : "Preview"
-                    });
-                }
-                
-                return list;
+                this.listenToOnce(this, "after:render", () => {
+                    this.checkToShowPreview();
+                });
+            },
+            
+            getActionList: function () {
+                return this.actionList;
             },
             
             actionShowPreview() {
@@ -57,15 +68,30 @@ Espo.define('dam:views/rendition/record/panels/relations/rendition-version/row',
                 $el.prop("href", `?entryPoint=versions&event=download&type=rendition&id=${data.id}`);
             },
             
-            _hasPreview() {
-                let renditionView = this.getParentView()
+            checkToShowPreview() {
+                let renditionModel = this.getParentView()
                     .getParentView()
-                    .getParentView();
+                    .getParentView()
+                    .model;
                 
-                let type   = renditionView.model.get("type").replace(" ", "-").toLowerCase();
-                let nature = this.getMetadata().get(`app.config.renditions.${type}.nature`);
-                
-                return nature === "image";
+                this.getModelFactory().create("Asset", model => {
+                    model.id = renditionModel.get("assetId");
+                    model.fetch().then(() => {
+                        
+                        this.assetType = this.damConfig.getType(model.get("type"));
+    
+                        let renditionType = renditionModel.get("type");
+                        let showPreview   = this.damConfig.getByType(`${this.assetType}.renditions.${renditionType}.nature`) === "image";
+    
+                        if (showPreview) {
+                            this.actionList.push({
+                                action: "showPreview",
+                                label : "Preview"
+                            });
+                            this.reRender();
+                        }
+                    });
+                });
             }
         });
     }

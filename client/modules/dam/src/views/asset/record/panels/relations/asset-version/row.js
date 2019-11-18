@@ -1,6 +1,8 @@
-Espo.define('dam:views/asset/record/panels/relations/asset-version/row', 'views/record/row-actions/relationship',
-    Dep => {
+Espo.define('dam:views/asset/record/panels/relations/asset-version/row',
+    ['views/record/row-actions/relationship', 'dam:config'],
+    (Dep, Config) => {
         return Dep.extend({
+            damConfig : null,
             
             events: _.extend(Dep.prototype.events, {
                 'click .action': function (e) {
@@ -13,6 +15,11 @@ Espo.define('dam:views/asset/record/panels/relations/asset-version/row', 'views/
                     }
                 }
             }),
+            
+            setup () {
+                this.damConfig = Config.prototype.init.call(this);
+                Dep.prototype.setup.call(this);
+            },
             
             getActionList: function () {
                 let list = [];
@@ -62,8 +69,8 @@ Espo.define('dam:views/asset/record/panels/relations/asset-version/row', 'views/
                     .getParentView()
                     .getParentView();
                 
-                let type   = assetView.model.get("type").replace(" ", "-").toLowerCase();
-                let nature = this.getMetadata().get(`app.config.types.custom.${type}.nature`);
+                let type   = this.damConfig.getType(assetView.model.get("type"));
+                let nature = this.damConfig.getByType(`${type}.nature`);
                 
                 return nature === "image";
             }

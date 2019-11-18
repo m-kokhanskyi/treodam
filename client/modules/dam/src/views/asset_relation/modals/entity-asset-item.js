@@ -1,7 +1,8 @@
-Espo.define('dam:views/asset_relation/modals/entity-asset-item', 'view', function (Dep) {
+Espo.define('dam:views/asset_relation/modals/entity-asset-item', ['view', "dam:config"], (Dep, Config) => {
     return Dep.extend({
-        template: "dam:asset_relation/modals/entity-asset-item",
-        field   : null,
+        template : "dam:asset_relation/modals/entity-asset-item",
+        field    : null,
+        damConfig: null,
         
         data() {
             let data = {
@@ -16,8 +17,10 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', 'view', functio
         },
         
         setup() {
-            let typeCode = this.model.get("assetType").replace(" ", "-").toLowerCase();
-            this.field   = this.getMetadata().get(`app.config.types.custom.${typeCode}.nature`);
+            this.damConfig = Config.prototype.init.call(this);
+            
+            let typeCode = this.damConfig.getType(this.model.get("assetType"));
+            this.field   = this.damConfig.getByType(`${typeCode}.nature`);
             
             this.createView("entityAssetEdit", "dam:views/asset_relation/modals/entity-asset-form", {
                 model: this.model,
@@ -33,7 +36,7 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', 'view', functio
                     notValid = view.validate() || notValid;
                 }
             }
-            return notValid
+            return notValid;
         }
     });
 });

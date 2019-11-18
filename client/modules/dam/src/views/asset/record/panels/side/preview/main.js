@@ -1,8 +1,10 @@
-Espo.define('dam:views/asset/record/panels/side/preview/main', 'view',
-    Dep => {
+Espo.define('dam:views/asset/record/panels/side/preview/main', ['view', "dam:config"],
+    (Dep, Config) => {
         return Dep.extend({
-            template: "dam:asset/record/panels/side/preview/main",
-            events  : {
+            template : "dam:asset/record/panels/side/preview/main",
+            damConfig: null,
+            
+            events   : {
                 'click a[data-action="showImagePreview"]': function (e) {
                     e.stopPropagation();
                     e.preventDefault();
@@ -16,6 +18,7 @@ Espo.define('dam:views/asset/record/panels/side/preview/main', 'view',
                 }
             },
             setup() {
+                this.damConfig = Config.prototype.init.call(this);
                 Dep.prototype.setup.call(this);
                 
                 this.listenTo(this.model, "change:fileId", () => {
@@ -37,10 +40,10 @@ Espo.define('dam:views/asset/record/panels/side/preview/main', 'view',
             },
             _isImage() {
                 if (this.model.get("type")) {
-                    let type = this.model.get("type").replace(" ", "-").toLowerCase();
-                    return this.getMetadata().get(`app.config.types.custom.${type}.preview`)
-                        || this.getMetadata().get(`app.config.types.custom.${type}.nature`) === "image";
-            
+                    let type = this.damConfig.getType(this.model.get("type"));
+                    return this.damConfig.getByType(`${type}.preview`)
+                        || this.damConfig.getByType(`${type}.nature`) === "image";
+                    
                 }
                 return false;
             }

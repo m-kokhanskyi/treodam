@@ -1,7 +1,10 @@
-Espo.define('dam:views/rendition/record/panels/side/preview/detail', 'view',
-    Dep => Dep.extend({
-        template: "dam:rendition/record/panels/side/preview/detail",
-        events  : {
+Espo.define('dam:views/rendition/record/panels/side/preview/detail', ["view", "dam:config"],
+    (Dep, Config) => Dep.extend({
+        template  : "dam:rendition/record/panels/side/preview/detail",
+        damConfig : null,
+        assetType: null,
+        
+        events: {
             'click a[data-action="showImagePreview"]': function (e) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -15,6 +18,22 @@ Espo.define('dam:views/rendition/record/panels/side/preview/detail', 'view',
             }
         },
         
+        setup() {
+            this.damConfig = Config.prototype.init.call(this);
+            Dep.prototype.setup.call(this);
+            
+            if (this.model.get("assetId")) {
+                this.wait(true);
+                this.getModelFactory().create("Asset", model => {
+                    model.id = this.model.get("assetId");
+                    model.fetch().then(() => {
+                        this.assetType = this.damConfig.getType(model.get("type"));
+                        this.wait(false);
+                    });
+                });
+            }
+        },
+        
         data() {
             return {
                 show: this._show()
@@ -22,8 +41,8 @@ Espo.define('dam:views/rendition/record/panels/side/preview/detail', 'view',
         },
         
         _show() {
-            return this.getMetadata().get(`app.config.renditions.${this.model.get("type")}.preview`)
-                || this.getMetadata().get(`app.config.renditions.${this.model.get("type")}.nature`) === "image"
+            return this.damConfig.getByType(`${this.assetType}.renditions.${this.model.get("type")}.preview`)
+                || this.damConfig.getByType(`${this.assetType}.renditions.${this.model.get("type")}.nature`) === "image"
                 || false;
         }
     })

@@ -57,7 +57,7 @@ class Asset extends Base
     {
         $type = ConfigManager::getType($asset->get("type"));
 
-        if (!$this->getConfigManager()->get([$type, "createVersion"])) {
+        if (!$this->getConfigManager()->getByType([$type, "createVersion"])) {
             return true;
         }
 
@@ -87,7 +87,7 @@ class Asset extends Base
     public function getFileInfo(\Dam\Entities\Asset $asset)
     {
         $type   = ConfigManager::getType($asset->get('type'));
-        $nature = $this->getConfigManager()->get([$type, "nature"]);
+        $nature = $this->getConfigManager()->getByType([$type, "nature"]);
 
         $fileInfo = $this->getService("Attachment")->getFileInfo($asset->get("file"));
 

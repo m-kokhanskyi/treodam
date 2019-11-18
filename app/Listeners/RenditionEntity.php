@@ -42,7 +42,7 @@ class RenditionEntity extends AbstractListener
         /**@var $entity Entity* */
         $entity = $event->getArgument("entity");
 
-        $info = $this->getConfigManager()->get([
+        $info = $this->getConfigManager()->getByType([
             ConfigManager::getType($entity->get("asset")->get("type")),
             "renditions",
             $entity->get("type")

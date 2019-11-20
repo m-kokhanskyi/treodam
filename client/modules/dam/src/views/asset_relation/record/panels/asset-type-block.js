@@ -3,7 +3,7 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
         template: "dam:asset_relation/record/panels/asset-type-block",
         sort    : false,
         show    : false,
-        
+
         setup() {
             Dep.prototype.setup.call(this);
             this.sort = this.options.sort || false;
@@ -58,6 +58,11 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
                             parent._refreshAssetPanel();
                             this.model.get('entityModel').fetch();
                         });
+                        if (this.getMetadata().get(['scopes', this.model.get('entityName'), 'advancedFilters'])) {
+                            view.listenTo(view, 'after:render', () => {
+                                this.model.trigger("advanced-filters");
+                            });
+                        }
                         collection.fetch();
                     });
                 });

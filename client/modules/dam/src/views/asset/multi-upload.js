@@ -11,7 +11,7 @@ Espo.define('dam:views/asset/multi-upload', ["view", "dam:config"], function (De
         }, Dep.prototype.events),
         
         setup() {
-            this.damConfig = Config.prototype.setup.call(this);
+            this.damConfig = Config.prototype.init.call(this);
             Dep.prototype.setup.call(this);
         },
         

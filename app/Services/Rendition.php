@@ -189,11 +189,11 @@ class Rendition extends \Espo\Core\Templates\Services\Base
             $imageInfo = $attachmentService->getImageInfo($attachmentEntity, $path);
             if ($imageInfo) {
                 $entity->set([
-                    "width"       => $imageInfo['width'],
-                    "height"      => $imageInfo['height'],
-                    "colorSpace"  => $imageInfo['color_space'],
-                    "colorDepth"  => $imageInfo['color_depth'],
-                    "orientation" => $imageInfo['orientation'],
+                    $this->attributeMapping("width")       => $imageInfo['width'],
+                    $this->attributeMapping("height")      => $imageInfo['height'],
+                    $this->attributeMapping("color-space") => $imageInfo['color_space'],
+                    $this->attributeMapping("color-depth") => $imageInfo['color_depth'],
+                    $this->attributeMapping("orientation") => $imageInfo['orientation'],
                 ]);
             }
 
@@ -209,7 +209,10 @@ class Rendition extends \Espo\Core\Templates\Services\Base
 
     public function rebuildNames(\Dam\Entities\Asset $asset)
     {
-        $renditionRules = $this->getConfigManager()->getByType([ConfigManager::getType($asset->get('type')), "renditions"]);
+        $renditionRules = $this->getConfigManager()->getByType([
+            ConfigManager::getType($asset->get('type')),
+            "renditions",
+        ]);
 
         foreach ($renditionRules as $key => $rules) {
             if (!$rules['auto'] || stripos(($rules['fileNameMask'] ?? ""), "{{original}}") === false) {
@@ -315,6 +318,11 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     protected function getQueueManager()
     {
         return $this->getInjection("queueManager");
+    }
+
+    protected function attributeMapping(string $name): string
+    {
+        return $this->getConfigManager()->get(["attributeMapping", $name, "field"]) ?? $name;
     }
 }
 

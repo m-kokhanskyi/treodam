@@ -104,11 +104,26 @@ class Asset extends Base
 
     public function updateAttributes(\Dam\Entities\Asset $asset, array $imageInfo)
     {
-        $asset->set("height", ($imageInfo['height'] ?? false) ? $imageInfo['height'] : null);
-        $asset->set("width", ($imageInfo['width'] ?? false) ? $imageInfo['width'] : null);
-        $asset->set("colorSpace", ($imageInfo['color_space'] ?? false) ? $imageInfo['color_space'] : null);
-        $asset->set("colorDepth", ($imageInfo['color_depth'] ?? false) ? $imageInfo['color_depth'] : null);
-        $asset->set("orientation", ($imageInfo['orientation'] ?? false) ? $imageInfo['orientation'] : null);
+        $asset->set(
+            $this->attributeMapping("height"),
+            ($imageInfo['height'] ?? false) ? $imageInfo['height'] : null
+        );
+        $asset->set(
+            $this->attributeMapping("width"),
+            ($imageInfo['width'] ?? false) ? $imageInfo['width'] : null
+        );
+        $asset->set(
+            $this->attributeMapping("color-space"),
+            ($imageInfo['color_space'] ?? false) ? $imageInfo['color_space'] : null
+        );
+        $asset->set(
+            $this->attributeMapping("color-depth"),
+            ($imageInfo['color_depth'] ?? false) ? $imageInfo['color_depth'] : null
+        );
+        $asset->set(
+            $this->attributeMapping("orientation"),
+            ($imageInfo['orientation'] ?? false) ? $imageInfo['orientation'] : null
+        );
     }
 
     public function getRelationsCount(Entity $entity)
@@ -225,6 +240,11 @@ class Asset extends Base
             $key !== "ownerUser"
             &&
             !$this->skipEntityAssets($key);
+    }
+
+    protected function attributeMapping(string $name): string
+    {
+        return $this->getConfigManager()->get(["attributeMapping", $name, "field"]) ?? $name;
     }
 
     private function getTranslate($label, $category, $scope)

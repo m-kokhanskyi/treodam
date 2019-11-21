@@ -1,5 +1,5 @@
 {
-  "types"     : {
+  "types"            : {
     "global" : {},
     "default": {},
     "custom" : {
@@ -393,7 +393,7 @@
       }
     }
   },
-  "renditions": {
+  "renditions"       : {
     "githumb1" : {
       "auto"         : true,
       "nature"       : "image",
@@ -457,53 +457,23 @@
     }
   },
   "attributesMapping": {
-    "width"      : {
-      "type"    : "integer",
-      "label"   : "width",
-      "required": false,
-      "readOnly": true
-    },
-    "height"     : {
-      "type"    : "integer",
-      "label"   : "height",
-      "required": false,
-      "readOnly": true
-    },
-    "file-type"  : {
-      "type"    : "string",
-      "label"   : "File Type",
-      "required": false,
-      "readOnly": true
-    },
-    "color-space": {
-      "type"    : "string",
-      "label"   : "Color Space",
-      "required": false,
-      "readOnly": true
-    },
-    "color-depth": {
-      "type"    : "string",
-      "label"   : "Color Depth",
-      "required": false,
-      "readOnly": true
+    "size"       : {
+      "field": "size"
     },
     "orientation": {
-      "type"    : "string",
-      "label"   : "Orientation",
-      "required": false,
-      "readOnly": true
+      "field": "orientation"
     },
-    "alt"        : {
-      "type"    : "string",
-      "label"   : "Alt",
-      "required": false,
-      "readOnly": false
+    "width"      : {
+      "field": "width"
     },
-    "title"      : {
-      "type"    : "string",
-      "label"   : "Title",
-      "required": false,
-      "readOnly": false
+    "height"     : {
+      "field": "height"
+    },
+    "color-depth": {
+      "field": "colorDepth"
+    },
+    "color-space": {
+      "field": "colorSpace"
     }
   }
 }

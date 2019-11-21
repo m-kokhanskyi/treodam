@@ -48,17 +48,16 @@ class ConfigManager
         return $this;
     }
 
+    /**
+     * @param array $path
+     * @param array $config
+     * @return array|mixed|null|string
+     */
     public function get(array $path, array $config = [])
     {
         if (!$config) {
             $config = $this->getConfig();
         }
-
-        if (!isset($config['custom'][$path[0]])) {
-            return $config['default'];
-        }
-
-        $config = $config['custom'];
 
         foreach ($path as $pathItem) {
             if (isset($config[$pathItem])) {
@@ -75,7 +74,11 @@ class ConfigManager
     {
         $config = $this->getConfig();
 
-        return $this->get($path, $config['type']);
+        if (!isset($config['type']['custom'][$path[0]])) {
+            return $config['default'];
+        }
+
+        return $this->get($path, $config['type']['custom']);
     }
 
     public function run()

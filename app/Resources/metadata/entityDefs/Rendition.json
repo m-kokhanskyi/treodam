@@ -89,7 +89,7 @@
       "required"         : false,
       "disableFormatting": false,
       "audited"          : false,
-      "readOnly"         : false,
+      "readOnly"         : true,
       "tooltip"          : false
     },
     "height"           : {
@@ -97,7 +97,7 @@
       "required"         : false,
       "disableFormatting": false,
       "audited"          : false,
-      "readOnly"         : false,
+      "readOnly"         : true,
       "tooltip"          : false
     },
     "size"             : {
@@ -105,7 +105,7 @@
       "required": false,
       "measure" : "File Size",
       "audited" : false,
-      "readOnly": false,
+      "readOnly": true,
       "tooltip" : false
     },
     "colorDepth"       : {
@@ -113,7 +113,7 @@
       "required": false,
       "trim"    : true,
       "audited" : false,
-      "readOnly": false,
+      "readOnly": true,
       "tooltip" : false
     },
     "colorSpace"       : {
@@ -121,7 +121,7 @@
       "required": false,
       "trim"    : true,
       "audited" : false,
-      "readOnly": false,
+      "readOnly": true,
       "tooltip" : false
     },
     "orientation"      : {
@@ -129,7 +129,7 @@
       "required": false,
       "trim"    : true,
       "audited" : false,
-      "readOnly": false,
+      "readOnly": true,
       "tooltip" : false
     },
     "asset"            : {

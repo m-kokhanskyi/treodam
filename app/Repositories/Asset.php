@@ -45,13 +45,13 @@ class Asset extends Base implements DAMAttachment
     {
         return [
             ($entity->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/",
-            $entity->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC
+            $entity->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC,
         ];
     }
 
     public function linkAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)
     {
-        return $this->getMapper()->relate($foreign, "relatedAssets", $main);
+        return $this->getMapper()->relate($main, "relatedAssets", $foreign);
     }
 
     public function unlinkAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)

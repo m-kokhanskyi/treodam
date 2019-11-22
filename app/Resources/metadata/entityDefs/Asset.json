@@ -1,12 +1,5 @@
 {
   "fields"    : {
-    "relatedAssets"  : {
-      "type"                    : "linkMultiple",
-      "layoutDetailDisabled"    : true,
-      "layoutMassUpdateDisabled": true,
-      "importDisabled"          : true,
-      "noLoad"                  : true
-    },
     "height"         : {
       "type"             : "int",
       "required"         : false,
@@ -232,19 +225,16 @@
       "audited" : false,
       "readOnly": true,
       "tooltip" : false
+    },
+    "relatedAssets": {
+      "type": "linkMultiple",
+      "layoutDetailDisabled": true,
+      "layoutMassUpdateDisabled": true,
+      "importDisabled": true,
+      "noLoad": true
     }
   },
   "links"     : {
-    "relatedAssets"  : {
-      "type"        : "hasMany",
-      "relationName": "assetAsset",
-      "entity"      : "Asset",
-      "audited"     : false,
-      "midKeys"     : [
-        "leftId",
-        "rightId"
-      ]
-    },
     "renditions"     : {
       "type"       : "hasMany",
       "foreign"    : "asset",
@@ -312,6 +302,31 @@
       "audited"     : false,
       "entityAsset" : false,
       "disableMassRelation": true
+    },
+    "relatedAssets": {
+      "type": "hasMany",
+      "relationName": "assetAsset",
+      "foreign": "assetsLeft",
+      "entity": "Asset",
+      "audited": false,
+      "isCustom": true,
+      "midKeys": [
+        "leftId",
+        "rightId"
+      ]
+    },
+    "assetsLeft": {
+      "type": "hasMany",
+      "relationName": "assetAsset",
+      "foreign": "relatedAssets",
+      "entity": "Asset",
+      "layoutRelationshipsDisabled" : true,
+      "audited": false,
+      "isCustom": true,
+      "midKeys": [
+        "rightId",
+        "leftId"
+      ]
     }
   },
   "collection": {

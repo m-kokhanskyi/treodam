@@ -132,6 +132,10 @@ class AssetEntity extends AbstractListener
         $foreign = $event->getArgument('foreign');
         $entity  = $event->getArgument('entity');
 
+        if (is_string($foreign) && $event->getArgument("relationName") === "assetsLeft") {
+            $foreign = $this->getEntityManager()->getEntity("Asset", $foreign);
+        }
+
         //check any relation for inactive assets
         if (!$entity->get("isActive")) {
             throw new BadRequest($this->getLanguage()->translate("CantAddInActive", 'exceptions', 'Asset'));

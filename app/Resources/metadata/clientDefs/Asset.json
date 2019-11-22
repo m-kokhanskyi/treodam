@@ -34,6 +34,13 @@
         "label": "",
         "view" : "dam:views/asset/record/panels/side/preview/main"
       }
+    ],
+    "editSmall" : [
+      {
+        "name" : "preview",
+        "label": "",
+        "view" : "dam:views/asset/record/panels/side/preview/main"
+      }
     ]
   },
   "controller"          : "dam:controllers/asset",
@@ -51,9 +58,7 @@
     ]
   },
   "modalViews"          : {
-    "select"   : "dam:views/asset/modals/select-records",
-    "edit"     : "dam:views/asset/modals/multi-create",
-    "quickEdit": "views/modals/edit"
+    "select"   : "dam:views/asset/modals/select-records"
   },
   "views"               : {
     "list" : "dam:views/asset/list",

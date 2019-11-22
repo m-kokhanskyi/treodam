@@ -4,7 +4,7 @@ Espo.define('dam:views/asset/record/panels/side/preview/main', ['view', "dam:con
             template : "dam:asset/record/panels/side/preview/main",
             damConfig: null,
             
-            events   : {
+            events: {
                 'click a[data-action="showImagePreview"]': function (e) {
                     e.stopPropagation();
                     e.preventDefault();
@@ -27,7 +27,8 @@ Espo.define('dam:views/asset/record/panels/side/preview/main', ['view', "dam:con
             },
             data() {
                 return {
-                    showImage: this._showImage()
+                    showImage: this._showImage(),
+                    path     : this.options.el
                 };
             },
             _showImage() {

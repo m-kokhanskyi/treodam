@@ -3,7 +3,7 @@
 </div>
 
 <style>
-    .image-preview {
+    {{{path}}} .image-preview {
         max-height: 100%;
         max-width: 100%;
         background-image: linear-gradient(45deg, #cccccc 25%, transparent 25%), linear-gradient(-45deg, #cccccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #cccccc 75%), linear-gradient(-45deg, transparent 75%, #cccccc 75%);

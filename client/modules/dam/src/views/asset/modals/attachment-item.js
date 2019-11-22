@@ -37,7 +37,6 @@ Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields
                 return data;
             },
             setup() {
-                debugger;
                 this.damConfig = Config.prototype.init.call(this);
                 
                 let type   = this.options.type || null;

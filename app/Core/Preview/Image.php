@@ -28,7 +28,7 @@ class Image extends Base
             throw new NotFound();
         }
 
-        if (!empty($this->size) && !$this->size === "original") {
+        if (!empty($this->size) && $this->size !== "original") {
             if (!empty($this->imageSizes[$this->size])) {
                 $thumbFilePath = $this->buildPath($this->attachment, $this->size);
 

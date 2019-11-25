@@ -1,6 +1,6 @@
 <?php
 
-
+declare(strict_types=1);
 namespace Dam\EntryPoints;
 
 use Dam\Core\Download\Custom;

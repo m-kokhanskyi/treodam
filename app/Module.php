@@ -23,8 +23,8 @@ declare(strict_types=1);
 namespace Dam;
 
 use Espo\Core\Utils\DataUtil;
-use Treo\Core\Utils\Metadata;
 use Treo\Core\ModuleManager\AbstractModule;
+use Treo\Core\Utils\Metadata;
 
 /**
  * Class Module
@@ -67,5 +67,13 @@ class Module extends AbstractModule
 
         $data = DataUtil::merge($data, $metadata);
 
+    }
+
+    /**
+     * @return string|\Treo\Core\ModuleManager\string
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 }

@@ -1,6 +1,5 @@
 <?php
-
-
+declare(strict_types=1);
 namespace Dam\Core\Utils;
 
 
@@ -70,6 +69,7 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         if ($params['entity'] === "Asset" || $params['entityForeign'] === "Asset") {
             $this->createAssetRelations($params);
             $this->createRelation();
+            $this->createMassUploadAsset($params);
         }
 
         return $res;
@@ -135,6 +135,22 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         ]);
 
         return $this->getMetadata()->save();
+    }
+
+    protected function createMassUploadAsset(array $params)
+    {
+        $link   = $params['entityForeign'] === "Asset" ? $params['link'] : $params['linkForeign'];
+        $entity = $params['entity'] === "Asset" ? $params['entityForeign'] : $params['entity'];
+
+        $this->getMetadata()->set("clientDefs", $entity, [
+            "relationshipPanels" => [
+                $link => [
+                    "view" => "dam:views/asset/record/panels/bottom-panel"
+                ],
+            ],
+        ]);
+
+        $this->getMetadata()->save();
     }
 
     protected function deleteAssetRelations($params)

@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace Dam;
 
+use Dam\Core\Utils\Util;
 use Treo\Core\ModuleManager\AbstractEvent;
 use Treo\Core\Utils\Metadata;
 
@@ -225,7 +226,18 @@ class Event extends AbstractEvent
 
     protected function installConfig()
     {
-        (new \Dam\Core\ConfigManager($this->getContainer()))->convert()->run();
+        if (file_exists("data/dam/config.yaml")) {
+            return true;
+        }
+
+        $damModule = $this->getContainer()->get('moduleManager')->getModule("Dam");
+
+        copy($damModule->getPath() . "/app/config.yaml", "data/dam/config.yaml");
+
+        file_put_contents(
+            "data/dam/config.php",
+            "<?php " . PHP_EOL . "return " . $this->container->get("FileManager")->varExport(yaml_parse_file("data/dam/config.yaml")) . ";" . PHP_EOL
+        );
     }
 
     /**

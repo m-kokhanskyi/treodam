@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Dam\Core\Download;
 
 use Dam\Entities\Attachment;

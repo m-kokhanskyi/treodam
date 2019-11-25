@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************
  * This file is part of EspoCRM.
  *
@@ -26,7 +27,7 @@
  * In accordance with Section 7(b) of the GNU General Public License version 3,
  * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
  ************************************************************************/
-
+declare(strict_types=1);
 namespace Dam\EntryPoints;
 
 use Dam\Core\FileStorage\DAMUploadDir;

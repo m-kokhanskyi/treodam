@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Dam\Services;
 
 class AssetMetaData extends \Espo\Core\Templates\Services\Base

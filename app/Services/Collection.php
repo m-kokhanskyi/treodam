@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Dam\Services;
 
 class Collection extends \Espo\Core\Templates\Services\Base

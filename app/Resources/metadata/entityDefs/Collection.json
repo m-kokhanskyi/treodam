@@ -85,7 +85,8 @@
             "type": "hasMany",
             "foreign": "collection",
             "entity": "Asset",
-            "audited": false
+            "audited": false,
+            "disableMassRelation": true
         },
         "createdBy": {
             "type": "belongsTo",

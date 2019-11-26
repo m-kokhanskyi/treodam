@@ -309,7 +309,6 @@
       "foreign": "assetsLeft",
       "entity": "Asset",
       "audited": false,
-      "isCustom": true,
       "midKeys": [
         "leftId",
         "rightId"
@@ -322,11 +321,11 @@
       "entity": "Asset",
       "layoutRelationshipsDisabled" : true,
       "audited": false,
-      "isCustom": true,
       "midKeys": [
         "rightId",
         "leftId"
-      ]
+      ],
+      "disableMassRelation": true
     }
   },
   "collection": {

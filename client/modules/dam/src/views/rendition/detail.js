@@ -1,7 +1,7 @@
 Espo.define('dam:views/rendition/detail', 'dam:views/detail',
     Dep => Dep.extend({
-
         assetModel: null,
+        
         setupHeader: function () {
             this.waitForView("header");
             if (this.model.has("assetId")) {

@@ -27,7 +27,7 @@ Espo.define('dam:views/asset/record/plate', 'views/record/list',
         name: 'plate',
 
         listContainerEl: '.list > div > .plate > .row',
-
+    
         massActionList              : ['remove', 'massUpdate'],
     
         checkAllResultMassActionList: ['remove', 'massUpdate'] ,

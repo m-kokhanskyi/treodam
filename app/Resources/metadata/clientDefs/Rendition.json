@@ -29,7 +29,8 @@
   "relationshipPanels": {
     "assetMetaDatas"   : {
       "select": false,
-      "create": false
+      "create": false,
+      "view": "dam:views/asset/record/panels/relations/asset-meta-data/main"
     },
     "renditionVersions": {
       "select"        : false,

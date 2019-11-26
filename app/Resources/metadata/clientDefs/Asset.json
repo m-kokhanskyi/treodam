@@ -8,15 +8,15 @@
       }
     ]
   },
-  "sidePanels" : {
-    "edit" : [
+  "sidePanels"          : {
+    "edit"       : [
       {
         "name" : "preview",
         "label": "",
         "view" : "dam:views/asset/record/panels/side/preview/main"
       }
     ],
-    "detail" : [
+    "detail"     : [
       {
         "name" : "custom_download",
         "label": "Custom Download",
@@ -28,14 +28,14 @@
         "view" : "dam:views/asset/record/panels/side/preview/main"
       }
     ],
-    "detailSmall" : [
+    "detailSmall": [
       {
         "name" : "preview",
         "label": "",
         "view" : "dam:views/asset/record/panels/side/preview/main"
       }
     ],
-    "editSmall" : [
+    "editSmall"  : [
       {
         "name" : "preview",
         "label": "",
@@ -58,7 +58,7 @@
     ]
   },
   "modalViews"          : {
-    "select"   : "dam:views/asset/modals/select-records"
+    "select": "dam:views/asset/modals/select-records"
   },
   "views"               : {
     "list" : "dam:views/asset/list",
@@ -203,13 +203,14 @@
       "view"  : "dam:views/asset/record/panels/rendition"
     },
     "assetMetaDatas" : {
-      "select": false,
-      "create": false
+      "select"        : false,
+      "create"        : false,
+      "view": "dam:views/asset/record/panels/relations/asset-meta-data/main"
     },
-    "assetVersions" : {
-      "select": false,
-      "create": false,
-      "rowActionsView"  : "dam:views/asset/record/panels/relations/asset-version/row"
+    "assetVersions"  : {
+      "select"        : false,
+      "create"        : false,
+      "rowActionsView": "dam:views/asset/record/panels/relations/asset-version/row"
     },
     "relatedAssets"  : {
       "selectBoolFilterList": [

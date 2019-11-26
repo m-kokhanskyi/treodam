@@ -28,6 +28,10 @@ Espo.define('dam:views/asset/record/plate', 'views/record/list',
 
         listContainerEl: '.list > div > .plate > .row',
 
+        massActionList              : ['remove', 'massUpdate'],
+    
+        checkAllResultMassActionList: ['remove', 'massUpdate'] ,
+        
         events: _.extend({
             'click .item-container': function (e) {
                 const id = $(e.currentTarget).data('id');

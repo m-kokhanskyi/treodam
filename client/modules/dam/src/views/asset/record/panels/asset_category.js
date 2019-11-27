@@ -24,23 +24,26 @@ Espo.define('dam:views/asset/record/panels/asset_category', 'views/record/panels
             notSelectCategories: function () {
                 return this.model.id;
             },
-            byCollection : function () {
+            byCollection       : function () {
                 return this.model.attributes.collectionId;
             }
         },
         
         setup() {
+            this.defs.createAction = "createAssetCategory";
             Dep.prototype.setup.call(this);
             
-            let select = this.actionList.find(item => item.action === (this.defs.selectAction || 'selectRelated'));
+            let select = this.actionList.find(item => item.action === (
+                this.defs.selectAction || 'selectRelated'
+            ));
             
             if (select) {
                 select.data = {
-                    link: this.link,
-                    scope: this.scope,
+                    link                  : this.link,
+                    scope                 : this.scope,
                     boolFilterListCallback: 'getSelectBoolFilterList',
                     boolFilterDataCallback: 'getSelectBoolFilterData',
-                    primaryFilterName: this.defs.selectPrimaryFilterName || null
+                    primaryFilterName     : this.defs.selectPrimaryFilterName || null
                 };
             }
         },
@@ -58,8 +61,40 @@ Espo.define('dam:views/asset/record/panels/asset_category', 'views/record/panels
         },
         
         getSelectBoolFilterList() {
-            return this.defs.selectBoolFilterList || null
+            return this.defs.selectBoolFilterList || null;
         },
+        
+        actionCreateAssetCategory: function (data) {
+            data = data || {};
+        
+            var link        = data.link;
+            var scope       = this.model.defs['links'][link].entity;
+            var foreignLink = this.model.defs['links'][link].foreign;
+            
+            var attributes = {};
+            
+            this.notify('Loading...');
+            
+            this.createView('quickCreate', "dam:views/asset/record/panels/relations/asset-category/modals/create", {
+                scope           : scope,
+                fullFormDisabled: true,
+                relate          : {
+                    model: this.model,
+                    link : foreignLink
+                },
+                attributes      : attributes,
+                assetModel      : this.model
+            }, function (view) {
+                view.render();
+                view.notify(false);
+                this.listenToOnce(view, 'after:save', function () {
+                    this.collection.fetch();
+                    this.model.trigger('after:relate');
+                }, this);
+            }.bind(this));
+            
+            return false;
+        }
         
     })
 );

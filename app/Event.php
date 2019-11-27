@@ -232,6 +232,10 @@ class Event extends AbstractEvent
 
         $damModule = $this->getContainer()->get('moduleManager')->getModule("Dam");
 
+        if (!is_dir("data/dam")) {
+            mkdir("data/dam");
+        }
+
         copy($damModule->getPath() . "/app/config.yaml", "data/dam/config.yaml");
 
         file_put_contents(

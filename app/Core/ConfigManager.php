@@ -9,8 +9,6 @@ use Treo\Core\Container;
 class ConfigManager
 {
     protected $container;
-    protected $jsonConfig;
-    protected $customValue;
     protected $config;
 
     const PATH_TO_DAM    = "data/dam";

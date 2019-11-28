@@ -21,7 +21,13 @@ class AssetRelation extends Base
             $relatedEntity = $entity1;
         }
 
-        if ($this->checkRules($relatedEntity) && !$this->checkDuplicate($assetEntity, $relatedEntity)) {
+        $r = 1;
+
+        if (
+            !$this->isRelatedAssets($assetEntity, $relatedEntity)
+            && $this->checkRules($relatedEntity)
+            && !$this->checkDuplicate($assetEntity, $relatedEntity)
+        ) {
             $this->deleteBelongsRelations($assetEntity, $relatedEntity);
             $this->getRepository()->createLink($assetEntity, $relatedEntity, $assignedUserId);
         }
@@ -253,6 +259,11 @@ class AssetRelation extends Base
         }
 
         return true;
+    }
+
+    protected function isRelatedAssets($entity1, $entity2)
+    {
+        return get_class($entity1) === get_class($entity2);
     }
 
 }

@@ -121,6 +121,12 @@ class Versions extends Base
 
         header('Content-Description: File Transfer');
 
+        $type = mime_content_type($path);
+
+        if ($type) {
+            header('Content-Type: ' . $type);
+        }
+
         header("Content-Disposition: attachment;filename=\"" . $outputFileName . "\"");
         header('Expires: 0');
         header('Cache-Control: must-revalidate');

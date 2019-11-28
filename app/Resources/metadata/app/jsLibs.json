@@ -3,5 +3,8 @@
     "path"     : "client/modules/dam/lib/tree.jquery.js",
     "exportsTo": "$",
     "exportsAs": "jsTree"
+  },
+  "crypto" : {
+    "path"     : "client/modules/dam/lib/crypto-js.min.js"
   }
 }

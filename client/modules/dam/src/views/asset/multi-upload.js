@@ -1,8 +1,9 @@
-Espo.define('dam:views/asset/multi-upload', ["view", "dam:config"], function (Dep, Config) {
+Espo.define('dam:views/asset/multi-upload', ["view", "dam:config", "lib!crypto"], function (Dep, Config) {
     return Dep.extend({
-        template : "dam:asset/multi-upload",
-        size     : {},
-        damConfig: null,
+        template      : "dam:asset/multi-upload",
+        size          : {},
+        damConfig     : null,
+        attachmentHash: [],
         
         events: _.extend({
             'change input[data-name="upload"]': function (e) {
@@ -65,25 +66,48 @@ Espo.define('dam:views/asset/multi-upload', ["view", "dam:config"], function (De
                 this.getModelFactory().create('Attachment', function (model) {
                     let fileReader    = new FileReader();
                     fileReader.onload = function (e) {
-                        model.set('name', file.name);
-                        model.set('type', file.type || 'text/plain');
-                        model.set('role', 'Attachment');
-                        model.set('size', file.size);
-                        model.set('relatedType', "Asset");
-                        model.set('file', e.target.result);
-                        model.set('field', 'file');
-                        model.set('modelAttributes', this.model);
-                        model.save({}, {timeout: 0}).then(function () {
-                            this.collection.push(model);
+                        if (this._isDuplicate(e)) {
+                            this.notify("Is Duplicate", "error");
                             resolve();
-                        }.bind(this)).fail(function () {
-                            resolve();
-                        }.bind(this));
+                        } else {
+                            model.set('name', file.name);
+                            model.set('type', file.type || 'text/plain');
+                            model.set('role', 'Attachment');
+                            model.set('size', file.size);
+                            model.set('relatedType', "Asset");
+                            model.set('file', e.target.result);
+                            model.set('field', 'file');
+                            model.set('modelAttributes', this.model);
+                            model.save({}, {timeout: 0}).then(function () {
+                                this.collection.push(model);
+                                resolve();
+                            }.bind(this)).fail(function () {
+                                resolve();
+                            }.bind(this));
+                        }
                     }.bind(this);
                     fileReader.readAsDataURL(file);
                     
                 }.bind(this));
             });
+        },
+        
+        _isDuplicate(e) {
+            let type = this.damConfig.getType(this.model.get("type"));
+            
+            if (this.damConfig.getByType(`${type}.validations.unique`) === null) {
+                return false;
+            }
+            
+            let hash = CryptoJS.MD5(e.currentTarget.result).toString();
+            
+            if (this.attachmentHash.find(i => hash === i)) {
+                return true;
+            }
+            
+            this.attachmentHash.push(hash);
+            
+            return false;
         }
     });
 });

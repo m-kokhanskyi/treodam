@@ -33,9 +33,7 @@ Espo.define('dam:views/asset/multi-upload', ["view", "dam:config"], function (De
             Promise.all(pList).then(r => {
                 this.collection.trigger("upload:done", r);
             }).catch(r => {
-                if (this.collection.length > 0) {
-                    this.collection.trigger("upload:done", r);
-                }
+                this.collection.trigger("upload:done", r);
             });
         },
         
@@ -79,7 +77,7 @@ Espo.define('dam:views/asset/multi-upload', ["view", "dam:config"], function (De
                             this.collection.push(model);
                             resolve();
                         }.bind(this)).fail(function () {
-                            reject();
+                            resolve();
                         }.bind(this));
                     }.bind(this);
                     fileReader.readAsDataURL(file);

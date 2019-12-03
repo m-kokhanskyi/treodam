@@ -35,11 +35,6 @@ Espo.define('dam:views/asset/record/panels/relations', 'treo-core:views/record/p
                                 el   : this.options.el + ' .group[data-name="' + model.get("name") + '"]'
                             };
                             
-                            if (showFirst) {
-                                params.show = true;
-                                showFirst   = false;
-                            }
-                            
                             this.blocks.push(model.get("name"));
                             this.createView(model.get('name'), "dam:views/asset/record/panels/entity-block", params);
                         });

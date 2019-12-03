@@ -1,7 +1,7 @@
 Espo.define('dam:views/asset_relation/modals/entity-asset-item', ['view', "dam:config"], (Dep, Config) => {
     return Dep.extend({
         template : "dam:asset_relation/modals/entity-asset-item",
-        field    : null,
+        type     : null,
         damConfig: null,
         
         data() {
@@ -9,7 +9,7 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', ['view', "dam:c
                 'assetSize': `${this.model.get("assetSize")} kb`
             };
             
-            if (this.field === "image") {
+            if (this._showPreview()) {
                 data.preview = `?entryPoint=preview&size=small&id=${this.model.get("assetId")}`;
             }
             
@@ -19,8 +19,7 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', ['view', "dam:c
         setup() {
             this.damConfig = Config.prototype.init.call(this);
             
-            let typeCode = this.damConfig.getType(this.model.get("assetType"));
-            this.field   = this.damConfig.getByType(`${typeCode}.nature`);
+            this.type = this.damConfig.getType(this.model.get("assetType"));
             
             this.createView("entityAssetEdit", "dam:views/asset_relation/modals/entity-asset-form", {
                 model: this.model,
@@ -37,6 +36,11 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', ['view', "dam:c
                 }
             }
             return notValid;
+        },
+        
+        _showPreview() {
+            let config = this.damConfig.getByType(this.type);
+            return config.nature === "image" || config.preview;
         }
     });
 });

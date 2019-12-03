@@ -6,9 +6,7 @@ Espo.define('dam:views/asset/record/panels/entity-block', 'view',
                 Dep.prototype.setup.call(this);
                 
                 this.createHeaderBlock();
-                if (this.options.show) {
-                    this.showInfo();
-                }
+                this.showInfo();
             },
             
             createHeaderBlock() {

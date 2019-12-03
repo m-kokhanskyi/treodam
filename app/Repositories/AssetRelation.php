@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Dam\Repositories;
 
 use Dam\Core\ORM\Query\DamQuery;
@@ -80,22 +81,25 @@ class AssetRelation extends Base
         });
 
         $select = $this->getDamQuery()->createSelectStatement($entity, $fieldsList);
+        $joins  = $this->getDamQuery()->buildJoins($entity);
 
         if ($entityName === "Asset") {
 
             $tableName = $this->getDamQuery()->toDb($type);
 
-            $sql  = "    SELECT {$select}, {$tableName}.name as relatedEntityName
+            $sql  = "    SELECT {$select}, {$tableName}.name as relatedEntityName, 'asset' as scope
                     FROM asset_relation
                     INNER JOIN {$tableName} ON ({$tableName}.id = asset_relation.entity_id)
+                    " . ($joins ? $joins : "") . "
                     WHERE asset_relation.asset_id = ?
                         AND {$tableName}.deleted = '0'
                         AND asset_relation.deleted = '0'";
             $data = [$entityId];
         } else {
-            $sql  = "    SELECT {$select}, CONCAT(asset.name, ' / ', asset.size) as relatedEntityName
+            $sql  = "    SELECT {$select}, asset.name as relatedEntityName, 'entity' as scope 
                     FROM asset_relation
                     INNER JOIN asset ON (asset.id = asset_relation.asset_id)
+                     " . ($joins ? $joins : "") . "
                     WHERE asset_relation.entity_id = ?
                         AND asset_relation.entity_name = ?
                         AND asset.type = ?
@@ -118,6 +122,7 @@ class AssetRelation extends Base
         });
 
         $select = $this->getDamQuery()->createSelectStatement($entity, $fieldsList);
+        $joins  = $this->getDamQuery()->buildJoins($entity);
 
         $sql  = "   SELECT {$select}, 
                         asset.name as assetName, 
@@ -125,6 +130,7 @@ class AssetRelation extends Base
                         asset.type as assetType
                     FROM asset_relation
                     INNER JOIN asset ON (asset.id = asset_relation.asset_id)
+                    " . ($joins ? $joins : "") . "
                     WHERE asset_relation.entity_id = ?
                         AND asset_relation.entity_name = ?
                         AND asset.deleted = '0'

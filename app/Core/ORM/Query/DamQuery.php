@@ -24,4 +24,9 @@ class DamQuery extends \Espo\ORM\DB\Query\Base
     {
         // TODO: Implement limit() method.
     }
+
+    public function buildJoins(IEntity $entity, $select = null, $skipList = [])
+    {
+        return $this->getBelongsToJoins($entity, $select, $skipList);
+    }
 }

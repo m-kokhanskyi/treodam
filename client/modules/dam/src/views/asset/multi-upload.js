@@ -12,6 +12,8 @@ Espo.define('dam:views/asset/multi-upload', ["view", "dam:config", "lib!crypto"]
         }, Dep.prototype.events),
         
         setup() {
+            this.attachmentHash = [];
+            
             this.damConfig = Config.prototype.init.call(this);
             Dep.prototype.setup.call(this);
         },

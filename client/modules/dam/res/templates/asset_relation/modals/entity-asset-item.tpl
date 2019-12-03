@@ -30,5 +30,9 @@
     .edit-form .panel {
         margin-bottom : 0;
     }
+
+    .edit-form .overview {
+        min-height : 1px !important;
+    }
 </style>
 

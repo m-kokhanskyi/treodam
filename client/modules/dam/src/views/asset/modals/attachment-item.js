@@ -2,7 +2,7 @@ Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields
     function (Dep, Code, Config) {
         return Dep.extend({
             template : "dam:asset/modals/attachment-item",
-            field    : null,
+            type    : null,
             damConfig: null,
             
             events: {
@@ -29,9 +29,9 @@ Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields
                         parseInt(this.model.get("size")) / 1024
                     ).toFixed(2) + " kb"
                 };
-                
-                if (this.field === "image") {
-                    data.preview = `?entryPoint=image&size=small&id=${this.model.id}`;
+    
+                if (this._showPreview()) {
+                    data.preview = `?entryPoint=preview&size=small&id=${this.model.id}&type=attachment`;
                 }
                 
                 return data;
@@ -42,8 +42,7 @@ Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields
                 let type   = this.options.type || null;
                 let access = this.options.private;
                 
-                let typeCode = this.damConfig.getType(type);
-                this.field   = this.damConfig.getByType(`${typeCode}.nature`);
+                this.type   = this.damConfig.getType(type);
                 
                 this.getModelFactory().create("Asset", model => {
                     
@@ -69,6 +68,11 @@ Espo.define('dam:views/asset/modals/attachment-item', ['view', "dam:views/fields
                 name = name.split('.');
                 name.pop();
                 return name.join('.');
+            },
+            
+            _showPreview() {
+                let config = this.damConfig.getByType(this.type);
+                return config.nature === "image" || config.preview;
             }
         });
     });

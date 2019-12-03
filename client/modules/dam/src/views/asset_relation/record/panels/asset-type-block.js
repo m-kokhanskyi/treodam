@@ -2,18 +2,15 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
     Dep => Dep.extend({
         template: "dam:asset_relation/record/panels/asset-type-block",
         sort    : false,
-        show    : false,
-
+        show    : true,
+        
         setup() {
             Dep.prototype.setup.call(this);
             this.sort = this.options.sort || false;
-            this.show = this.options.show || false;
             this.createHeaderBlock();
             
             this.listenTo(this, "after:render", () => {
-                if (this.show) {
-                    this.showInfo();
-                }
+                this.showInfo();
             });
         },
         
@@ -34,7 +31,7 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
             } else {
                 this.getCollectionFactory().create("AssetRelation", (collection) => {
                     collection.url = `AssetRelation/byEntity/${this.model.get('entityName')}/${this.model.get('entityId')}?type=${this.model.get('name')}`;
-                    
+                    collection.sortBy = "";
                     this.collection = collection;
                     this.createView('list', "dam:views/asset_relation/record/list", {
                         collection          : this.collection,

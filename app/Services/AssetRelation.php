@@ -89,8 +89,19 @@ class AssetRelation extends Base
             $res = $this->getRepository()->getItemsByAssetIds($entityName, $entityId, explode(",", $request->get("assetIds")));
         }
 
-        return $res ?? false;
+        if (!isset($res) || !$res) {
+            return false;
+        }
 
+        foreach ($res as $i => $item) {
+            $model = $this->getRepository()->get();
+            $model->set($item);
+            $this->loadAdditionalFields($model);
+
+            $res[$i] = $model->toArray();
+        }
+
+        return $res;
     }
 
     public function getItem(array $where)

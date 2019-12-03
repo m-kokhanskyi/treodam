@@ -20,7 +20,7 @@
     "module": "Dam",
     "object": true,
     "isCustom": true,
-    "hasAssignedUser": false,
-    "hasTeam": false,
-    "hasOwner": false
+    "hasAssignedUser": true,
+    "hasTeam": true,
+    "hasOwner": true
 }

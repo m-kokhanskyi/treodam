@@ -12,8 +12,11 @@
       "required": true
     },
     "relatedEntityName": {
-      "type"       : "varchar",
-      "notStorable": true
+      "type"                : "varchar",
+      "notStorable"         : true,
+      "view"                : "dam:views/asset_relation/fields/related-entity-name",
+      "readOnly"            : true,
+      "layoutDetailDisabled": true
     },
     "description"      : {
       "type": "text"

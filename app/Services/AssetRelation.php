@@ -191,7 +191,13 @@ class AssetRelation extends Base
 
     public function getAvailableEntities(string $assetId)
     {
-        return $this->getRepository()->getAvailableEntities($assetId);
+        $links = array_map(function ($item) {
+            return $item['entity'];
+        }, $this->getMetadata()->get(["entityDefs", "Asset", "links"]));
+
+        $availableEntities = array_unique(array_values($links));
+
+        return $this->getRepository()->getAvailableEntities($assetId, $availableEntities);
     }
 
     protected function removeBelongsToRelation(Entity $entity, string $relatedEntityName)

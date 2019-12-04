@@ -141,9 +141,18 @@ class AssetRelation extends Base
         return $this->getData($sql, $data);
     }
 
-    public function getAvailableEntities($assetId)
+    public function getAvailableEntities($assetId, array $availableEntities)
     {
-        return $this->getData("SELECT entity_name as name FROM asset_relation where deleted = 0 AND asset_id = ? GROUP BY entity_name", [$assetId]);
+        return $this->getData(
+            "SELECT entity_name as name 
+                 FROM asset_relation 
+                 WHERE 
+                    deleted = 0 
+                    AND asset_id = ?
+                    AND entity_name IN ('" . implode("','", $availableEntities) . "') 
+                 GROUP BY entity_name",
+            [$assetId]
+        );
     }
 
 

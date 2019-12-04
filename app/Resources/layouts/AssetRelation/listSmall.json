@@ -3,7 +3,9 @@
         "name": "preview"
     },
     {
-        "name": "name",
-        "align": "left"
+        "name": "name"
+    },
+    {
+        "name" : "relatedEntityName"
     }
 ]

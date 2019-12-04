@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Dam\Core\Utils;
 
 
@@ -95,12 +96,14 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
     protected function createAssetRelations($params)
     {
         $relationEntityName = $params['entity'] === "Asset" ? $params['entityForeign'] : $params['entity'];
-        $panels             = array_filter($this->getMetadata()->get([
+        $currentDetailPanel = $this->getMetadata()->get([
             "clientDefs",
             $relationEntityName,
             "bottomPanels",
             "detail",
-        ]),
+        ]);
+
+        $panels = array_filter($currentDetailPanel ?? [],
             function ($item) {
                 return ($item['name'] !== self::ASSET_RELATION_NAME);
             }
@@ -145,7 +148,7 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         $this->getMetadata()->set("clientDefs", $entity, [
             "relationshipPanels" => [
                 $link => [
-                    "view" => "dam:views/asset/record/panels/bottom-panel"
+                    "view" => "dam:views/asset/record/panels/bottom-panel",
                 ],
             ],
         ]);

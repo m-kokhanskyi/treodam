@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Dam\Core\Utils;
 
 
@@ -18,11 +19,13 @@ class Util extends \Treo\Core\Utils\Util
             switch (true) {
                 case stripos($item, "date") !== false :
                     $i = explode(":", $item);
+
                     return date($i[1]);
                     break;
                 case stripos($item, "rand") !== false :
                     $i = explode(":", $item);
-                    return Random::getString($i[1] ?? 5);
+
+                    return Random::getString(isset($i[1]) ? (int)$i[1] : 5);
                     break;
 
                 case stripos($item, "unique") !== false:
@@ -53,6 +56,7 @@ class Util extends \Treo\Core\Utils\Util
             if (stripos($name, "COLORSPACE_") !== false && $value == $colorId) {
                 $el = explode("_", $name);
                 array_shift($el);
+
                 return implode("_", $el);
             }
         }

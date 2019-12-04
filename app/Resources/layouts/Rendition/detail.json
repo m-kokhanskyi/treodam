@@ -6,15 +6,21 @@
                     "name": "name"
                 },
                 {
-                    "name": "file"
+                    "name": "type"
                 }
             ],
             [
                 {
                     "name": "private"
                 },
+                false
+            ],
+            [
                 {
                     "name": "nameOfFile"
+                },
+                {
+                    "name": "file"
                 }
             ]
         ],

@@ -74,9 +74,14 @@ class CollectionEntity extends AbstractListener
     /**
      * @param $entity
      * @return bool
+     * @throws \Espo\Core\Exceptions\Error
      */
     protected function isValidCategory($entity)
     {
+        if (is_string($entity)) {
+            $entity = $this->getEntityManager()->getEntity("AssetCategory", $entity);
+        }
+
         return !$entity->get("categoryParentId");
     }
 

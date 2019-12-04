@@ -312,7 +312,8 @@
       "midKeys": [
         "leftId",
         "rightId"
-      ]
+      ],
+      "disableMassRelation": true
     },
     "assetsLeft": {
       "type": "hasMany",

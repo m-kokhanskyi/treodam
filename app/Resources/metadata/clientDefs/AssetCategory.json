@@ -21,7 +21,6 @@
   ],
   "iconClass": "fas fa-layer-group",
   "recordViews": {
-    "list": "dam:views/asset_category/record/list",
     "listTree": "dam:views/asset_category/record/list-tree",
     "detail": "dam:views/asset_category/record/detail"
   },

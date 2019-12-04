@@ -3,15 +3,21 @@
     "rows": [
       [
         {
-          "name": "type"
+          "name": "name"
         },
         {
-          "name": "name"
+          "name": "type"
         }
       ],
       [
         {
           "name": "private"
+        },
+        false
+      ],
+      [
+        {
+          "name": "nameOfFile"
         },
         {
           "name": "file"

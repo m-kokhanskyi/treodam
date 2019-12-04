@@ -30,12 +30,26 @@
     "assetMetaDatas"   : {
       "select": false,
       "create": false,
-      "view": "dam:views/asset/record/panels/relations/asset-meta-data/main"
+      "view"  : "dam:views/asset/record/panels/relations/asset-meta-data/main"
     },
     "renditionVersions": {
       "select"        : false,
       "create"        : false,
       "rowActionsView": "dam:views/rendition/record/panels/relations/rendition-version/row"
+    }
+  },
+  "dynamicLogic"      : {
+    "fields": {
+      "type": {
+        "readOnly": {
+          "conditionGroup": [
+            {
+              "type"     : "isNotEmpty",
+              "attribute": "id"
+            }
+          ]
+        }
+      }
     }
   }
 }

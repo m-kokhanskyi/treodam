@@ -48,10 +48,6 @@ class RenditionEntity extends AbstractListener
             $entity->get("type")
         ]);
 
-        if ($this->changeAttachmentInAuto($entity, $info)) {
-            throw new BadRequest("You can't change attachment for this rendition");
-        }
-
         if (!$entity->isNew() && $entity->isAttributeChanged("type")) {
             throw new BadRequest("You can't change type");
         }
@@ -108,15 +104,5 @@ class RenditionEntity extends AbstractListener
     protected function getConfigManager(): ConfigManager
     {
         return $this->container->get("ConfigManager");
-    }
-
-    /**
-     * @param Entity $entity
-     * @param array $info
-     * @return bool
-     */
-    private function changeAttachmentInAuto(Rendition $entity, ?array $info): bool
-    {
-        return !$entity->isNew() && $this->changeAttachment($entity) && $info['auto'] && !$entity->isAutoCreated;
     }
 }

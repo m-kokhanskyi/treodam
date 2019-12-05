@@ -93,7 +93,6 @@ class AssetEntity extends AbstractListener
         //rename file
         if (!$entity->isNew() && $entity->isAttributeChanged("nameOfFile")) {
             $this->getService("Attachment")->changeName($entity->get('file'), $entity->get('nameOfFile'), $entity);
-            $this->getService("Rendition")->rebuildNames($entity);
         }
 
         //deactivate asset
@@ -109,12 +108,6 @@ class AssetEntity extends AbstractListener
     {
         /** @var $entity Asset */
         $entity = $event->getArgument("entity");
-
-        if ($entity->isAttributeChanged("fileId")) {
-            //build Renditions
-            //$this->getService("Rendition")->buildRenditions($entity);
-            $this->getService("Rendition")->createQueue($entity);
-        }
 
         //get meta data
         if ($this->changeAttachment($entity)) {

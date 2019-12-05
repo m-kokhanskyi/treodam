@@ -27,6 +27,8 @@ class Config extends AbstractConsole
         if ($res === false) {
             self::show("Error on save config", self::ERROR, true);
         } else {
+            $this->getConfig()->updateCacheTimestamp();
+            $this->getConfig()->save();
             self::show("Config update successful", self::SUCCESS, true);
         }
     }

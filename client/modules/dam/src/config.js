@@ -1,16 +1,35 @@
-Espo.define("dam:config", [], () => {
+Espo.define("dam:config", "view", (Dep) => {
     
-    let Config = function () {};
+    let Config = function () {
+    };
     
     _.extend(Config.prototype, {
-        data: null,
-        url : "DamConfig",
+        data : null,
+        url  : "DamConfig",
+        cache: null,
         
         init() {
             let obj = new Config();
-            obj.fetch();
             
+            if (obj.loadFromCache(this._helper.cache)) {
+                return obj;
+            }
+            
+            obj.fetch();
             return obj;
+        },
+        
+        loadFromCache(cache) {
+            this.cache = cache;
+            
+            if (this.cache) {
+                var cached = this.cache.get('app', 'damconfig');
+                if (cached) {
+                    this.data = cached;
+                    return true;
+                }
+            }
+            return null;
         },
         
         fetch() {
@@ -21,8 +40,15 @@ Espo.define("dam:config", [], () => {
                 async   : false,
                 success : (data) => {
                     this.data = data;
+                    this.storeToCache();
                 }
             });
+        },
+        
+        storeToCache() {
+            if (this.cache) {
+                this.cache.set('app', 'damconfig', this.data);
+            }
         },
         
         get(path, defaultValue) {
@@ -40,7 +66,9 @@ Espo.define("dam:config", [], () => {
             for (var i = 0; i < arr.length; i++) {
                 var key = arr[i];
                 
-                if (!(key in pointer)) {
+                if (!(
+                    key in pointer
+                )) {
                     result = defaultValue;
                     break;
                 }
@@ -72,7 +100,7 @@ Espo.define("dam:config", [], () => {
             return name.replace(" ", "-").toLowerCase();
         }
         
-    }, Backbone.Events);
+    }, Dep, Backbone.Events);
     
     return Config;
 });

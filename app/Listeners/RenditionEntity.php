@@ -56,12 +56,6 @@ class RenditionEntity extends AbstractListener
             $this->getService($entity->getEntityType())->validateType($entity);
         }
 
-        if (!$entity->isNew() && $this->changeAttachment($entity)) {
-            if (isset($info['createVersion']) && $info['createVersion']) {
-                $this->getService($entity->getEntityType())->createVersion($entity);
-            }
-        }
-
         $attachment = $entity->get("file");
         if ($attachment->get("tmpPath")) {
             $this->getService("Attachment")->moveToRendition($entity, $attachment);

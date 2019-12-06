@@ -55,25 +55,6 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         return true;
     }
 
-    public function createVersion($entity)
-    {
-        $asset = $entity->get('asset');
-        $info  = $this->getConfigManager()->getByType([
-            ConfigManager::getType($asset->get('type')),
-            "renditions",
-            $entity->get("type"),
-        ]);
-
-        if (!isset($info['createVersion']) || $info['createVersion'] === false) {
-            return true;
-        }
-
-        $attachmentId = $entity->getFetched("imageId") ?? $entity->getFetched("fileId");
-        $attachment   = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
-
-        return $this->getServiceFactory()->create("RenditionVersion")->createEntity($attachment);
-    }
-
     public function updateAttachmentInfo($entity)
     {
         $attachmentService = $this->getServiceFactory()->create("Attachment");

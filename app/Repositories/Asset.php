@@ -51,7 +51,8 @@ class Asset extends Base implements DAMAttachment
 
     public function linkAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)
     {
-        return $this->getMapper()->relate($main, "relatedAssets", $foreign);
+        return $this->getMapper()->relate($foreign, "relatedAssets", $main) &&
+            $this->getMapper()->relate($main, "relatedAssets", $foreign);
     }
 
     public function unlinkAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)

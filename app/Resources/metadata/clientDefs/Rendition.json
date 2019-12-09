@@ -13,12 +13,26 @@
     "edit": "dam:views/rendition/modals/edit"
   },
   "sidePanels"        : {
-    "detail": [
+    "detail"     : [
       {
         "name" : "download",
         "label": "Download",
         "view" : "dam:views/rendition/record/panels/side/download/main"
       },
+      {
+        "name" : "preview",
+        "label": "",
+        "view" : "dam:views/rendition/record/panels/side/preview/detail"
+      }
+    ],
+    "detailSmall": [
+      {
+        "name" : "preview",
+        "label": "",
+        "view" : "dam:views/rendition/record/panels/side/preview/detail"
+      }
+    ],
+    "editSmall"  : [
       {
         "name" : "preview",
         "label": "",

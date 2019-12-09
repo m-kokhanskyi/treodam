@@ -1,7 +1,7 @@
 Espo.define('dam:views/rendition/record/panels/side/preview/detail', ["view", "dam:config"],
     (Dep, Config) => Dep.extend({
-        template  : "dam:rendition/record/panels/side/preview/detail",
-        damConfig : null,
+        template : "dam:rendition/record/panels/side/preview/detail",
+        damConfig: null,
         assetType: null,
         
         events: {
@@ -22,6 +22,10 @@ Espo.define('dam:views/rendition/record/panels/side/preview/detail', ["view", "d
             this.damConfig = Config.prototype.init.call(this);
             Dep.prototype.setup.call(this);
             
+            this.listenTo(this.model, "change:fileId", () => {
+                this.reRender();
+            });
+            
             if (this.model.get("assetId")) {
                 this.wait(true);
                 this.getModelFactory().create("Asset", model => {
@@ -36,14 +40,29 @@ Espo.define('dam:views/rendition/record/panels/side/preview/detail', ["view", "d
         
         data() {
             return {
-                show: this._show()
+                show: this._showImage(),
+                path: this.options.el
             };
         },
         
-        _show() {
-            return this.damConfig.getByType(`${this.assetType}.renditions.${this.model.get("type")}.preview`)
-                || this.damConfig.getByType(`${this.assetType}.renditions.${this.model.get("type")}.nature`) === "image"
-                || false;
+        _showImage() {
+            return !!(
+                this._isImage() && this._hasImage()
+            );
+        },
+        
+        _hasImage() {
+            return this.model.has("fileId") && this.model.get("fileId");
+        },
+        
+        _isImage() {
+            if (this.model.get("type")) {
+                return this.damConfig.getByType(`${this.assetType}.renditions.${this.model.get("type")}.preview`)
+                    || this.damConfig.getByType(`${this.assetType}.renditions.${this.model.get("type")}.nature`) === "image"
+                    || false;
+                
+            }
+            return false;
         }
     })
 );

@@ -50,15 +50,9 @@
         "wlq",
         "whq",
         "githumb1",
-        "dithumb1",
         "githumb2",
-        "dithumb2",
         "githumb3",
-        "dithumb3",
-        "githumb4",
-        "dithumb4",
-        "watermark",
-        "test"
+        "githumb4"
       ],
       "default" : "wlq",
       "isSorted": false,

@@ -30,10 +30,10 @@ type:
           min: 10
           max: 100
         colorDepth:
-        - 8
+          - 8
         colorSpace:
-        - RGB
-        - SRGB
+          - RGB
+          - SRGB
         scale:
           min:
             width: 150
@@ -82,20 +82,6 @@ type:
               w: 1920
               h: 1920
           validations: []
-        watermark:
-          auto: false
-          nature: image
-          createVersion: true
-          handlers:
-            watermark:
-              watermark: watermark.png
-              position: left-top
-          validations: []
-        test:
-          createVersion: true
-          auto: false
-          validations: []
-          handlers: []
     description-image:
       nature: image
       validations:
@@ -113,10 +99,10 @@ type:
           min: 10
           max: 100
         colorDepth:
-        - 8
+          - 8
         colorSpace:
-        - RGB
-        - SRGB
+          - RGB
+          - SRGB
         scale:
           min:
             width: 1
@@ -165,15 +151,6 @@ type:
               w: 1920
               h: 1920
           validations: []
-        watermark:
-          auto: false
-          nature: image
-          createVersion: true
-          handlers:
-            watermark:
-              watermark: watermark.png
-              position: left-top
-          validations: []
     office-document:
       nature: file
       validations:
@@ -185,132 +162,132 @@ type:
             min: 0
             max: 100000000
         extension:
-        - doc
-        - dot
-        - docx
-        - dotx
-        - dotm
-        - docb
-        - xls
-        - xlt
-        - xlm
-        - xlxs
-        - xlsm
-        - xltx
-        - xltm
-        - ppt
-        - pot
-        - pps
-        - pptx
-        - pptm
-        - potx
-        - potm
-        - ppam
-        - ppsx
-        - ppsm
-        - sldx
-        - sldm
-        - mdb
-        - accdb
-        - accdr
-        - accdt
-        - vaccdr
-        - rtf
-        - odt
-        - ott
-        - odm
-        - ods
-        - ots
-        - odg
-        - otg
-        - odp
-        - otp
-        - odf
-        - odc
-        - odb
-        - xlsx
+          - doc
+          - dot
+          - docx
+          - dotx
+          - dotm
+          - docb
+          - xls
+          - xlt
+          - xlm
+          - xlxs
+          - xlsm
+          - xltx
+          - xltm
+          - ppt
+          - pot
+          - pps
+          - pptx
+          - pptm
+          - potx
+          - potm
+          - ppam
+          - ppsx
+          - ppsm
+          - sldx
+          - sldm
+          - mdb
+          - accdb
+          - accdr
+          - accdt
+          - vaccdr
+          - rtf
+          - odt
+          - ott
+          - odm
+          - ods
+          - ots
+          - odg
+          - otg
+          - odp
+          - otp
+          - odf
+          - odc
+          - odb
+          - xlsx
         mime:
           list:
-          - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-          - application/x-vnd.oasis.opendocument.chart
-          - application/vnd.oasis.opendocument.chart
-          - application/vnd.oasis.opendocument.formula
-          - application/x-vnd.oasis.opendocument.formula
-          - application/vnd.oasis.opendocument.presentation-template
-          - application/x-vnd.oasis.opendocument.presentation-template
-          - application/x-vnd.oasis.opendocument.presentation
-          - application/vnd.oasis.opendocument.presentation
-          - application/x-vnd.oasis.opendocument.graphics-template
-          - application/vnd.oasis.opendocument.graphics-template
-          - application/x-vnd.oasis.opendocument.graphics
-          - application/vnd.oasis.opendocument.graphics
-          - application/x-vnd.oasis.opendocument.spreadsheet-template
-          - application/vnd.oasis.opendocument.spreadsheet-template
-          - application/x-vnd.oasis.opendocument.spreadsheet
-          - application/vnd.oasis.opendocument.spreadsheet
-          - application/vnd.oasis.opendocument.textmaster
-          - application/x-vnd.oasis.opendocument.textmaster
-          - application/doc
-          - application/ms-doc
-          - application/msword
-          - application/vnd.openxmlformats-officedocument.wordprocessingml.document
-          - application/vnd.openxmlformats-officedocument.wordprocessingml.template
-          - application/vnd.ms-word.template.macroEnabled.12
-          - application/vnd.ms-excel
-          - application/excel
-          - application/msexcel
-          - application/x-excel
-          - application/xlt
-          - application/x-msexcel
-          - application/x-ms-excel
-          - application/x-dos_ms_excel
-          - application/xls
-          - application/vnd.ms-excel.sheet.macroEnabled.12
-          - application/vnd.openxmlformats-officedocument.spreadsheetml.template
-          - application/vnd.ms-excel.template.macroEnabled.12
-          - application/vnd.ms-powerpoint
-          - application/mspowerpoint
-          - application/ms-powerpoint
-          - application/mspowerpnt
-          - application/vnd-mspowerpoint
-          - application/powerpoint
-          - application/x-powerpoint
-          - application/x-m
-          - application/x-mspowerpoint
-          - application/x-dos_ms_powerpnt
-          - application/pot
-          - application/x-soffic
-          - application/vnd.openxmlformats-officedocument.presentationml.presentation
-          - application/vnd.ms-powerpoint.presentation.macroEnabled.12
-          - application/vnd.openxmlformats-officedocument.presentationml.template
-          - application/vnd.ms-powerpoint.addin.macroEnabled.12
-          - application/vnd.openxmlformats-officedocument.presentationml.slideshow
-          - application/vnd.ms-powerpoint.slideshow.macroEnabled.12
-          - application/msaccess
-          - application/x-msaccess
-          - application/vnd.msaccess
-          - application/vnd.ms-access
-          - application/mdb
-          - application/x-mdb
-          - zz-application/zz-winassoc-mdb
-          - application/rtf
-          - application/x-rtf
-          - text/rtf
-          - text/richtext
-          - application/x-soffice
-          - application/vnd.oasis.opendocument.text
-          - application/x-vnd.oasis.opendocument.text
-          - application/vnd.oasis.opendocument.text-template
+            - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+            - application/x-vnd.oasis.opendocument.chart
+            - application/vnd.oasis.opendocument.chart
+            - application/vnd.oasis.opendocument.formula
+            - application/x-vnd.oasis.opendocument.formula
+            - application/vnd.oasis.opendocument.presentation-template
+            - application/x-vnd.oasis.opendocument.presentation-template
+            - application/x-vnd.oasis.opendocument.presentation
+            - application/vnd.oasis.opendocument.presentation
+            - application/x-vnd.oasis.opendocument.graphics-template
+            - application/vnd.oasis.opendocument.graphics-template
+            - application/x-vnd.oasis.opendocument.graphics
+            - application/vnd.oasis.opendocument.graphics
+            - application/x-vnd.oasis.opendocument.spreadsheet-template
+            - application/vnd.oasis.opendocument.spreadsheet-template
+            - application/x-vnd.oasis.opendocument.spreadsheet
+            - application/vnd.oasis.opendocument.spreadsheet
+            - application/vnd.oasis.opendocument.textmaster
+            - application/x-vnd.oasis.opendocument.textmaster
+            - application/doc
+            - application/ms-doc
+            - application/msword
+            - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+            - application/vnd.openxmlformats-officedocument.wordprocessingml.template
+            - application/vnd.ms-word.template.macroEnabled.12
+            - application/vnd.ms-excel
+            - application/excel
+            - application/msexcel
+            - application/x-excel
+            - application/xlt
+            - application/x-msexcel
+            - application/x-ms-excel
+            - application/x-dos_ms_excel
+            - application/xls
+            - application/vnd.ms-excel.sheet.macroEnabled.12
+            - application/vnd.openxmlformats-officedocument.spreadsheetml.template
+            - application/vnd.ms-excel.template.macroEnabled.12
+            - application/vnd.ms-powerpoint
+            - application/mspowerpoint
+            - application/ms-powerpoint
+            - application/mspowerpnt
+            - application/vnd-mspowerpoint
+            - application/powerpoint
+            - application/x-powerpoint
+            - application/x-m
+            - application/x-mspowerpoint
+            - application/x-dos_ms_powerpnt
+            - application/pot
+            - application/x-soffic
+            - application/vnd.openxmlformats-officedocument.presentationml.presentation
+            - application/vnd.ms-powerpoint.presentation.macroEnabled.12
+            - application/vnd.openxmlformats-officedocument.presentationml.template
+            - application/vnd.ms-powerpoint.addin.macroEnabled.12
+            - application/vnd.openxmlformats-officedocument.presentationml.slideshow
+            - application/vnd.ms-powerpoint.slideshow.macroEnabled.12
+            - application/msaccess
+            - application/x-msaccess
+            - application/vnd.msaccess
+            - application/vnd.ms-access
+            - application/mdb
+            - application/x-mdb
+            - zz-application/zz-winassoc-mdb
+            - application/rtf
+            - application/x-rtf
+            - text/rtf
+            - text/richtext
+            - application/x-soffice
+            - application/vnd.oasis.opendocument.text
+            - application/x-vnd.oasis.opendocument.text
+            - application/vnd.oasis.opendocument.text-template
       renditions: []
     text:
       nature: file
       validations:
         extension:
-        - txt
+          - txt
         mime:
           list:
-          - text/plain
-          - application/txt
+            - text/plain
+            - application/txt
         size:
           private:
             min: 0
@@ -331,16 +308,16 @@ type:
             max: 100000000
         mime:
           list:
-          - text/comma-separated-values
-          - text/csv
-          - application/csv
-          - application/excel
-          - application/vnd.ms-excel
-          - application/vnd.msexcel
-          - text/anytext
-          - text/plain
+            - text/comma-separated-values
+            - text/csv
+            - application/csv
+            - application/excel
+            - application/vnd.ms-excel
+            - application/vnd.msexcel
+            - text/anytext
+            - text/plain
         extension:
-        - csv
+          - csv
         CSVValidation: []
       renditions: []
     pdf-document:
@@ -356,14 +333,14 @@ type:
             max: 100000000
         mime:
           list:
-          - application/pdf
-          - application/x-pdf
-          - application/acrobat
-          - applications/vnd.pdf
-          - text/pdf
-          - text/x-pdf
+            - application/pdf
+            - application/x-pdf
+            - application/acrobat
+            - applications/vnd.pdf
+            - text/pdf
+            - text/x-pdf
         extension:
-        - pdf
+          - pdf
         PDFValidation: []
       renditions: []
     archive:
@@ -378,49 +355,49 @@ type:
             max: 100000000
         mime:
           list:
-          - application/x-archive
-          - application/x-cpio
-          - application/x-shar
-          - application/x-iso9660-image
-          - application/x-sbx
-          - application/x-tar
-          - application/x-bzip2
-          - application/gzip
-          - application/x-gzip
-          - application/x-lzip
-          - application/x-lzma
-          - application/x-lzop
-          - application/x-snappy-framed
-          - application/x-xz
-          - application/x-compress
-          - application/x-7z-compressed
-          - application/x-ace-compressed
-          - application/x-astrotite-afa
-          - application/x-alz-compressed
-          - application/vnd.android.package-archive
-          - application/octet-stream
-          - application/x-freearc
-          - application/x-arj
-          - application/x-b1
-          - application/vnd.ms-cab-compressed
-          - application/x-cfs-compressed
-          - application/x-dar
-          - application/x-dgc-compressed
-          - application/x-apple-diskimage
-          - application/x-gca-compressed
-          - application/java-archive
-          - application/x-lzh
-          - application/x-lzx
-          - application/x-rar
-          - application/x-rar-compressed
-          - application/x-stuffit
-          - application/x-stuffitx
-          - application/x-gtar
-          - application/x-ms-wim
-          - application/x-xar
-          - application/zip
-          - application/x-zoo
-          - application/x-par2
+            - application/x-archive
+            - application/x-cpio
+            - application/x-shar
+            - application/x-iso9660-image
+            - application/x-sbx
+            - application/x-tar
+            - application/x-bzip2
+            - application/gzip
+            - application/x-gzip
+            - application/x-lzip
+            - application/x-lzma
+            - application/x-lzop
+            - application/x-snappy-framed
+            - application/x-xz
+            - application/x-compress
+            - application/x-7z-compressed
+            - application/x-ace-compressed
+            - application/x-astrotite-afa
+            - application/x-alz-compressed
+            - application/vnd.android.package-archive
+            - application/octet-stream
+            - application/x-freearc
+            - application/x-arj
+            - application/x-b1
+            - application/vnd.ms-cab-compressed
+            - application/x-cfs-compressed
+            - application/x-dar
+            - application/x-dgc-compressed
+            - application/x-apple-diskimage
+            - application/x-gca-compressed
+            - application/java-archive
+            - application/x-lzh
+            - application/x-lzx
+            - application/x-rar
+            - application/x-rar-compressed
+            - application/x-stuffit
+            - application/x-stuffitx
+            - application/x-gtar
+            - application/x-ms-wim
+            - application/x-xar
+            - application/zip
+            - application/x-zoo
+            - application/x-par2
       renditions: []
   default:
     validations: []

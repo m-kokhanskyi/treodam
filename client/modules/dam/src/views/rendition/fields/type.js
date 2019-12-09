@@ -27,7 +27,7 @@ Espo.define('dam:views/rendition/fields/type', ['views/fields/enum', 'dam:config
                         }
                     }
                     this.params.options = params;
-                    
+                    this.model.set("type", params[0]);
                     this.wait(false);
                 });
             });

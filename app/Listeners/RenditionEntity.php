@@ -42,12 +42,6 @@ class RenditionEntity extends AbstractListener
         /**@var $entity Entity* */
         $entity = $event->getArgument("entity");
 
-        $info = $this->getConfigManager()->getByType([
-            ConfigManager::getType($entity->get("asset")->get("type")),
-            "renditions",
-            $entity->get("type")
-        ]);
-
         if (!$entity->isNew() && $entity->isAttributeChanged("type")) {
             throw new BadRequest("You can't change type");
         }
@@ -62,7 +56,8 @@ class RenditionEntity extends AbstractListener
         }
 
         if ($this->changeAttachment($entity)) {
-            $this->getService($entity->getEntityType())->updateAttachmentInfo($entity);
+            $asset = $this->getService("Asset")->getEntity($entity->get("assetId"));
+            $this->getService($entity->getEntityType())->updateAttachmentInfo($entity, $asset);
         }
 
         if (!$entity->get("nameOfFile")) {

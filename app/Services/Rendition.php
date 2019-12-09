@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
+
 namespace Dam\Services;
 
 use Dam\Core\ConfigManager;
 use Dam\Core\FilePathBuilder;
 use Dam\Core\FileStorage\DAMUploadDir;
-use Dam\Core\Utils\Util;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Treo\Core\Utils\Language;
@@ -55,11 +55,16 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         return true;
     }
 
-    public function updateAttachmentInfo($entity)
+    public function updateAttachmentInfo($entity, $assetEntity)
     {
         $attachmentService = $this->getServiceFactory()->create("Attachment");
         $attachmentEntity  = $entity->get("file");
-        $nature            = $this->getMetadata()->get(['app', 'config', 'renditions', $entity->get("type"), "nature"]);
+        $nature            = $this->getConfigManager()->getByType([
+            ConfigManager::getType($assetEntity->get("type")),
+            "renditions",
+            $entity->get("type"),
+            "nature"
+        ]);
 
         $path = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->get("type")}/" . $entity->get("path") . "/" . $attachmentEntity->get("name");
 

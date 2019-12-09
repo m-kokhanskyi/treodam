@@ -23,10 +23,10 @@ class Rendition extends \Espo\Core\Templates\Services\Base
 
     public function updateMetaData(\Dam\Entities\Rendition $entity)
     {
-        $attachment = $entity->get('image') ?? $entity->get("file");
+        $attachment = $entity->get("file");
 
         if ($meta = $this->getServiceFactory()->create("Attachment")->getImageMeta($attachment)) {
-            return $this->getServiceFactory()->create("AssetMetaData")->insertData("rendition", $entity->id, $meta);
+            return $this->getServiceFactory()->create("RenditionMetaData")->insertData($entity->id, $meta);
         }
 
         return false;

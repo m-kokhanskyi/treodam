@@ -1,9 +1,18 @@
 {
   "fields"    : {
+    "renditionMetaDatas": {
+      "type": "linkMultiple",
+      "layoutDetailDisabled": true,
+      "layoutMassUpdateDisabled": true,
+      "noLoad": true,
+      "importDisabled": true,
+      "isCustom": true
+    },
     "name"             : {
       "type"    : "varchar",
       "required": true,
-      "trim"    : true
+      "trim"    : true,
+      "view" : "dam:views/rendition/fields/name"
     },
     "path"             : {
       "type"                    : "varchar",
@@ -129,27 +138,20 @@
     "asset"            : {
       "type": "link"
     },
-    "assetMetaDatas"   : {
-      "type"                    : "linkMultiple",
-      "layoutDetailDisabled"    : true,
-      "layoutMassUpdateDisabled": true,
-      "noLoad"                  : true,
-      "importDisabled"          : true
-    },
     "nameOfFile"       : {
       "type": "varchar",
       "trim": true,
       "view": "dam:views/rendition/fields/name-of-file"
-    },
-    "renditionVersions": {
-      "type"                    : "linkMultiple",
-      "layoutDetailDisabled"    : true,
-      "layoutMassUpdateDisabled": true,
-      "noLoad"                  : true,
-      "importDisabled"          : true
     }
   },
   "links"     : {
+    "renditionMetaDatas": {
+      "type": "hasMany",
+      "foreign": "rendition",
+      "entity": "RenditionMetaData",
+      "audited": false,
+      "isCustom": true
+    },
     "createdBy"        : {
       "type"  : "belongsTo",
       "entity": "User"
@@ -177,18 +179,6 @@
       "type"   : "belongsTo",
       "foreign": "renditions",
       "entity" : "Asset",
-      "audited": false
-    },
-    "assetMetaDatas"   : {
-      "type"   : "hasMany",
-      "foreign": "rendition",
-      "entity" : "AssetMetaData",
-      "audited": false
-    },
-    "renditionVersions": {
-      "type"   : "hasMany",
-      "foreign": "rendition",
-      "entity" : "RenditionVersion",
       "audited": false
     }
   },

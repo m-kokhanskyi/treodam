@@ -41,15 +41,10 @@
     ]
   },
   "relationshipPanels": {
-    "assetMetaDatas"   : {
+    "renditionMetaDatas"   : {
       "select": false,
       "create": false,
-      "view"  : "dam:views/asset/record/panels/relations/asset-meta-data/main"
-    },
-    "renditionVersions": {
-      "select"        : false,
-      "create"        : false,
-      "rowActionsView": "dam:views/rendition/record/panels/relations/rendition-version/row"
+      "view"  : "dam:views/rendition/record/panels/relations/meta-data/main"
     }
   },
   "dynamicLogic"      : {

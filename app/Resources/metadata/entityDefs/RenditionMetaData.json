@@ -1,5 +1,8 @@
 {
   "fields"    : {
+    "rendition": {
+      "type": "link"
+    },
     "name"        : {
       "type"    : "varchar",
       "required": true,
@@ -42,12 +45,16 @@
       "audited" : false,
       "readOnly": false,
       "tooltip" : false
-    },
-    "asset"       : {
-      "type": "link"
     }
   },
   "links"     : {
+    "rendition": {
+      "type": "belongsTo",
+      "foreign": "renditionMetaDatas",
+      "entity": "Rendition",
+      "audited": false,
+      "isCustom": true
+    },
     "createdBy"   : {
       "type"  : "belongsTo",
       "entity": "User"
@@ -65,12 +72,6 @@
       "entity"                     : "Team",
       "relationName"               : "EntityTeam",
       "layoutRelationshipsDisabled": true
-    },
-    "asset"       : {
-      "type"   : "belongsTo",
-      "foreign": "assetMetaDatas",
-      "entity" : "Asset",
-      "audited": false
     }
   },
   "collection": {

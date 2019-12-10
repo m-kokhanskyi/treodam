@@ -51,25 +51,6 @@ class Asset extends Base
 
     /**
      * @param \Dam\Entities\Asset $asset
-     * @return bool
-     */
-    public function createVersion(\Dam\Entities\Asset $asset)
-    {
-        $type = ConfigManager::getType($asset->get("type"));
-
-        if (!$this->getConfigManager()->getByType([$type, "createVersion"])) {
-            return true;
-        }
-
-        $attachmentId = $asset->getFetched("fileId");
-
-        $attachment = $this->getEntityManager()->getEntity("Attachment", $attachmentId);
-
-        return $this->getServiceFactory()->create("AssetVersion")->createEntity($attachment);
-    }
-
-    /**
-     * @param \Dam\Entities\Asset $asset
      * @return mixed
      */
     public function updateMetaData(\Dam\Entities\Asset $asset)

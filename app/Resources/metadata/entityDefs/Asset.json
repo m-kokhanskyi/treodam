@@ -89,13 +89,6 @@
       "noLoad"                  : true,
       "importDisabled"          : true
     },
-    "assetVersions"  : {
-      "type"                    : "linkMultiple",
-      "layoutDetailDisabled"    : true,
-      "layoutMassUpdateDisabled": true,
-      "noLoad"                  : true,
-      "importDisabled"          : true
-    },
     "path"           : {
       "type"                    : "varchar",
       "emHidden"                : true,
@@ -254,14 +247,6 @@
       "type"       : "hasMany",
       "foreign"    : "asset",
       "entity"     : "AssetMetaData",
-      "audited"    : false,
-      "entityAsset": false,
-      "disableMassRelation": true
-    },
-    "assetVersions"  : {
-      "type"       : "hasMany",
-      "foreign"    : "asset",
-      "entity"     : "AssetVersion",
       "audited"    : false,
       "entityAsset": false,
       "disableMassRelation": true

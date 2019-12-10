@@ -113,10 +113,14 @@ class AssetCategoryEntity extends AbstractListener
      */
     public function beforeRelate(Event $event)
     {
-        $entity        = $event->getArgument('entity');
+        $entity = $event->getArgument('entity');
 
-        if ($this->hasChild($entity)) {
+        if ($this->hasChild($entity) && $event->getArgument("relationName") === "asset") {
             throw new BadRequest($this->getLanguage()->translate("Category is not last", 'exceptions', 'Global'));
+        }
+
+        if ($entity->get("categoryParentId") && $event->getArgument("relationName") === "collections") {
+            throw new BadRequest($this->getLanguage()->translate("Only root category"));
         }
     }
 

@@ -6,7 +6,7 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', ['view', "dam:c
         
         data() {
             let data = {
-                'assetSize': `${this.model.get("assetSize")} kb`
+            
             };
             
             if (this._showPreview()) {
@@ -19,7 +19,7 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', ['view', "dam:c
         setup() {
             this.damConfig = Config.prototype.init.call(this);
             
-            this.type = this.damConfig.getType(this.model.get("assetType"));
+            this.type = this.damConfig.getType(this.options.assetType);
             
             this.createView("entityAssetEdit", "dam:views/asset_relation/modals/entity-asset-form", {
                 model: this.model,

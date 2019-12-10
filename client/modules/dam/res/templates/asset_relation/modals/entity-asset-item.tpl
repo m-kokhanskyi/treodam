@@ -7,7 +7,6 @@
                                      href="#Asset/view/{{get model "assetId"}}">{{get model "assetName"}}</a>&nbsp;&nbsp;&nbsp;<span
                     class="collapser fas fa-chevron-up" data-action="collapsePanel"></span> &nbsp;&nbsp;&nbsp;<span
                     class="collapser fas fa-times" data-action="deleteAttachment"></span></h4>
-        <p class="by-author">{{assetSize}}</p>
         <div class="row">
             <div class="col-md-12 edit-form">
                 {{{entityAssetEdit}}}

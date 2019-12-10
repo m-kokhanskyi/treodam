@@ -85,11 +85,11 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
                 this.collection.fetch().then(() => {
                     this.blocks = [];
                     this.collection.forEach(model => {
-                        if (model.get("hasItem")) {
-                            this.blocks.push(model.get("name"));
-                        }
                         if (model.get("hasItem") && !this.hasView(model.get("name"))) {
                             this._createTypeBlock(model, false);
+                        }
+                        if (model.get("hasItem")) {
+                            this.blocks.push(model.get("name"));
                         }
                     });
                     this.reRender();
@@ -178,9 +178,12 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
                 dialog.once('select', function (selectObj) {
                     var data = {};
                     if (Object.prototype.toString.call(selectObj) === '[object Array]') {
-                        var ids = [];
+                        var ids        = [];
+                        var assetTypes = {};
+                        
                         selectObj.forEach(function (model) {
                             ids.push(model.id);
+                            assetTypes[model.id] = model.get("type");
                         });
                         data.ids = ids;
                     } else {
@@ -197,7 +200,7 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
                         type   : 'POST',
                         data   : JSON.stringify(data),
                         success: function () {
-                            this._updateAssetRelations(data);
+                            this._updateAssetRelations(data, assetTypes);
                         }.bind(this),
                         error  : function () {
                             this.notify('Error occurred', 'error');
@@ -219,12 +222,13 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
             return false;
         },
         
-        _updateAssetRelations(assetIds) {
+        _updateAssetRelations(assetIds, assetTypes) {
             this.getCollectionFactory().create("AssetRelation", collection => {
                 collection.url = `AssetRelation/byEntity/${this.scope}/${this.model.id}?assetIds=${assetIds.ids.join(',')}`;
                 collection.fetch().then(() => {
                     this.createView("EntityAssetList", "dam:views/asset_relation/modals/entity-asset-list", {
-                        collection: collection
+                        collection: collection,
+                        assetTypes: assetTypes
                     }, view => {
                         view.render();
                         
@@ -256,10 +260,11 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         },
         _createTypeBlock(model, show, callback) {
             model.set({
-                entityName: this.defs.entityName,
-                entityId  : this.model.id,
-                entityModel  : this.model
+                entityName : this.defs.entityName,
+                entityId   : this.model.id,
+                entityModel: this.model
             });
+            
             this.createView(model.get('name'), "dam:views/asset_relation/record/panels/asset-type-block", {
                 model: model,
                 el   : this.options.el + ' .group[data-name="' + model.get("name") + '"]',

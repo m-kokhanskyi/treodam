@@ -1,7 +1,8 @@
 Espo.define('dam:views/asset_relation/modals/entity-asset-list', 'views/modal', function (Dep) {
     return Dep.extend({
-        template: "dam:asset_relation/modals/entity-asset-list",
-        items   : [],
+        template  : "dam:asset_relation/modals/entity-asset-list",
+        items     : [],
+        assetTypes: {},
         
         data() {
             return {
@@ -10,7 +11,8 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-list', 'views/modal', 
         },
         
         setup() {
-            this.header = this.getLanguage().translate("Create Entity Assets", 'labels', this.scope);
+            this.header     = this.getLanguage().translate("Create Entity Assets", 'labels', this.scope);
+            this.assetTypes = this.options.assetTypes;
             
             this.addButton({
                 name : "save",
@@ -30,11 +32,13 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-list', 'views/modal', 
             this.items = [];
             
             this.collection.forEach((model) => {
+               
                 let viewName = `entityAsset-${model.id}`;
                 this.items.push(viewName);
                 this.createView(viewName, "dam:views/asset_relation/modals/entity-asset-item", {
                     model: model,
-                    el   : this.options.el + ` tr[data-name="${viewName}"]`
+                    el   : this.options.el + ` tr[data-name="${viewName}"]`,
+                    assetType : this.assetTypes[model.get("assetId")]
                 });
             });
         },
@@ -43,14 +47,15 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-list', 'views/modal', 
             if (this.validate()) {
                 this.notify('Not valid', 'error');
                 return;
-            };
+            }
+            
             this.collection.forEach(model => {
                 model.save().then(() => {
                     this.notify('Linked', 'success');
                     this.trigger("after:save");
                     this.dialog.close();
                 });
-            })
+            });
         },
         
         validate() {
@@ -61,7 +66,7 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-list', 'views/modal', 
                     notValid = view.validate() || notValid;
                 }
             }
-            return notValid
+            return notValid;
         }
     });
 });

@@ -82,17 +82,41 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
         
         actionRefresh() {
             if (this.collection) {
+                let Promises = [];
+                
                 this.collection.fetch().then(() => {
                     this.blocks = [];
                     this.collection.forEach(model => {
                         if (model.get("hasItem") && !this.hasView(model.get("name"))) {
-                            this._createTypeBlock(model, false);
+                            Promises.push(new Promise(resolve => {
+                                model.set({
+                                    entityName : this.defs.entityName,
+                                    entityId   : this.model.id,
+                                    entityModel: this.model
+                                });
+    
+                                this.createView(model.get('name'), "dam:views/asset_relation/record/panels/asset-type-block", {
+                                    model: model,
+                                    el   : this.options.el + ' .group[data-name="' + model.get("name") + '"]',
+                                    sort : this.sort,
+                                    show : false
+                                }, view => {
+                                    resolve();
+                                });
+                            }));
                         }
                         if (model.get("hasItem")) {
                             this.blocks.push(model.get("name"));
                         }
                     });
-                    this.reRender();
+                    
+                    if (Promises.length > 0) {
+                        Promise.all(Promises).then(r => {
+                            this.reRender();
+                        });
+                    } else {
+                        this.reRender();
+                    }
                 });
             }
         },
@@ -270,6 +294,10 @@ Espo.define('dam:views/asset_relation/record/panels/bottom-panel', 'treo-core:vi
                 el   : this.options.el + ' .group[data-name="' + model.get("name") + '"]',
                 sort : this.sort,
                 show : show
+            }, view => {
+                if (typeof callback === "function") {
+                    callback(view);
+                }
             });
         }
     })

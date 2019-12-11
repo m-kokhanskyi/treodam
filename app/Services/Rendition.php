@@ -25,8 +25,10 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     {
         $attachment = $entity->get("file");
 
-        if ($meta = $this->getServiceFactory()->create("Attachment")->getImageMeta($attachment)) {
-            return $this->getServiceFactory()->create("RenditionMetaData")->insertData($entity->id, $meta);
+        if (stripos($attachment->get("type"),  "image/")) {
+            if ($meta = $this->getServiceFactory()->create("Attachment")->getImageMeta($attachment)) {
+                return $this->getServiceFactory()->create("RenditionMetaData")->insertData($entity->id, $meta);
+            }
         }
 
         return false;
@@ -77,7 +79,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
             ]);
         }
 
-        if ($nature === "image") {
+        if ($nature === "image" && stripos($attachmentEntity->get("type"), "image/")) {
             $imageInfo = $attachmentService->getImageInfo($attachmentEntity, $path);
             if ($imageInfo) {
                 $entity->set([

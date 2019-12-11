@@ -62,6 +62,10 @@ class Attachment extends \Treo\Services\Attachment
      */
     public function getImageInfo($attachment, $path = null): array
     {
+        if (!stripos($attachment->get("type"), "image/")) {
+            return [];
+        }
+
         $path = $path ?? $this->getPath($attachment);
 
         $image = new Imagick($path);

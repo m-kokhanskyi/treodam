@@ -23,7 +23,6 @@ declare(strict_types=1);
 namespace Dam\Listeners;
 
 use Dam\Core\ConfigManager;
-use Dam\Entities\Rendition;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\ORM\Entity;
 use Treo\Core\EventManager\Event;
@@ -41,6 +40,10 @@ class RenditionEntity extends AbstractListener
     {
         /**@var $entity Entity* */
         $entity = $event->getArgument("entity");
+
+        if ($entity->isNew() && $this->typeDuplicate($entity)) {
+            throw new BadRequest($this->getLanguage()->translate("Renditions with this type already exist"));
+        }
 
         if (!$entity->isNew() && $entity->isAttributeChanged("type")) {
             throw new BadRequest("You can't change type");
@@ -64,7 +67,7 @@ class RenditionEntity extends AbstractListener
             $this->getService($entity->getEntityType())->createNameOfFile($entity);
         } elseif ($entity->isAttributeChanged("nameOfFile")) {
             $this->getService("Attachment")
-                ->changeName($attachment, $entity->get("nameOfFile"), $entity);
+                 ->changeName($attachment, $entity->get("nameOfFile"), $entity);
         }
 
         if (!$entity->isNew() && $entity->isAttributeChanged("private")) {
@@ -85,6 +88,20 @@ class RenditionEntity extends AbstractListener
         }
     }
 
+    protected function typeDuplicate(Entity $entity)
+    {
+        $assetId = $entity->get("assetId");
+        $type    = $entity->get("type");
+
+        $res = $this->getRepository($entity->getEntityName())->where([
+            'assetId' => $assetId,
+            'type'    => $type,
+        ])->count();
+
+        return $res ? true : false;
+
+    }
+
     protected function changeAttachment(Entity $entity)
     {
         return $entity->isAttributeChanged("fileId");
@@ -93,5 +110,10 @@ class RenditionEntity extends AbstractListener
     protected function getConfigManager(): ConfigManager
     {
         return $this->container->get("ConfigManager");
+    }
+
+    protected function getRepository($name)
+    {
+        return $this->getEntityManager()->getRepository($name);
     }
 }

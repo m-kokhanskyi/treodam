@@ -27,18 +27,31 @@ Espo.define('dam:views/rendition/record/panels/side/preview/detail', ["view", "d
             });
             
             if (this.model.get("assetId")) {
-                this.wait(true);
-                this.getModelFactory().create("Asset", model => {
-                    model.id = this.model.get("assetId");
-                    model.fetch().then(() => {
-                        this.assetType = this.damConfig.getType(model.get("type"));
-                        this.wait(false);
-                    });
-                });
+                this._setAssetType();
             }
+            
+            this.listenTo(this.model, "sync", () => {
+                this._setAssetType(assetModel => {
+                    this.reRender();
+                });
+            });
+        },
+        
+        _setAssetType(callback) {
+            this.getModelFactory().create("Asset", model => {
+                model.id = this.model.get("assetId");
+                model.fetch().then(() => {
+                    this.assetType = this.damConfig.getType(model.get("type"));
+                    
+                    if (typeof callback === "function") {
+                        callback(model);
+                    }
+                });
+            });
         },
         
         data() {
+            // debugger;
             return {
                 show: this._showImage(),
                 path: this.options.el
@@ -56,7 +69,7 @@ Espo.define('dam:views/rendition/record/panels/side/preview/detail', ["view", "d
         },
         
         _isImage() {
-            if (this.model.get("type")) {
+            if (this.model.get("type") && this.assetType) {
                 return this.damConfig.getByType(`${this.assetType}.renditions.${this.model.get("type")}.preview`)
                     || this.damConfig.getByType(`${this.assetType}.renditions.${this.model.get("type")}.nature`) === "image"
                     || false;

@@ -40,6 +40,11 @@ Espo.define('dam:views/asset/modals/info-panel', 'view', function (Dep) {
                 },
                 mode : 'edit'
             });
+        },
+    
+        setReadOnly () {
+            this.getView("type").setReadOnly();
+            this.getView("private").setReadOnly();
         }
     });
 });

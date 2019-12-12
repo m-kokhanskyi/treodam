@@ -11,8 +11,10 @@ Espo.define('dam:views/modals/multi-create', 'views/modal', function (Dep) {
             this.getCollectionFactory().create("Attachments", collection => {
                 this.collection = collection;
                 this.collection.listenTo(this.collection, "upload:done", () => {
-                    this._afterUploadDone();
-                    this._renderAttachmentList();
+                    if (this.collection.length > 0) {
+                        this._afterUploadDone();
+                        this._renderAttachmentList();
+                    }
                 });
             });
             
@@ -74,7 +76,7 @@ Espo.define('dam:views/modals/multi-create', 'views/modal', function (Dep) {
                 name : "cancel",
                 label: "Cancel"
             });
-            this.getView("assetInfoPanel").remove();
+            this.getView("assetInfoPanel").setReadOnly();
         },
         
         actionSave() {

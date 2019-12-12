@@ -1,0 +1,35 @@
+{
+  "bottomPanels": {
+    "detail": [
+      {
+        "name": "asset_relations",
+        "label": "Asset Relations",
+        "view": "dam:views/asset_relation/record/panels/bottom-panel",
+        "entityName": "Category"
+      }
+    ]
+  },
+  "sidePanels" : {
+    "edit" : [
+      {
+        "name" : "image",
+        "label": "",
+        "view" : "pim:views/product/fields/image"
+      }
+    ],
+    "detail" : [
+      {
+        "name" : "image",
+        "label": "",
+        "view" : "pim:views/product/fields/image"
+      }
+    ],
+    "detailSmall" : [
+      {
+        "name" : "image",
+        "label": "",
+        "view" : "pim:views/product/fields/image"
+      }
+    ]
+  }
+}

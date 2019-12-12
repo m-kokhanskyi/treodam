@@ -25,7 +25,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     {
         $attachment = $entity->get("file");
 
-        if (stripos($attachment->get("type"),  "image/")) {
+        if (stripos($attachment->get("type"),  "image/") !== false) {
             if ($meta = $this->getServiceFactory()->create("Attachment")->getImageMeta($attachment)) {
                 return $this->getServiceFactory()->create("RenditionMetaData")->insertData($entity->id, $meta);
             }

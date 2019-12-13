@@ -108,6 +108,9 @@ class AssetCategory extends AbstractSelectManager
         ];
     }
 
+    /**
+     * @param $result
+     */
     protected function boolFilterOnlyRoot(&$result)
     {
         $result['whereClause'][] = [
@@ -115,6 +118,9 @@ class AssetCategory extends AbstractSelectManager
         ];
     }
 
+    /**
+     * @param $result
+     */
     protected function boolFilterByCollection(&$result)
     {
         if ($value = $this->getBoolData('byCollection')) {

@@ -36,7 +36,6 @@ use Espo\ORM\Entity;
 class Asset extends Base implements DAMAttachment
 {
     /**
-     * TODO: change to work with entity (look entity params)
      *
      * @param Entity $entity
      * @return array
@@ -49,12 +48,22 @@ class Asset extends Base implements DAMAttachment
         ];
     }
 
+    /**
+     * @param \Dam\Entities\Asset $main
+     * @param \Dam\Entities\Asset $foreign
+     * @return bool
+     */
     public function linkAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)
     {
         return $this->getMapper()->relate($foreign, "relatedAssets", $main) &&
             $this->getMapper()->relate($main, "relatedAssets", $foreign);
     }
 
+    /**
+     * @param \Dam\Entities\Asset $main
+     * @param \Dam\Entities\Asset $foreign
+     * @return mixed
+     */
     public function unlinkAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)
     {
         return $this->getMapper()->unrelate($foreign, "relatedAssets", $main);

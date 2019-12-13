@@ -1,4 +1,22 @@
 <?php
+/**
+ * Dam
+ * Free Extension
+ * Copyright (c) TreoLabs GmbH
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 declare(strict_types=1);
 
 namespace Dam\Repositories;
@@ -8,8 +26,17 @@ use Espo\Core\ORM\Entity;
 use Espo\Core\Templates\Repositories\Base;
 use PDO;
 
+/**
+ * Class AssetRelation
+ * @package Dam\Repositories
+ */
 class AssetRelation extends Base
 {
+    /**
+     * @param Entity $asset
+     * @param Entity $related
+     * @param string $assignedUserId
+     */
     public function createLink(Entity $asset, Entity $related, string $assignedUserId)
     {
         $entity = $this->get();
@@ -26,6 +53,11 @@ class AssetRelation extends Base
         $this->save($entity);
     }
 
+    /**
+     * @param Entity $asset
+     * @param Entity $related
+     * @return bool
+     */
     public function deleteLink(Entity $asset, Entity $related)
     {
         $entities = $this->where([
@@ -45,6 +77,11 @@ class AssetRelation extends Base
         return true;
     }
 
+    /**
+     * @param string $entityName
+     * @param string $entityId
+     * @return mixed
+     */
     public function deleteLinks(string $entityName, string $entityId)
     {
         if ($entityName === "Asset") {
@@ -58,6 +95,12 @@ class AssetRelation extends Base
         return $pdo->exec("DELETE FROM `asset_relation` WHERE {$where}");
     }
 
+    /**
+     * @param string $assetId
+     * @param string $entityName
+     * @param string $entityId
+     * @return mixed
+     */
     public function getEntityAssetsById(string $assetId, string $entityName, string $entityId)
     {
         return $this->where([
@@ -67,11 +110,23 @@ class AssetRelation extends Base
         ])->findOne();
     }
 
+    /**
+     * @param array  $list
+     * @param string $entityName
+     * @param string $entityId
+     * @return mixed
+     */
     public function getItemsInList(array $list, string $entityName, string $entityId)
     {
         return $this->getData($this->getSqlItemsInList($list), [$entityId, $entityName]);
     }
 
+    /**
+     * @param $entityId
+     * @param $entityName
+     * @param $type
+     * @return mixed
+     */
     public function getItemsByType($entityId, $entityName, $type)
     {
         $entity = $this->getEntityManager()->getEntity("AssetRelation");
@@ -113,6 +168,12 @@ class AssetRelation extends Base
 
     }
 
+    /**
+     * @param string $entityName
+     * @param string $entityId
+     * @param array  $assetIds
+     * @return mixed
+     */
     public function getItemsByAssetIds(string $entityName, string $entityId, array $assetIds)
     {
         $entity = $this->getEntityManager()->getEntity("AssetRelation");
@@ -141,6 +202,11 @@ class AssetRelation extends Base
         return $this->getData($sql, $data);
     }
 
+    /**
+     * @param       $assetId
+     * @param array $availableEntities
+     * @return mixed
+     */
     public function getAvailableEntities($assetId, array $availableEntities)
     {
         return $this->getData(
@@ -155,7 +221,11 @@ class AssetRelation extends Base
         );
     }
 
-
+    /**
+     * @param string $sql
+     * @param array  $data
+     * @return mixed
+     */
     protected function getData(string $sql, array $data = [])
     {
         $pdo = $this->getPDO();
@@ -167,6 +237,10 @@ class AssetRelation extends Base
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @param array $list
+     * @return string
+     */
     protected function getSqlItemsInList(array $list)
     {
         return "SELECT COUNT('id') as count, a.type
@@ -180,11 +254,17 @@ class AssetRelation extends Base
                 GROUP BY a.type";
     }
 
+    /**
+     * @return DamQuery
+     */
     protected function getDamQuery()
     {
         return new DamQuery($this->getPDO(), $this->entityFactory);
     }
 
+    /**
+     * @return array
+     */
     private function skipAttributeList()
     {
         return [

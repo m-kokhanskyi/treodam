@@ -1,14 +1,38 @@
 <?php
+/**
+ * Dam
+ * Free Extension
+ * Copyright (c) TreoLabs GmbH
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 declare(strict_types=1);
+
 namespace Dam\Controllers;
 
 use Espo\Core\Exceptions;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
-use Treo\Core\Slim\Http\Request;
 use Espo\Core\Exceptions\NotFound;
+use Treo\Core\Slim\Http\Request;
 
+/**
+ * Class AssetRelation
+ * @package Dam\Controllers
+ */
 class AssetRelation extends AbstractController
 {
     /**
@@ -47,6 +71,12 @@ class AssetRelation extends AbstractController
         ];
     }
 
+    /**
+     * @param         $params
+     * @param         $data
+     * @param Request $request
+     * @return array
+     */
     public function actionByEntity($params, $data, Request $request)
     {
         if (!$this->isReadAction($request)) {
@@ -61,6 +91,12 @@ class AssetRelation extends AbstractController
         ];
     }
 
+    /**
+     * @param         $params
+     * @param         $data
+     * @param Request $request
+     * @return mixed
+     */
     public function actionSortOrder($params, $data, Request $request)
     {
         if (!$this->isPutAction($request)) {
@@ -72,6 +108,12 @@ class AssetRelation extends AbstractController
             ->updateSortOrder($params["entity_name"], $params['entity_id'], $data->ids);
     }
 
+    /**
+     * @param         $params
+     * @param         $data
+     * @param Request $request
+     * @return array
+     */
     public function actionEntityList($params, $data, Request $request)
     {
         if (!$this->isReadAction($request)) {
@@ -86,6 +128,12 @@ class AssetRelation extends AbstractController
         ];
     }
 
+    /**
+     * @param         $params
+     * @param         $data
+     * @param Request $request
+     * @return array
+     */
     public function actionByAsset($params, $data, Request $request)
     {
         if (!$this->isReadAction($request)) {
@@ -100,6 +148,12 @@ class AssetRelation extends AbstractController
         ];
     }
 
+    /**
+     * @param         $params
+     * @param         $data
+     * @param Request $request
+     * @return mixed
+     */
     public function actionUpdateBy($params, $data, Request $request)
     {
         if (!$request->isPost() && !$request->isPatch()) {

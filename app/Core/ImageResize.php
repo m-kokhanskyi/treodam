@@ -1,19 +1,42 @@
 <?php
+/**
+ * Dam
+ * Free Extension
+ * Copyright (c) TreoLabs GmbH
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 declare(strict_types=1);
+
 namespace Dam\Core;
 
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Imagick;
 
+/**
+ * Class ImageResize
+ * @package Dam\Core
+ */
 class ImageResize
 {
-    const CROP_TOP = 1;
-    const CROP_CENTER = 2;
-    const CROP_BOTTOM = 3;
-    const CROP_LEFT = 4;
-    const CROP_RIGHT = 5;
+    const CROP_TOP        = 1;
+    const CROP_CENTER     = 2;
+    const CROP_BOTTOM     = 3;
+    const CROP_LEFT       = 4;
+    const CROP_RIGHT      = 5;
     const CROP_TOP_CENTER = 6;
 
     /**@var $image Imagick * */
@@ -26,6 +49,11 @@ class ImageResize
     protected $sourceW;
     protected $sourceH;
 
+    /**
+     * @param string $filename
+     * @return $this
+     * @throws \ImagickException
+     */
     public function load(string $filename)
     {
         if (!defined('IMAGETYPE_WEBP')) {
@@ -43,6 +71,12 @@ class ImageResize
         return $this;
     }
 
+    /**
+     * @param      $max_width
+     * @param      $max_height
+     * @param bool $upscale
+     * @return $this
+     */
     public function resizeToBestFit($max_width, $max_height, $upscale = false)
     {
         $res = true;
@@ -58,7 +92,12 @@ class ImageResize
         return $this;
     }
 
-
+    /**
+     * @param      $width
+     * @param      $height
+     * @param bool $upscale
+     * @return $this
+     */
     public function resize($width, $height, $upscale = false)
     {
         $res = true;
@@ -75,10 +114,10 @@ class ImageResize
     }
 
     /**
-     * @param $width
-     * @param $height
+     * @param      $width
+     * @param      $height
      * @param bool $upscale
-     * @param int $position
+     * @param int  $position
      * @return $this
      * @throws Error
      */
@@ -95,7 +134,7 @@ class ImageResize
         }
 
         $ratio_source = $this->image->getImageWidth() / $this->image->getImageHeight();
-        $ratio_dest = $width / $height;
+        $ratio_dest   = $width / $height;
 
         if ($ratio_dest < $ratio_source) {
             $this->resizeToHeight($height, $upscale);
@@ -128,11 +167,20 @@ class ImageResize
         return $this;
     }
 
+    /**
+     * @param string $fileName
+     * @return bool
+     */
     public function save(string $fileName)
     {
         return $this->image->writeImage($fileName);
     }
 
+    /**
+     * @param bool  $use
+     * @param array $params
+     * @return bool
+     */
     protected function useUpscale(bool $use, array $params)
     {
         list($w, $h) = $params;
@@ -144,6 +192,11 @@ class ImageResize
         return true;
     }
 
+    /**
+     * @param      $height
+     * @param bool $allow_enlarge
+     * @return $this
+     */
     protected function resizeToHeight($height, $allow_enlarge = false)
     {
         $ratio = $height / $this->image->getImageHeight();
@@ -154,11 +207,17 @@ class ImageResize
         return $this;
     }
 
+    /**
+     * @param $width
+     * @param $height
+     * @param $upscale
+     * @return $this
+     */
     protected function setImageProps($width, $height, $upscale)
     {
         if (!$upscale) {
             if ($width > $this->getSourceWidth() || $height > $this->getSourceHeight()) {
-                $width = $this->getSourceWidth();
+                $width  = $this->getSourceWidth();
                 $height = $this->getSourceHeight();
             }
         }
@@ -175,27 +234,43 @@ class ImageResize
         return $this;
     }
 
-
+    /**
+     * @return mixed
+     */
     protected function getSourceWidth()
     {
         return $this->sourceW;
     }
 
+    /**
+     * @return mixed
+     */
     protected function getSourceHeight()
     {
         return $this->sourceH;
     }
 
+    /**
+     * @return mixed
+     */
     protected function getDestWidth()
     {
         return $this->destW;
     }
 
+    /**
+     * @return mixed
+     */
     protected function getDestHeight()
     {
         return $this->destH;
     }
 
+    /**
+     * @param     $expectedSize
+     * @param int $position
+     * @return float|int
+     */
     protected function getCropPosition($expectedSize, $position = self::CROP_CENTER)
     {
         $size = 0;
@@ -211,12 +286,18 @@ class ImageResize
                 $size = $expectedSize / 4;
                 break;
         }
+
         return $size;
     }
 
+    /**
+     * @param      $width
+     * @param bool $upscale
+     * @return $this
+     */
     public function resizeToWidth($width, $upscale = false)
     {
-        $ratio = $width / $this->getSourceWidth();
+        $ratio  = $width / $this->getSourceWidth();
         $height = $this->getSourceHeight() * $ratio;
 
         $this->setImageProps($width, $height, $upscale);

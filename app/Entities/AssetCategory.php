@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace Dam\Entities;
 
 use Espo\Core\Exceptions\Error;
-use \Espo\Core\Templates\Entities\Base;
+use Espo\Core\Templates\Entities\Base;
 use Espo\ORM\EntityCollection;
 
 /**
@@ -33,6 +33,9 @@ use Espo\ORM\EntityCollection;
  */
 class AssetCategory extends Base
 {
+    /**
+     * @var string
+     */
     protected $entityType = "AssetCategory";
 
     /**
@@ -46,7 +49,7 @@ class AssetCategory extends Base
 
         // prepare where
         $where = [
-            'assetCategories.id' => [$this->get('id')]
+            'assetCategories.id' => [$this->get('id')],
         ];
 
         $categoryChildren = $this->getChildren();

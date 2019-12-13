@@ -1,21 +1,53 @@
 <?php
+/**
+ * Dam
+ * Free Extension
+ * Copyright (c) TreoLabs GmbH
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 declare(strict_types=1);
 
 namespace Dam\Core\Utils;
-
 
 use Dam\Entities\Asset;
 use Espo\Core\Exceptions\BadRequest;
 use Treo\Core\Container;
 
+/**
+ * Class EntityManager
+ * @package Dam\Core\Utils
+ */
 class EntityManager extends \Espo\Core\Utils\EntityManager
 {
+    /**
+     * @var array
+     */
     protected $asset_relation = [];
+    /**
+     * @var array
+     */
     protected $relation       = [];
 
     const ASSET_RELATION_NAME = "asset_relations";
     const RELATION_NAME       = 'relations';
 
+    /**
+     * @param string $entityName
+     * @return array
+     */
     protected static function getAssetRelationTemplate(string $entityName)
     {
         return [
@@ -28,6 +60,10 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         ];
     }
 
+    /**
+     * EntityManager constructor.
+     * @param Container|null $container
+     */
     public function __construct(Container $container = null)
     {
         $this->relation = [
@@ -93,6 +129,10 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         return $res;
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     protected function createAssetRelations($params)
     {
         $relationEntityName = $params['entity'] === "Asset" ? $params['entityForeign'] : $params['entity'];
@@ -120,6 +160,9 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         return $this->getMetadata()->save();
     }
 
+    /**
+     * @return mixed
+     */
     protected function createRelation()
     {
         $panels = array_filter($this->getMetadata()->get(["clientDefs", "Asset", "bottomPanels", "detail"]),
@@ -140,6 +183,9 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         return $this->getMetadata()->save();
     }
 
+    /**
+     * @param array $params
+     */
     protected function createMassUploadAsset(array $params)
     {
         $link   = $params['entityForeign'] === "Asset" ? $params['link'] : $params['linkForeign'];
@@ -156,6 +202,10 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         $this->getMetadata()->save();
     }
 
+    /**
+     * @param $params
+     * @return bool
+     */
     protected function deleteAssetRelations($params)
     {
         $relationEntityName = $params['entity'];
@@ -184,6 +234,9 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         return $this->getMetadata()->save();
     }
 
+    /**
+     * @return bool
+     */
     protected function deleteRelation()
     {
         $links = array_keys($this->getMetadata()->get(["entityDefs", "Asset", "links"]));
@@ -208,6 +261,11 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         return true;
     }
 
+    /**
+     * @param string|null $entityName
+     * @param string|null $to
+     * @return bool
+     */
     protected function hasLinkTo(?string $entityName, ?string $to)
     {
         $links = $this->getMetadata()->get(['entityDefs', $entityName, "links"]);
@@ -221,6 +279,11 @@ class EntityManager extends \Espo\Core\Utils\EntityManager
         return false;
     }
 
+    /**
+     * @param string $entityName1
+     * @param string $entityName2
+     * @return bool
+     */
     protected function isAsset(string $entityName1, string $entityName2)
     {
         return $entityName1 === "Asset" || $entityName2 === "Asset";

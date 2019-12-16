@@ -116,6 +116,7 @@ abstract class Base
      */
     protected function createThumb($thumbFilePath, $filePath, $size)
     {
+        //TODO: change to loaders
         $image = new ImageResize($filePath);
 
         if (!$this->imageSizes[$size]) {

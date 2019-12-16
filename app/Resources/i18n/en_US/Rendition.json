@@ -19,7 +19,8 @@
     "links": {
         "asset": "Asset",
         "assetMetaDatas": "Asset Meta Datas",
-        "renditionVersions": "Rendition Versions"
+        "renditionVersions": "Rendition Versions",
+        "renditionMetaDatas": "Meta Data"
     },
     "labels": {
         "Create Rendition": "Create Rendition"

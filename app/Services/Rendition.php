@@ -117,7 +117,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
             ]);
         }
 
-        if ($nature === "image" && stripos($attachmentEntity->get("type"), "image/")) {
+        if ($nature === "image" && stripos($attachmentEntity->get("type"), "image/") !== false) {
             $imageInfo = $attachmentService->getImageInfo($attachmentEntity, $path);
             if ($imageInfo) {
                 $entity->set([

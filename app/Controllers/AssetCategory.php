@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace Dam\Controllers;
 
-use \Espo\Core\Templates\Controllers\Base;
+use Espo\Core\Templates\Controllers\Base;
 
 /**
  * Class AssetCategory

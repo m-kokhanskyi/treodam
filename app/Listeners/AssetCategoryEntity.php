@@ -265,7 +265,6 @@ class AssetCategoryEntity extends AbstractListener
      *
      * @return array
      */
-    //TODO: refactored
     protected function getEntityParents(Entity $category, array $parents = []): array
     {
         $parent = $category->get('categoryParent');
@@ -286,7 +285,6 @@ class AssetCategoryEntity extends AbstractListener
      *
      * @return array
      */
-    //TODO: refactored
     protected function getEntityChildren($entities, array $children = [])
     {
         if (!empty($entities)) {

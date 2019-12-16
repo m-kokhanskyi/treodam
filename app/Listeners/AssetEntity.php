@@ -1,5 +1,6 @@
 <?php
-/** Dam
+/**
+ * Dam
  * Free Extension
  * Copyright (c) TreoLabs GmbH
  *
@@ -153,6 +154,9 @@ class AssetEntity extends AbstractListener
         }
     }
 
+    /**
+     * @param Event $event
+     */
     public function beforeUnrelate(Event $event)
     {
         $foreign = $event->getArgument('foreign');
@@ -164,6 +168,9 @@ class AssetEntity extends AbstractListener
         }
     }
 
+    /**
+     * @param Event $event
+     */
     public function afterRemove(Event $event)
     {
         $entity = $event->getArgument("entity");
@@ -193,6 +200,11 @@ class AssetEntity extends AbstractListener
         }
     }
 
+    /**
+     * @param $collectionId
+     * @param $categories
+     * @return bool
+     */
     protected function isCorrectCategory($collectionId, $categories): bool
     {
         $pdo = $this->getEntityManager()->getPDO();
@@ -243,6 +255,10 @@ class AssetEntity extends AbstractListener
         return $entity->isAttributeChanged('private') || $this->changeAttachment($entity);
     }
 
+    /**
+     * @param Entity $entity
+     * @return mixed
+     */
     private function changeAttachment(Entity $entity)
     {
         return $entity->isAttributeChanged('fileId');
@@ -276,6 +292,10 @@ class AssetEntity extends AbstractListener
         return $path;
     }
 
+    /**
+     * @param Entity $entity
+     * @return bool
+     */
     private function isDeactivateAsset(Entity $entity)
     {
         return $entity->isAttributeChanged("isActive") && !$entity->get("isActive");

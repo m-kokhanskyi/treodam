@@ -227,6 +227,9 @@ class Event extends AbstractEvent
         $config->save();
     }
 
+    /**
+     * @return bool
+     */
     protected function installConfig()
     {
         if (file_exists("data/dam/config.yaml")) {

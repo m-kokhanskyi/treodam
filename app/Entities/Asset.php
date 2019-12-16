@@ -25,7 +25,7 @@ namespace Dam\Entities;
 use Dam\Core\FilePathBuilder;
 use Dam\Core\FileStorage\DAMUploadDir;
 use Dam\Core\PathInfo;
-use \Espo\Core\Templates\Entities\Base;
+use Espo\Core\Templates\Entities\Base;
 
 /**
  * Class Asset
@@ -34,21 +34,33 @@ use \Espo\Core\Templates\Entities\Base;
  */
 class Asset extends Base implements PathInfo
 {
+    /**
+     * @var string
+     */
     protected $entityType = "Asset";
 
+    /**
+     * @return array
+     */
     public function getPathInfo(): array
     {
         return [
             ($this->get('private') ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "master/",
-            $this->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC
+            $this->get('private') ? FilePathBuilder::PRIVATE : FilePathBuilder::PUBLIC,
         ];
     }
 
+    /**
+     * @return string
+     */
     public function getMainFolder(): string
     {
         return "master";
     }
 
+    /**
+     * @return array
+     */
     public static function staticRelations()
     {
         return [
@@ -62,7 +74,7 @@ class Asset extends Base implements PathInfo
             'teams',
             'file',
             'assetCategories',
-            'ownerUser'
+            'ownerUser',
         ];
     }
 }

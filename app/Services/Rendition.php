@@ -1,4 +1,23 @@
 <?php
+/**
+ * Dam
+ * Free Extension
+ * Copyright (c) TreoLabs GmbH
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 declare(strict_types=1);
 
 namespace Dam\Services;
@@ -10,8 +29,15 @@ use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Treo\Core\Utils\Language;
 
+/**
+ * Class Rendition
+ * @package Dam\Services
+ */
 class Rendition extends \Espo\Core\Templates\Services\Base
 {
+    /**
+     * Rendition constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -21,11 +47,15 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         $this->addDependency("language");
     }
 
+    /**
+     * @param \Dam\Entities\Rendition $entity
+     * @return bool
+     */
     public function updateMetaData(\Dam\Entities\Rendition $entity)
     {
         $attachment = $entity->get("file");
 
-        if (stripos($attachment->get("type"),  "image/")) {
+        if (stripos($attachment->get("type"),  "image/") !== false) {
             if ($meta = $this->getServiceFactory()->create("Attachment")->getImageMeta($attachment)) {
                 return $this->getServiceFactory()->create("RenditionMetaData")->insertData($entity->id, $meta);
             }
@@ -34,6 +64,10 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         return false;
     }
 
+    /**
+     * @param $entity
+     * @return bool
+     */
     public function validateType($entity)
     {
         $asset = $entity->get('asset');
@@ -57,6 +91,10 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         return true;
     }
 
+    /**
+     * @param $entity
+     * @param $assetEntity
+     */
     public function updateAttachmentInfo($entity, $assetEntity)
     {
         $attachmentService = $this->getServiceFactory()->create("Attachment");
@@ -94,17 +132,25 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         }
     }
 
+    /**
+     * @return ConfigManager
+     */
     protected function getConfigManager(): ConfigManager
     {
         return $this->getInjection("ConfigManager");
     }
 
-
+    /**
+     * @return Language
+     */
     protected function getLanguage(): Language
     {
         return $this->getInjection("language");
     }
 
+    /**
+     * @return FilePathBuilder
+     */
     protected function getFilePathBuilder(): FilePathBuilder
     {
         return $this->getInjection("filePathBuilder");
@@ -119,6 +165,10 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         return $this->getServiceFactory()->create($name);
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     protected function attributeMapping(string $name): string
     {
         return $this->getConfigManager()->get(["attributeMapping", $name, "field"]) ?? $name;

@@ -1,5 +1,25 @@
 <?php
+/**
+ * Dam
+ * Free Extension
+ * Copyright (c) TreoLabs GmbH
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 declare(strict_types=1);
+
 namespace Dam\Core\Download;
 
 use Dam\Entities\Attachment;
@@ -129,24 +149,44 @@ class Custom
     {
         switch ($this->scale) {
             case "resize":
-                $this->imagick->resizeImage((int)$this->width, (int)$this->height, Imagick::FILTER_HAMMING, 1, false);
+                $this->imagick->resizeImage(
+                    (int)$this->width,
+                    (int)$this->height,
+                    Imagick::FILTER_HAMMING,
+                    1, false
+                );
                 break;
             case "byWidth":
-                $this->imagick->resizeImage((int)$this->width, 1000000000, Imagick::FILTER_HAMMING, 1, true);
+                $this->imagick->resizeImage(
+                    (int)$this->width,
+                    1000000000,
+                    Imagick::FILTER_HAMMING,
+                    1,
+                    true
+                );
                 break;
             case "byHeight" :
-                $this->imagick->resizeImage(1000000000, (int)$this->height, Imagick::FILTER_HAMMING, 1, true);
+                $this->imagick->resizeImage(
+                    1000000000,
+                    (int)$this->height,
+                    Imagick::FILTER_HAMMING,
+                    1,
+                    true
+                );
                 break;
         }
 
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function quality()
     {
         switch (true) {
             case $this->format === "jpeg":
-                $this->imagick->setImageCompressionQuality($this->quality);
+                $this->imagick->setImageCompressionQuality((int)$this->quality);
                 break;
             case $this->format === "png" :
                 break;
@@ -155,6 +195,10 @@ class Custom
         return $this;
     }
 
+    /**
+     * @return $this
+     * @throws \ImagickException
+     */
     protected function format()
     {
         if ($this->format === "jpeg") {

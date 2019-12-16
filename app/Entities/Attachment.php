@@ -34,11 +34,18 @@ class Attachment extends \Treo\Entities\Attachment
      */
     protected $entityType = "Attachment";
 
+    /**
+     * @return string
+     */
     public function _getStorage()
     {
         return "DAMUploadDir";
     }
 
+    /**
+     * @param $name
+     * @return $this
+     */
     public function setName($name)
     {
         $baseFileInfo = pathinfo($this->get("name"));

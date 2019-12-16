@@ -83,6 +83,10 @@ class Asset extends Base
         }
     }
 
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @param array               $imageInfo
+     */
     public function updateAttributes(\Dam\Entities\Asset $asset, array $imageInfo)
     {
         $asset->set(
@@ -107,6 +111,10 @@ class Asset extends Base
         );
     }
 
+    /**
+     * @param Entity $entity
+     * @return mixed
+     */
     public function getRelationsCount(Entity $entity)
     {
         $collection = $this->getService("AssetRelation")->getRelationsLinks($entity);
@@ -114,6 +122,11 @@ class Asset extends Base
         return $collection->count();
     }
 
+    /**
+     * @param Entity $entity
+     * @param        $userId
+     * @return bool
+     */
     public function assetRelation(Entity $entity, $userId)
     {
         if (!$list = $this->checkIssetLink($entity)) {
@@ -133,11 +146,20 @@ class Asset extends Base
         return true;
     }
 
+    /**
+     * @param Entity $entity
+     * @return mixed
+     */
     public function deleteLinks(Entity $entity)
     {
         return $this->getService("AssetRelation")->deleteLinks("Asset", $entity->id);
     }
 
+    /**
+     * @param \Dam\Entities\Asset $main
+     * @param \Dam\Entities\Asset $foreign
+     * @return mixed
+     */
     public function linkToAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)
     {
         if ($main->id === $foreign->id) {
@@ -147,6 +169,11 @@ class Asset extends Base
         return $this->getRepository()->linkAsset($main, $foreign);
     }
 
+    /**
+     * @param \Dam\Entities\Asset $main
+     * @param \Dam\Entities\Asset $foreign
+     * @return mixed
+     */
     public function unlinkToAsset(\Dam\Entities\Asset $main, \Dam\Entities\Asset $foreign)
     {
         return $this->getRepository()->unlinkAsset($main, $foreign);
@@ -185,6 +212,10 @@ class Asset extends Base
         return $this->getServiceFactory()->create($name);
     }
 
+    /**
+     * @param Entity $entity
+     * @return array
+     */
     protected function checkIssetLink(Entity $entity)
     {
         $list = [];
@@ -201,6 +232,10 @@ class Asset extends Base
         return $list;
     }
 
+    /**
+     * @param string $key
+     * @return bool
+     */
     protected function skipEntityAssets(string $key)
     {
         return !$this->getMetadata()->get(['entityDefs', 'Asset', 'links', $key, 'entityAsset']);
@@ -223,11 +258,20 @@ class Asset extends Base
             !$this->skipEntityAssets($key);
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     protected function attributeMapping(string $name): string
     {
         return $this->getConfigManager()->get(["attributeMapping", $name, "field"]) ?? $name;
     }
 
+    /**
+     * @param $label
+     * @param $category
+     * @param $scope
+     */
     private function getTranslate($label, $category, $scope)
     {
         $this->getInjection("language")->translate($label, $category, $scope);

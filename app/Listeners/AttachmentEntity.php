@@ -1,5 +1,6 @@
 <?php
-/** Dam
+/**
+ * Dam
  * Free Extension
  * Copyright (c) TreoLabs GmbH
  *
@@ -48,6 +49,9 @@ class AttachmentEntity extends AbstractListener
         }
     }
 
+    /**
+     * @param Event $event
+     */
     public function afterSave(Event $event)
     {
     }
@@ -62,6 +66,9 @@ class AttachmentEntity extends AbstractListener
         $this->getEntityManager()->getRepository("Attachment")->removeThumbs($entity);
     }
 
+    /**
+     * @return Manager
+     */
     protected function getFileManager(): Manager
     {
         return $this->container->get('FileManager');

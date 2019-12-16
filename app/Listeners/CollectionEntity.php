@@ -1,5 +1,6 @@
 <?php
-/** Dam
+/**
+ * Dam
  * Free Extension
  * Copyright (c) TreoLabs GmbH
  *
@@ -50,6 +51,9 @@ class CollectionEntity extends AbstractListener
         }
     }
 
+    /**
+     * @param Event $event
+     */
     public function afterSave(Event $event)
     {
         /**@var $entity Collection* */

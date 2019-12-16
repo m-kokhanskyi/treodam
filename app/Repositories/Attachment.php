@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 declare(strict_types=1);
 
 namespace Dam\Repositories;
@@ -34,6 +35,9 @@ use Espo\ORM\Entity;
  */
 class Attachment extends \Treo\Repositories\Attachment
 {
+    /**
+     * Init
+     */
     protected function init()
     {
         parent::init();
@@ -151,6 +155,10 @@ class Attachment extends \Treo\Repositories\Attachment
         return false;
     }
 
+    /**
+     * @param Entity $entity
+     * @param array  $options
+     */
     public function afterRemove(\Espo\ORM\Entity $entity, array $options = [])
     {
         //if uploaded new attachment with previous name
@@ -175,6 +183,11 @@ class Attachment extends \Treo\Repositories\Attachment
         return $this->getInjection("DAMFileManager");
     }
 
+    /**
+     * @param PathInfo $entity
+     * @param Entity   $attachment
+     * @return string
+     */
     private function buildPath(PathInfo $entity, Entity $attachment): string
     {
         $path = $entity->getPathInfo()[0];

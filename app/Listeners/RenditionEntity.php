@@ -36,6 +36,9 @@ use Treo\Listeners\AbstractListener;
  */
 class RenditionEntity extends AbstractListener
 {
+    /**
+     * @param Event $event
+     */
     public function beforeSave(Event $event)
     {
         /**@var $entity Entity* */
@@ -88,6 +91,10 @@ class RenditionEntity extends AbstractListener
         }
     }
 
+    /**
+     * @param Entity $entity
+     * @return bool
+     */
     protected function typeDuplicate(Entity $entity)
     {
         $assetId = $entity->get("assetId");
@@ -102,16 +109,27 @@ class RenditionEntity extends AbstractListener
 
     }
 
+    /**
+     * @param Entity $entity
+     * @return mixed
+     */
     protected function changeAttachment(Entity $entity)
     {
         return $entity->isAttributeChanged("fileId");
     }
 
+    /**
+     * @return ConfigManager
+     */
     protected function getConfigManager(): ConfigManager
     {
         return $this->container->get("ConfigManager");
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     protected function getRepository($name)
     {
         return $this->getEntityManager()->getRepository($name);

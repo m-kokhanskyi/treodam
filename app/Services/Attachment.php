@@ -42,6 +42,9 @@ use Treo\Core\FileStorage\Manager;
  */
 class Attachment extends \Treo\Services\Attachment
 {
+    /**
+     * Attachment constructor.
+     */
     public function __construct()
     {
         $this->addDependency("Validator");
@@ -62,7 +65,7 @@ class Attachment extends \Treo\Services\Attachment
      */
     public function getImageInfo($attachment, $path = null): array
     {
-        if (!stripos($attachment->get("type"), "image/")) {
+        if (stripos($attachment->get("type"), "image/") === false) {
             return [];
         }
 
@@ -133,6 +136,10 @@ class Attachment extends \Treo\Services\Attachment
         return $entity;
     }
 
+    /**
+     * @param string $attachmentId
+     * @return bool
+     */
     public function unRelateAsset(string $attachmentId)
     {
         $entity = $this->getEntity($attachmentId);
@@ -155,10 +162,6 @@ class Attachment extends \Treo\Services\Attachment
     {
         $attachment = $this->getEntity($asset->get("fileId"));
 
-//        if ($attachment->get('sourceId')) {
-//            return $this->copyDuplicate($asset);
-//        }
-
         if ($asset->get("nameOfFile")) {
             $attachment->setName($asset->get("nameOfFile"));
         }
@@ -174,6 +177,11 @@ class Attachment extends \Treo\Services\Attachment
         return false;
     }
 
+    /**
+     * @param $entity
+     * @param $attachment
+     * @return bool
+     */
     public function moveToRendition($entity, $attachment)
     {
         $sourcePath = $attachment->get("tmpPath");
@@ -195,6 +203,10 @@ class Attachment extends \Treo\Services\Attachment
         return false;
     }
 
+    /**
+     * @param \Dam\Entities\Asset $asset
+     * @return bool
+     */
     public function copyDuplicate(\Dam\Entities\Asset $asset)
     {
         $attachment = $this->getEntity($asset->get("fileId"));
@@ -405,21 +417,33 @@ class Attachment extends \Treo\Services\Attachment
                 'create') && !$this->getAcl()->checkScope($relatedEntityType, 'edit');
     }
 
+    /**
+     * @return FileManager
+     */
     protected function getFileManager(): FileManager
     {
         return $this->getInjection("DAMFileManager");
     }
 
+    /**
+     * @return Manager
+     */
     protected function getFileStorageManager(): Manager
     {
         return $this->getInjection("fileStorageManager");
     }
 
+    /**
+     * @return ConfigManager
+     */
     protected function getConfigManager(): ConfigManager
     {
         return $this->getInjection("ConfigManager");
     }
 
+    /**
+     * @return FilePathBuilder
+     */
     protected function getFilePathBuilder(): FilePathBuilder
     {
         return $this->getInjection("filePathBuilder");

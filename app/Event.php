@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace Dam;
 
-use Dam\Core\Utils\Util;
 use DamCommon\Services\MigrationPimImage;
+use DamCommon\Services\PimLayout;
 use Treo\Core\ModuleManager\AbstractEvent;
 use Treo\Core\Utils\Metadata;
 
@@ -69,6 +69,8 @@ class Event extends AbstractEvent
         $this->setApplicationName();
         //for Pim
         $this->migratePimImage();
+        //for Dam && PIM
+        (new PimLayout($this->getContainer()))->modify();
     }
 
     /**

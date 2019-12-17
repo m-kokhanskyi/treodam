@@ -68,9 +68,7 @@ class Event extends AbstractEvent
         // set applicationName
         $this->setApplicationName();
         //for Pim
-        $this->migratePimImage();
-        //for Dam && PIM
-        (new PimLayout($this->getContainer()))->modify();
+        $this->migratePim();
     }
 
     /**
@@ -287,13 +285,21 @@ class Event extends AbstractEvent
     /**
      * @throws \Espo\Core\Exceptions\Error
      */
-    protected function migratePimImage()
+    protected function migratePim(): void
     {
-        if (MigrationPimImage::issetPimImage($this->getMetadata(), $this->getContainer()->get('entityManager'))) {
+        $config = $this->getContainer()->get('config');
+
+        if (!empty($config->get('isInstalled'))
+            && $config->get('pimAndDamInstalled') === false
+            && $this->getMetadata()->isModuleInstalled('Pim')) {
+            //migration pimImage
             $migrationPimImage = new MigrationPimImage();
             $migrationPimImage->setContainer($this->getContainer());
-
             $migrationPimImage->run();
+
+            //set flag about installed Pim and Image
+            $config->set('pimAndDamInstalled', true);
+            $config->save();
         }
     }
 

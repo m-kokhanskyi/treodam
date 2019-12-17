@@ -22,7 +22,9 @@ declare(strict_types=1);
 
 namespace Dam\Migrations;
 
+use DamCommon\Services\MigrationPimImage;
 use Treo\Core\Migration\AbstractMigration;
+use Treo\Core\Utils\Metadata;
 
 /**
  * Class V1Dot2Dot1
@@ -44,17 +46,29 @@ class V1Dot2Dot1 extends AbstractMigration
      */
     protected function migratePimImage()
     {
-        $metadata = $this->getContainer()->get('metadata');
-        $entityManager = $this->getContainer()->get('entityManager');
+        $config = $this->getContainer()->get('config');
 
-        if (MigrationPimImage::issetPimImage($metadata, $entityManager)) {
+        if ($config->get('pimAndDamInstalled') === false && $this->getMetadata()->isModuleInstalled('Pim')) {
             $migrationPimImage = new MigrationPimImage();
             $migrationPimImage->setContainer($this->getContainer());
 
             $migrationPimImage->run();
+
+            //set flag about installed Pim and Image
+            $config->set('pimAndDamInstalled', true);
+            $config->save();
         }
     }
 
+    /**
+     * Get Metadata
+     * @return Metadata
+     */
+    protected function getMetadata(): Metadata
+    {
+        return $this->getContainer()->get('metadata');
+    }
+    
     /**
      * @inheritdoc
      */

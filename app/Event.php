@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace Dam;
 
+use Dam\Core\Utils\Util;
 use DamCommon\Services\MigrationPimImage;
-use DamCommon\Services\PimLayout;
 use Treo\Core\ModuleManager\AbstractEvent;
 use Treo\Core\Utils\Metadata;
 

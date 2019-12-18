@@ -1,7 +1,7 @@
 {
   "name": "treolabs/dam",
   "require": {
-    "treolabs/treocore": "~3.24.0",
+    "treolabs/treocore": ">=3.24.0 <3.26.0",
     "treolabs/colored-fields": "*",
     "ext-gd": "*",
     "ext-exif": "*",

@@ -76,7 +76,6 @@
       "sourceList"              : [],
       "audited"                 : false,
       "tooltip"                 : false,
-      "view"                    : "dam:views/rendition/fields/file",
       "layoutMassUpdateDisabled": true
     },
     "private"          : {

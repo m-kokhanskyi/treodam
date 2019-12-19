@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace Dam;
 
 use Dam\Core\Utils\Util;
+use DamCommon\Services\MigrationPimImage;
 use Treo\Core\ModuleManager\AbstractEvent;
 use Treo\Core\Utils\Metadata;
 
@@ -66,6 +67,8 @@ class Event extends AbstractEvent
         $this->installConfig();
         // set applicationName
         $this->setApplicationName();
+        //for Pim
+        $this->migratePim();
     }
 
     /**
@@ -277,6 +280,27 @@ class Event extends AbstractEvent
 
         // save
         $config->save();
+    }
+
+    /**
+     * @throws \Espo\Core\Exceptions\Error
+     */
+    protected function migratePim(): void
+    {
+        $config = $this->getContainer()->get('config');
+
+        if (!empty($config->get('isInstalled'))
+            && $config->get('pimAndDamInstalled') === false
+            && $this->getMetadata()->isModuleInstalled('Pim')) {
+            //migration pimImage
+            $migrationPimImage = new MigrationPimImage();
+            $migrationPimImage->setContainer($this->getContainer());
+            $migrationPimImage->run();
+
+            //set flag about installed Pim and Image
+            $config->set('pimAndDamInstalled', true);
+            $config->save();
+        }
     }
 
     /**

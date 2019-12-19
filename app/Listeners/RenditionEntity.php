@@ -89,6 +89,21 @@ class RenditionEntity extends AbstractListener
         if ($entity->isNew() || $this->changeAttachment($entity)) {
             $this->getService("Rendition")->updateMetaData($entity);
         }
+
+        if ($entity->isAttributeChanged("fileId") && !$entity->isNew()) {
+            $this->getService("Attachment")->deleteAttachment($entity->getFetched("fileId"), $entity->getEntityType());
+        }
+    }
+
+    public function afterRemove(Event $event)
+    {
+        $entity = $event->getArgument("entity");
+
+        $attachmentId = $entity->get("fileId");
+
+        if ($attachmentId) {
+            $this->getService("Attachment")->toDelete($attachmentId);
+        }
     }
 
     /**

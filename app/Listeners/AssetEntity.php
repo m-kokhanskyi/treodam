@@ -113,6 +113,10 @@ class AssetEntity extends AbstractListener
         if ($this->changeAttachment($entity)) {
             $this->getService("Asset")->updateMetaData($entity);
         }
+
+        if ($entity->isAttributeChanged("fileId") && !$entity->isNew()) {
+            $this->getService("Attachment")->deleteAttachment($entity->getFetched("fileId"), $entity->getEntityType());
+        }
     }
 
     /**
@@ -173,11 +177,11 @@ class AssetEntity extends AbstractListener
      */
     public function afterRemove(Event $event)
     {
-        $entity = $event->getArgument("entity");
+        $entity       = $event->getArgument("entity");
         $attachmentId = $entity->get("fileId");
 
         if ($attachmentId) {
-            $this->getService("Attachment")->unRelateAsset($attachmentId);
+            $this->getService("Attachment")->toDelete($attachmentId);
         }
     }
 

@@ -207,11 +207,6 @@
       "create"        : false,
       "view": "dam:views/asset/record/panels/relations/asset-meta-data/main"
     },
-    "assetVersions"  : {
-      "select"        : false,
-      "create"        : false,
-      "rowActionsView": "dam:views/asset/record/panels/relations/asset-version/row"
-    },
     "relatedAssets"  : {
       "selectBoolFilterList": [
         "notEntity",

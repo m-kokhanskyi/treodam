@@ -1,1 +1,0 @@
-<a href="?entryPoint=versions&event=download&type=rendition&id={{get model "id"}}">{{value}}</a>

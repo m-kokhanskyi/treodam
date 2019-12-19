@@ -78,8 +78,7 @@
       "disableFormatting": false,
       "audited"          : false,
       "readOnly"         : false,
-      "tooltip"          : false,
-      "isCustom"         : true
+      "tooltip"          : false
     }
   },
   "links"     : {

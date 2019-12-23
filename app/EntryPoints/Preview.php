@@ -22,16 +22,16 @@ declare(strict_types=1);
 
 namespace Dam\EntryPoints;
 
-use Espo\Core\EntryPoints\Base;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\Core\Exceptions\NotFound;
+use Treo\Core\EntryPoints\AbstractEntryPoint;
 
 /**
  * Class Preview
  * @package Dam\EntryPoints
  */
-class Preview extends Base
+class Preview extends AbstractEntryPoint
 {
     /**
      * @var bool

@@ -1,166 +1,479 @@
 ---
+### IMPORTANT. After change this file, run rebuild config. In terminal run next command: php index.php config dam rebuild.
+
+### List of support types
 type:
+
+  ### Custom asset types
   custom:
+
+    ### Type name
     icon:
+
+      ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: image
+
+      ### Use for create version. Use in asset-version module.
       createVersion: false
+
+      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
+
+        ### Validation by mime
         mime:
+
+          ### Pattern for validation. Check this part in mime type.
           pattern: image
+
+          ### Message for error
           message: Only images
+
+        ### Validation by ratio. Width to height.
         ratio: 1
+
+        ### Validation by size in kb
         size:
+
+          ### Parameter skip use for skip this validation part
           skip: true
+
+      ### Rules for rendition.
       renditions: []
+    ### Type name
     gallery-image:
+
+      ### Asset type. Support next types: image and file. The system creates a preview for the image.
       nature: image
+
+      ### Use for create version. Use in asset-version module.
       createVersion: true
+
+      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
+
+        ### Pattern for validation. Check this part in mime type.
         mime:
+
+          ### Pattern for validation. Check this part in mime type.
           pattern: image
+
+          ### Message for error
           message: Only images
+
+        ### Validation by size in kb
         size:
+
+          ### Rules for private asset
           private:
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 5000
+
+          ### Rules for public asset
           public:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 5000
+
+        ### Validation by quality
         quality:
+
+          ### Min quality. If parameter does not exist, set 0.
           min: 10
+
+          ### Max quality. If the parameter does not exist, skip the maximum size
           max: 100
+
+        ### Validation by color depth
         colorDepth:
+          ### Values list
           - 8
+
+        ### Validation by color space
         colorSpace:
+          ### Values list
           - RGB
           - SRGB
+
+        ### Validation by size (width/height)
         scale:
+
+          ### Min parameter
           min:
             width: 150
             height: 150
+
+        ### Validation by unique. Use only unique images for this asset type.
         unique: []
+
+      ### Rules for rendition
       renditions:
+
+        ### Rendition type
         githumb1:
+
+          ### Auto create. Use in asset-rendition module.
           auto: true
+
+          ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
+
+          ### Use for create version. Use in asset-version module.
           createVersion: false
+
+          ### Rule for create file name.
+          #{{original}} - get original name
+          #{{date:Y-d-m}} - current date in format Year-day-month
+          #{{rand:5}} - random string with 5 symbols.
           fileNameMask: '{{original}}-{{date:Y-d-m}}-{{rand:5}}'
+
+          ### Handlers for create file
           handlers:
+
+            ### Rules for resize
             resize:
+
+              ### Use for upscale image
               upscale: true
+
+              ### Width for resize
               w: 400
+
+              ### Height for resize
               h: 400
+
+              ### Crop position. Best fit use by default.
               type: crop-center
+
+          ### Validation for rendition
           validations: []
+
+        ### Rendition type
         githumb2:
+
+          ### Auto create. Use in asset-rendition module.
           auto: true
+
+          ### Asset type. Support next types: image and file. The system creates a preview for the image.
           nature: image
+
+          ### Use for create version. Use in asset-version module.
           createVersion: true
+
+          ### Handlers for create file
           handlers:
+
+            ### Rules for resize
             resize:
+
+              ### Use for upscale image
               upscale: true
+
+              ### Width for resize
               w: 800
+
+              ### Height for resize
               h: 800
+
+          ### Validation for rendition
           validations: []
+
+        ### Rendition type
         githumb3:
+
+          ### Auto create. Use in asset-rendition module.
           auto: true
+
+          ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
+
+          ### Use for create version. Use in asset-version module.
           createVersion: true
+
+          ### Handlers for create file
           handlers:
+
+            ### Rules for resize
             resize:
+
+              ### Use for upscale image
               upscale: true
+
+              ### Width for resize
               w: 1280
+
+              ### Height for resize
               h: 1280
+
+          ### Validation for rendition
           validations: []
+
+        ### Rendition type
         githumb4:
+
+          ### Auto create. Use in asset-rendition module.
           auto: true
+
+          ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
+
+          ### Use for create version. Use in asset-version module.
           createVersion: true
+
+          ### Handlers for create file
           handlers:
+
+            ### Rules for resize
             resize:
+
+              ### Use for upscale image
               upscale: true
+
+              ### Width for resize
               w: 1920
+
+              ### Height for resize
               h: 1920
+
+          ### Validation for rendition
           validations: []
+
+    ### Type name
     description-image:
+
+      ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: image
+
+      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
+
+        ### Validation by mime
         mime:
+
+          ### Pattern for validation. Check this part in mime type.
           pattern: image
+
+          ### Message for error
           message: Only images
+
+        ### Validation by size in kb
         size:
+
+          ### Rules for private asset
           private:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+          ### Rules for public asset
           public:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+        ### Validation by quality
         quality:
+
+          ### Min quality. If parameter does not exist, set 0.
           min: 10
+
+          ### Max quality. If the parameter does not exist, skip the maximum size
           max: 100
+
+        ### Validation by color depth
         colorDepth:
           - 8
+
+        ### Validation by color space
         colorSpace:
           - RGB
           - SRGB
+
+        ### Validation by size (width/height)
         scale:
+
+          ### Min parameter
           min:
             width: 1
             height: 1
+
+        ### Validation by unique. Use only unique images for this asset type.
         unique: []
+
+      ### Rules for rendition
       renditions:
+
+        ### Rendition type
         githumb1:
+
+          ### Auto create. Use in asset-rendition module.
           auto: true
+
+          ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
+
+          ### Use for create version. Use in asset-version module.
           createVersion: false
+
+          ### Rule for create file name.
+          #{{original}} - get original name
+          #{{date:Y-d-m}} - current date in format Year-day-month
+          #{{rand:5}} - random string with 5 symbols.
           fileNameMask: '{{original}}-{{date:Y-d-m}}-{{rand:5}}'
+
+          ### Handlers for create file
           handlers:
+
+            ### Rules for resize
             resize:
+
+              ### Use for upscale image
               upscale: true
+
+              ### Width for resize
               w: 400
+
+              ### Height for resize
               h: 400
+
+              ### Crop position. Best fit use by default.
               type: crop-center
+
+          ### Validation for rendition
           validations: []
+
+        ### Rendition type
         githumb2:
+
+          ### Auto create. Use in asset-rendition module.
           auto: true
+
+          ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
+
+          ### Use for create version. Use in asset-version module.
           createVersion: true
+
+          ### Handlers for create file
           handlers:
+
+            ### Rules for resize
             resize:
+
+              ### Use for upscale image
               upscale: true
+
+              ### Width for resize
               w: 800
+
+              ### Height for resize
               h: 800
+
+          ### Validation for rendition
           validations: []
+
+        ### Rendition type
         githumb3:
+
+          ### Auto create. Use in asset-rendition module.
           auto: true
+
+          ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
+
+          ### Use for create version. Use in asset-version module.
           createVersion: true
+
+          ### Handlers for create file
           handlers:
+
+            ### Rules for resize
             resize:
+
+              ### Use for upscale image
               upscale: true
+
+              ### Width for resize
               w: 1280
+
+              ### Height for resize
               h: 1280
+
+            ### Validation for rendition
           validations: []
+
+        ### Rendition type
         githumb4:
+
+          ### Auto create. Use in asset-rendition module.
           auto: true
+
+          ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
+
+          ### Use for create version. Use in asset-version module.
           createVersion: true
+
+          ### Handlers for create file
           handlers:
+
+            ### Rules for resize
             resize:
+
+              ### Use for upscale image
               upscale: true
+
+              ### Width for resize
               w: 1920
+
+              ### Height for resize
               h: 1920
+
+          ### Validation for rendition
           validations: []
+
+    ### Type name
     office-document:
+
+      ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: file
+
+      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
+
+        ### Validation by size in kb
         size:
+
+          ### Rules for private asset
           private:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+            ### Rules for public asset
           public:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+        ### Validation by extension
         extension:
           - doc
           - dot
@@ -206,7 +519,11 @@ type:
           - odc
           - odb
           - xlsx
+
+        ### Validation by mime
         mime:
+
+          ### Values list
           list:
             - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
             - application/x-vnd.oasis.opendocument.chart
@@ -278,35 +595,88 @@ type:
             - application/vnd.oasis.opendocument.text
             - application/x-vnd.oasis.opendocument.text
             - application/vnd.oasis.opendocument.text-template
+
+      ### Rules for rendition
       renditions: []
+
+    ### Type name
     text:
+
+      ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: file
+
+      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
+
+        ### Validation by extension
         extension:
           - txt
+
+        ### Validation by mime
         mime:
+          ### Values list
           list:
             - text/plain
             - application/txt
+
+        ### Validation by size in kb
         size:
+
+          ### Rules for private asset
           private:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+          ### Rules for public asset
           public:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+      ### Rules for rendition
       renditions: []
+
+    ### Type name
     csv:
+
+      ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: file
+
+      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
+
+        ### Validation by size in kb
         size:
+
+          ### Rules for private asset
           private:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+          ### Rules for public asset
           public:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+        ### Validation by mime
         mime:
+
+          ### Values list
           list:
             - text/comma-separated-values
             - text/csv
@@ -316,22 +686,51 @@ type:
             - application/vnd.msexcel
             - text/anytext
             - text/plain
+
+        ### Validation by extension
         extension:
           - csv
-        CSVValidation: []
+
+      ### Rules for rendition
       renditions: []
+
+    ### Type name
     pdf-document:
+
+      ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: file
+
+      ### Create preview for asset. Use where nature is file.
       preview: true
+
+      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
+
+        ### Validation by size in kb
         size:
+
+          ### Rules for private asset
           private:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+            ### Rules for public asset
           public:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+        ### Validation by mime
         mime:
+
+          ### Values list
           list:
             - application/pdf
             - application/x-pdf
@@ -339,21 +738,51 @@ type:
             - applications/vnd.pdf
             - text/pdf
             - text/x-pdf
+
+        ### Validation by extension
         extension:
           - pdf
+
+        ### Check if is correct pdf file.
         PDFValidation: []
+
+      ### Rules for rendition
       renditions: []
+
+    ### Type name
     archive:
+
+      ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: file
+
+      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
+
+        ### Validation by size in kb
         size:
+
+          ### Rules for private asset
           private:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+          ### Rules for public asset
           public:
+
+            ### Min size. If parameter does not exist, set 0.
             min: 0
+
+            ### Max size. If the parameter does not exist, skip the maximum size
             max: 100000000
+
+        ### Validation by mime
         mime:
+
+          ### Values list
           list:
             - application/x-archive
             - application/x-cpio
@@ -398,7 +827,10 @@ type:
             - application/zip
             - application/x-zoo
             - application/x-par2
+      ### Rules for rendition
       renditions: []
+
+  ### Use for create rules for new asset types.
   default:
     validations: []
     renditions: []

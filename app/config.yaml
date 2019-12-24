@@ -1,5 +1,5 @@
 ---
-### IMPORTANT. After change this file, run rebuild config. In terminal run next command: php index.php config dam rebuild.
+### IMPORTANT. After you change this file, run rebuild config. In terminal run next command: php index.php config dam rebuild.
 
 ### List of support types
 type:
@@ -13,10 +13,10 @@ type:
       ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: image
 
-      ### Use for create version. Use in asset-version module.
+      ###  Version creation. Use in asset-version module to create version.
       createVersion: false
 
-      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
+      ### Validation by next parameters: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
 
         ### Validation by mime
@@ -34,21 +34,22 @@ type:
         ### Validation by size in kb
         size:
 
-          ### Parameter skip use for skip this validation part
+          ### Parameter "skip" use for skip this validation part
           skip: true
 
       ### Rules for rendition.
       renditions: []
+
     ### Type name
     gallery-image:
 
       ### Asset type. Support next types: image and file. The system creates a preview for the image.
       nature: image
 
-      ### Use for create version. Use in asset-version module.
+      ###  Version creation. Use in asset-version module to create version.
       createVersion: true
 
-      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
+      ### Validation by next parameters: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
 
         ### Pattern for validation. Check this part in mime type.
@@ -108,7 +109,7 @@ type:
             width: 150
             height: 150
 
-        ### Validation by unique. Use only unique images for this asset type.
+        ### Uniqueness validation. Use only unique images for this asset type.
         unique: []
 
       ### Rules for rendition
@@ -123,7 +124,7 @@ type:
           ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
 
-          ### Use for create version. Use in asset-version module.
+          ### Version creation. Use in asset-version module to create version.
           createVersion: false
 
           ### Rule for create file name.
@@ -132,7 +133,7 @@ type:
           #{{rand:5}} - random string with 5 symbols.
           fileNameMask: '{{original}}-{{date:Y-d-m}}-{{rand:5}}'
 
-          ### Handlers for create file
+          ### Handlers for automatic creation file
           handlers:
 
             ### Rules for resize
@@ -162,10 +163,10 @@ type:
           ### Asset type. Support next types: image and file. The system creates a preview for the image.
           nature: image
 
-          ### Use for create version. Use in asset-version module.
+          ###  Version creation. Use in asset-version module to create version.
           createVersion: true
 
-          ### Handlers for create file
+          ### Handlers for automatic creation file
           handlers:
 
             ### Rules for resize
@@ -192,10 +193,10 @@ type:
           ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
 
-          ### Use for create version. Use in asset-version module.
+          ###  Version creation. Use in asset-version module to create version.
           createVersion: true
 
-          ### Handlers for create file
+          ### Handlers for automatic creation file
           handlers:
 
             ### Rules for resize
@@ -222,10 +223,10 @@ type:
           ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
 
-          ### Use for create version. Use in asset-version module.
+          ###  Version creation. Use in asset-version module to create version.
           createVersion: true
 
-          ### Handlers for create file
+          ### Handlers for automatic creation file
           handlers:
 
             ### Rules for resize
@@ -249,7 +250,7 @@ type:
       ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: image
 
-      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
+      ### Validation by next parameters: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
 
         ### Validation by mime
@@ -308,7 +309,7 @@ type:
             width: 1
             height: 1
 
-        ### Validation by unique. Use only unique images for this asset type.
+        ### Uniqueness validation. Use only unique images for this asset type.
         unique: []
 
       ### Rules for rendition
@@ -323,7 +324,7 @@ type:
           ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
 
-          ### Use for create version. Use in asset-version module.
+          ###  Version creation. Use in asset-version module to create version.
           createVersion: false
 
           ### Rule for create file name.
@@ -332,7 +333,7 @@ type:
           #{{rand:5}} - random string with 5 symbols.
           fileNameMask: '{{original}}-{{date:Y-d-m}}-{{rand:5}}'
 
-          ### Handlers for create file
+          ### Handlers for automatic creation file
           handlers:
 
             ### Rules for resize
@@ -362,10 +363,10 @@ type:
           ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
 
-          ### Use for create version. Use in asset-version module.
+          ###  Version creation. Use in asset-version module to create version.
           createVersion: true
 
-          ### Handlers for create file
+          ### Handlers for automatic creation file
           handlers:
 
             ### Rules for resize
@@ -392,10 +393,10 @@ type:
           ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
 
-          ### Use for create version. Use in asset-version module.
+          ###  Version creation. Use in asset-version module to create version.
           createVersion: true
 
-          ### Handlers for create file
+          ### Handlers for automatic creation file
           handlers:
 
             ### Rules for resize
@@ -422,10 +423,10 @@ type:
           ### File type. Support next types: image and file. The system creates a preview for the image.
           nature: image
 
-          ### Use for create version. Use in asset-version module.
+          ###  Version creation. Use in asset-version module to create version.
           createVersion: true
 
-          ### Handlers for create file
+          ### Handlers for automatic creation file
           handlers:
 
             ### Rules for resize
@@ -449,7 +450,7 @@ type:
       ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: file
 
-      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
+      ### Validation by next parameters: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
 
         ### Validation by size in kb
@@ -605,7 +606,7 @@ type:
       ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: file
 
-      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
+      ### Validation by next parameters: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
 
         ### Validation by extension
@@ -649,7 +650,7 @@ type:
       ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: file
 
-      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
+      ### Validation by next parameters: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
 
         ### Validation by size in kb
@@ -703,7 +704,7 @@ type:
       ### Create preview for asset. Use where nature is file.
       preview: true
 
-      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
+      ### Validation by next parameters: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
 
         ### Validation by size in kb
@@ -755,7 +756,7 @@ type:
       ### File type. Support next types: image and file. The system creates a preview for the image.
       nature: file
 
-      ### Validation by next params: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
+      ### Validation by next parameters: mime, ration, size, quality, color depth, color space, extension, pdf, scale, unique
       validations:
 
         ### Validation by size in kb
@@ -830,7 +831,7 @@ type:
       ### Rules for rendition
       renditions: []
 
-  ### Use for create rules for new asset types.
+  ### Default rules for new asset types.
   default:
     validations: []
     renditions: []

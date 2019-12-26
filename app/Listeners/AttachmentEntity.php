@@ -54,6 +54,7 @@ class AttachmentEntity extends AbstractListener
      */
     public function afterSave(Event $event)
     {
+
     }
 
     /**

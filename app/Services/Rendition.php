@@ -27,6 +27,8 @@ use Dam\Core\FilePathBuilder;
 use Dam\Core\FileStorage\DAMUploadDir;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
+use Treo\Core\EventManager\Event;
+use Treo\Core\EventManager\Manager;
 use Treo\Core\Utils\Language;
 
 /**
@@ -45,6 +47,39 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         $this->addDependency("ConfigManager");
         $this->addDependency("filePathBuilder");
         $this->addDependency("language");
+        $this->addDependency("eventManager");
+    }
+
+    /**
+     * @param \Dam\Entities\Rendition $rendition
+     * @return mixed
+     */
+    public function toDelete(\Dam\Entities\Rendition $rendition)
+    {
+        $rendition->set("deleted", true);
+
+        if ($this->getRepository()->save($rendition)) {
+            $this->afterToDelete($rendition);
+
+            return $this->getService("Attachment")->toDelete($rendition->get("fileId"));
+        }
+
+        return false;
+    }
+
+    public function toDeleteCollection($collections)
+    {
+        if (!$collections->count()) {
+            return false;
+        }
+
+        $res = true;
+
+        foreach ($collections as $collection) {
+            $res &= $this->toDelete($collection);
+        }
+
+        return $res;
     }
 
     /**
@@ -55,7 +90,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     {
         $attachment = $entity->get("file");
 
-        if (stripos($attachment->get("type"),  "image/") !== false) {
+        if (stripos($attachment->get("type"), "image/") !== false) {
             if ($meta = $this->getServiceFactory()->create("Attachment")->getImageMeta($attachment)) {
                 return $this->getServiceFactory()->create("RenditionMetaData")->insertData($entity->id, $meta);
             }
@@ -103,7 +138,7 @@ class Rendition extends \Espo\Core\Templates\Services\Base
             ConfigManager::getType($assetEntity->get("type")),
             "renditions",
             $entity->get("type"),
-            "nature"
+            "nature",
         ]);
 
         $path = ($entity->get("private") ? DAMUploadDir::PRIVATE_PATH : DAMUploadDir::PUBLIC_PATH) . "{$entity->get("type")}/" . $entity->get("path") . "/" . $attachmentEntity->get("name");
@@ -140,6 +175,18 @@ class Rendition extends \Espo\Core\Templates\Services\Base
         return $this->getInjection("ConfigManager");
     }
 
+    protected function afterToDelete($entity)
+    {
+        $event = new Event(
+            [
+                'entity' => $entity,
+            ]
+        );
+
+        // dispatch an event
+        $this->getInjection('eventManager')->dispatch('RenditionEntity', "afterToDelete", $event);
+    }
+
     /**
      * @return Language
      */
@@ -172,6 +219,14 @@ class Rendition extends \Espo\Core\Templates\Services\Base
     protected function attributeMapping(string $name): string
     {
         return $this->getConfigManager()->get(["attributeMapping", $name, "field"]) ?? $name;
+    }
+
+    /**
+     * @return Manager
+     */
+    protected function getEventManager(): Manager
+    {
+        return $this->getInjection("eventManager");
     }
 }
 

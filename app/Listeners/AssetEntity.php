@@ -183,6 +183,8 @@ class AssetEntity extends AbstractListener
         if ($attachmentId) {
             $this->getService("Attachment")->toDelete($attachmentId);
         }
+
+        $this->getService("Rendition")->toDeleteCollection($entity->get("renditions"));
     }
 
     /**

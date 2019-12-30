@@ -3,14 +3,14 @@
         "DAMUploadDir": "\\Dam\\Core\\FileStorage\\DAMUploadDir"
     },
     "public": {
-        "folderDepth": 5,
+        "folderDepth": 6,
         "folderNameLength": 5,
-        "maxFilesInFolder": 5
+        "maxFilesInFolder": 1000
     },
     "private": {
-        "folderDepth": 5,
+        "folderDepth": 6,
         "folderNameLength": 5,
-        "maxFilesInFolder": 5
+        "maxFilesInFolder": 1000
     },
-    "maxUploadFiles" : 5
+    "maxUploadFiles" : 10
 }

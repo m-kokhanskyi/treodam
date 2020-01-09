@@ -63,7 +63,8 @@ Espo.define('dam:views/asset_relation/record/panels/asset-type-block', 'view',
                         dragableListRows    : this.sort,
                         listRowsOrderSaveUrl: `AssetRelation/${this.model.get('entityName')}/${this.model.get('entityId')}/sortOrder`,
                         listLayout          : null,
-                        skipBuildRows       : true
+                        skipBuildRows       : true,
+                        rowActionsView      : this.model.get('rowActionsView') ? this.model.get('rowActionsView') : this.rowActionsView,
                     }, function (view) {
                         view.listenTo(collection, "sync", () => {
                             $(view.el).find('.list').slideDown("fast");

@@ -66,6 +66,7 @@
     "modifiedAt"     : "Geändert am",
     "modifiedBy"     : "Geändert vom",
     "ownerUser"      : "Inhaber",
-    "path"           : "Pfad"
+    "path"           : "Pfad",
+    "preview"        : "Vorschau"
   }
 }

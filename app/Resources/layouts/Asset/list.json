@@ -1,12 +1,15 @@
 [
-    {
-        "name": "name",
-        "link": true
-    },
-    {
-        "name": "code"
-    },
-    {
-        "name": "type"
-    }
+  {
+    "name": "name",
+    "link": true
+  },
+  {
+    "name": "preview"
+  },
+  {
+    "name": "code"
+  },
+  {
+    "name": "type"
+  }
 ]

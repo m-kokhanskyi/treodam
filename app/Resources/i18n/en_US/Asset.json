@@ -24,7 +24,8 @@
     "tags"           : "Tags",
     "width"          : "Width",
     "private"        : "Private",
-    "code"           : "Code"
+    "code"           : "Code",
+    "preview"        : "Preview"
   },
   "links"  : {
     "tests"          : "Tests",

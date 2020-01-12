@@ -1,5 +1,12 @@
 {
   "fields"    : {
+    "preview"        : {
+      "type"                    : "varchar",
+      "view"                    : "dam:views/asset/fields/preview",
+      "notStorable"             : true,
+      "layoutDetailDisabled"    : true,
+      "layoutMassUpdateDisabled": true
+    },
     "height"         : {
       "type"             : "int",
       "required"         : false,
@@ -219,21 +226,21 @@
       "readOnly": true,
       "tooltip" : false
     },
-    "relatedAssets": {
-      "type": "linkMultiple",
-      "layoutDetailDisabled": true,
+    "relatedAssets"  : {
+      "type"                    : "linkMultiple",
+      "layoutDetailDisabled"    : true,
       "layoutMassUpdateDisabled": true,
-      "importDisabled": true,
-      "noLoad": true
+      "importDisabled"          : true,
+      "noLoad"                  : true
     }
   },
   "links"     : {
     "renditions"     : {
-      "type"       : "hasMany",
-      "foreign"    : "asset",
-      "entity"     : "Rendition",
-      "audited"    : false,
-      "entityAsset": false,
+      "type"               : "hasMany",
+      "foreign"            : "asset",
+      "entity"             : "Rendition",
+      "audited"            : false,
+      "entityAsset"        : false,
       "disableMassRelation": true
     },
     "collection"     : {
@@ -244,11 +251,11 @@
       "entityAsset": false
     },
     "assetMetaDatas" : {
-      "type"       : "hasMany",
-      "foreign"    : "asset",
-      "entity"     : "AssetMetaData",
-      "audited"    : false,
-      "entityAsset": false,
+      "type"               : "hasMany",
+      "foreign"            : "asset",
+      "entity"             : "AssetMetaData",
+      "audited"            : false,
+      "entityAsset"        : false,
       "disableMassRelation": true
     },
     "createdBy"      : {
@@ -280,38 +287,38 @@
       "entityAsset": false
     },
     "assetCategories": {
-      "type"        : "hasMany",
-      "relationName": "assetCategoryAsset",
-      "foreign"     : "assets",
-      "entity"      : "AssetCategory",
-      "audited"     : false,
-      "entityAsset" : false,
+      "type"               : "hasMany",
+      "relationName"       : "assetCategoryAsset",
+      "foreign"            : "assets",
+      "entity"             : "AssetCategory",
+      "audited"            : false,
+      "entityAsset"        : false,
       "disableMassRelation": true
     },
-    "relatedAssets": {
-      "type": "hasMany",
-      "relationName": "assetAsset",
-      "foreign": "assetsLeft",
-      "entity": "Asset",
-      "audited": false,
-      "midKeys": [
+    "relatedAssets"  : {
+      "type"               : "hasMany",
+      "relationName"       : "assetAsset",
+      "foreign"            : "assetsLeft",
+      "entity"             : "Asset",
+      "audited"            : false,
+      "midKeys"            : [
         "leftId",
         "rightId"
       ],
       "disableMassRelation": true
     },
-    "assetsLeft": {
-      "type": "hasMany",
-      "relationName": "assetAsset",
-      "foreign": "relatedAssets",
-      "entity": "Asset",
-      "layoutRelationshipsDisabled" : true,
-      "audited": false,
-      "midKeys": [
+    "assetsLeft"     : {
+      "type"                       : "hasMany",
+      "relationName"               : "assetAsset",
+      "foreign"                    : "relatedAssets",
+      "entity"                     : "Asset",
+      "layoutRelationshipsDisabled": true,
+      "audited"                    : false,
+      "midKeys"                    : [
         "rightId",
         "leftId"
       ],
-      "disableMassRelation": true
+      "disableMassRelation"        : true
     }
   },
   "collection": {

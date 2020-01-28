@@ -22,10 +22,24 @@ declare(strict_types=1);
 namespace Dam\Core\Preview;
 
 use Dam\Core\FileStorage\DAMUploadDir;
+use Dam\Core\Preview\Icons\Csv;
+use Dam\Core\Preview\Icons\Doc;
+use Dam\Core\Preview\Icons\Docx;
+use Dam\Core\Preview\Icons\File;
+use Dam\Core\Preview\Icons\Ppt;
+use Dam\Core\Preview\Icons\Pptx;
+use Dam\Core\Preview\Icons\Rar;
+use Dam\Core\Preview\Icons\Tar;
+use Dam\Core\Preview\Icons\TarGz;
+use Dam\Core\Preview\Icons\Txt;
+use Dam\Core\Preview\Icons\Xls;
+use Dam\Core\Preview\Icons\Xlsx;
+use Dam\Core\Preview\Icons\Zip;
 use Dam\Entities\Attachment;
 use Espo\Core\Exceptions\Error;
 use Gumlet\ImageResize;
 use Treo\Core\Container;
+use Treo\Core\ModuleManager\Manager;
 
 /**
  * Class Base
@@ -46,12 +60,29 @@ abstract class Base
      */
     protected $container;
 
-    const MAPPING = [
+    const MIME_MAPPING = [
         "application/pdf" => Pdf::class,
         "image/gif"       => Image::class,
         "image/jpeg"      => Image::class,
         "image/png"       => Image::class,
     ];
+
+    const EXT_MAPPING = [
+        "doc"  => Doc::class,
+        "docx" => Docx::class,
+        "xls"  => Xls::class,
+        "xlsx" => Xlsx::class,
+        "ppt"  => Ppt::class,
+        "pptx" => Pptx::class,
+        "txt"  => Txt::class,
+        "csv"  => Csv::class,
+        "zip"  => Zip::class,
+        "tar"  => Tar::class,
+        "gz"   => TarGz::class,
+        "rar"  => Rar::class,
+    ];
+
+    const DEFAULT_CLASS = File::class;
 
     /**
      * @var $imageSizes
@@ -82,7 +113,19 @@ abstract class Base
     public static function init(Attachment $attachment, string $size, Container $container)
     {
         $mime      = $attachment->get('type');
-        $className = self::MAPPING[$mime] ?? "Dam\Core\Preview\File";
+        $extension = explode('.', $attachment->get("name"));
+        $extension = end($extension);
+
+        switch (true) {
+            case isset(self::MIME_MAPPING[$mime]):
+                $className = self::MIME_MAPPING[$mime];
+                break;
+            case isset(self::EXT_MAPPING[$extension]):
+                $className = self::EXT_MAPPING[$extension];
+                break;
+            default:
+                $className = self::DEFAULT_CLASS;
+        }
 
         return (new $className($attachment, $size, $container))->show();
     }
@@ -156,6 +199,11 @@ abstract class Base
     protected function getFileManager()
     {
         return $this->container->get('fileManager');
+    }
+
+    protected function getModuleManager(): Manager
+    {
+        return $this->container->get("moduleManager");
     }
 
     /**

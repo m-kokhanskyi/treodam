@@ -47,14 +47,74 @@
       "view"  : "dam:views/rendition/record/panels/relations/meta-data/main"
     }
   },
-  "dynamicLogic"      : {
+  "dynamicLogic": {
     "fields": {
       "type": {
         "readOnly": {
           "conditionGroup": [
             {
-              "type"     : "isNotEmpty",
+              "type": "isNotEmpty",
               "attribute": "id"
+            }
+          ]
+        }
+      },
+      "colorDepth": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "isNotEmpty",
+              "attribute": "colorDepth"
+            }
+          ]
+        }
+      },
+      "colorSpace": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "isNotEmpty",
+              "attribute": "colorSpace"
+            }
+          ]
+        }
+      },
+      "width": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "isNotEmpty",
+              "attribute": "width"
+            }
+          ]
+        }
+      },
+      "height": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "isNotEmpty",
+              "attribute": "height"
+            }
+          ]
+        }
+      },
+      "orientation": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "isNotEmpty",
+              "attribute": "orientation"
+            }
+          ]
+        }
+      },
+      "size": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "isNotEmpty",
+              "attribute": "size"
             }
           ]
         }

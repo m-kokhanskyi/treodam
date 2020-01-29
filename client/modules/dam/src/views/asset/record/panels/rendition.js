@@ -27,6 +27,10 @@ Espo.define('dam:views/asset/record/panels/rendition',
                 this.damConfig = Config.prototype.init.call(this);
                 this.defs.create = this._create();
                 Dep.prototype.setup.call(this);
+                
+                this.listenTo(this.collection, "sync", () => {
+                    Backbone.trigger("renditionSync");
+                });
             },
             
             _create() {

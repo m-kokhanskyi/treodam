@@ -25,7 +25,9 @@ Espo.define('dam:views/asset/record/panels/side/download/renditions', 'view',
             renditions: {},
             
             setup() {
-                this._setRenditions();
+                Backbone.on("renditionSync", () => {
+                    this._setRenditions();
+                });
             },
             
             hide() {

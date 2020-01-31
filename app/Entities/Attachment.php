@@ -39,7 +39,7 @@ class Attachment extends \Treo\Entities\Attachment
      */
     public function _getStorage()
     {
-        return "DAMUploadDir";
+        return $this->valuesContainer['storage'] ? $this->valuesContainer['storage'] : "DAMUploadDir";
     }
 
     /**

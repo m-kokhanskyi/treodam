@@ -3,7 +3,7 @@
   "require": {
     "treolabs/treocore": ">=3.25.0 <3.26.0",
     "treolabs/colored-fields": "*",
-    "treolabs/treodam-common": "~1.0.0",
+    "treolabs/treodam-common": "~1.1.0",
     "ext-gd": "*",
     "ext-exif": "*",
     "ext-imagick": "*",

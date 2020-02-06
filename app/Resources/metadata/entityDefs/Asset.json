@@ -177,10 +177,10 @@
       "view"                    : "dam:views/fields/code-from-name"
     },
     "type"           : {
-      "type"        : "enum",
-      "required"    : false,
-      "fontSize"    : 1,
-      "options"     : [
+      "type"                : "enum",
+      "required"            : false,
+      "fontSize"            : 1,
+      "options"             : [
         "Gallery Image",
         "Description Image",
         "Icon",
@@ -190,7 +190,7 @@
         "PDF Document",
         "Archive"
       ],
-      "optionColors": {
+      "optionColors"        : {
         "File"             : "fff",
         "PDF"              : "fff",
         "Image"            : "fff",
@@ -203,11 +203,12 @@
         "PDF Document"     : "fff",
         "Archive"          : "fff"
       },
-      "default"     : "Gallery Image",
-      "isSorted"    : false,
-      "audited"     : false,
-      "readOnly"    : false,
-      "tooltip"     : false
+      "default"             : "Gallery Image",
+      "isSorted"            : false,
+      "audited"             : false,
+      "readOnly"            : false,
+      "tooltip"             : false,
+      "prohibitedEmptyValue": true
     },
     "file"           : {
       "type"                    : "file",

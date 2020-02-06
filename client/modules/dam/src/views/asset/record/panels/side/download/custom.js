@@ -89,9 +89,9 @@ Espo.define('dam:views/asset/record/panels/side/download/custom', 'view',
                 });
                 
                 this.createView("mode", "views/fields/enum", {
-                    model: this.downloadModel,
-                    el   : `${this.options.el} .field[data-name="mode"]`,
-                    defs : {
+                    model               : this.downloadModel,
+                    el                  : `${this.options.el} .field[data-name="mode"]`,
+                    defs                : {
                         name  : 'mode',
                         params: {
                             options          : ["byWidth", "byHeight", "resize"],
@@ -102,7 +102,8 @@ Espo.define('dam:views/asset/record/panels/side/download/custom', 'view',
                             }
                         }
                     },
-                    mode : 'edit'
+                    mode                : 'edit',
+                    prohibitedEmptyValue: true
                 });
                 
                 this.createView("format", "views/fields/enum", {
@@ -114,11 +115,12 @@ Espo.define('dam:views/asset/record/panels/side/download/custom', 'view',
                             options          : ["jpeg", "png"],
                             translatedOptions: {
                                 "jpeg": "JPEG",
-                                "png": "PNG"
+                                "png" : "PNG"
                             }
                         }
                     },
-                    mode : "edit"
+                    mode : "edit",
+                    prohibitedEmptyValue : true
                 });
                 
                 this.createView("quality", "dam:views/fields/varchar", {
@@ -130,7 +132,7 @@ Espo.define('dam:views/asset/record/panels/side/download/custom', 'view',
                         trim    : true,
                         readOnly: false
                     }
-                })
+                });
                 
             },
             
@@ -196,7 +198,7 @@ Espo.define('dam:views/asset/record/panels/side/download/custom', 'view',
                     
                     model.listenTo(model, "change:format", () => {
                         this._changeFormat();
-                    })
+                    });
                 });
             },
             
@@ -253,14 +255,14 @@ Espo.define('dam:views/asset/record/panels/side/download/custom', 'view',
                     this.downloadModel.set("height", this.model.get("height"));
                 }
             },
-    
-            _changeFormat () {
+            
+            _changeFormat() {
                 let qualityView = this.getView("quality");
                 if (this.downloadModel.get("format") === "png") {
                     this.downloadModel.set("quality", 100);
-                    qualityView.readOnly = true;
+                    qualityView.setReadOnly();
                 } else {
-                    qualityView.readOnly = false;
+                    qualityView.setNotReadOnly();
                 }
                 
                 qualityView.reRender();

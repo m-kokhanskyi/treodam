@@ -20,6 +20,7 @@
 
 namespace Dam\Console;
 
+use Dam\Services\DamConfig;
 use Treo\Console\AbstractConsole;
 
 /**
@@ -39,12 +40,7 @@ class Config extends AbstractConsole
             self::show("Config not found in data/dam", self::ERROR, true);
         }
 
-        $config = $this->container->get("FileManager")->varExport(yaml_parse_file("data/dam/config.yaml"));
-
-        $res = file_put_contents(
-            "data/dam/config.php",
-            "<?php " . PHP_EOL . "return " . $config . ";" . PHP_EOL
-        );
+        $res = $this->getDamConfigService()->convertYamlToArray(yaml_parse_file("data/dam/config.yaml"));
 
         if ($res === false) {
             self::show("Error on save config", self::ERROR, true);
@@ -64,4 +60,22 @@ class Config extends AbstractConsole
     {
         return "Method for build yaml configs to php arrays";
     }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    protected function getService(string $name)
+    {
+        return $this->container->get("ServiceFactory")->create($name);
+    }
+
+    /**
+     * @return DamConfig
+     */
+    protected function getDamConfigService(): DamConfig
+    {
+        return $this->getService("DamConfig");
+    }
+
 }

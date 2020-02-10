@@ -1,6 +1,4 @@
 ---
-### IMPORTANT. After you change this file, run rebuild config. In terminal run next command: php index.php config dam rebuild.
-
 ### List of support types
 type:
 
@@ -156,7 +154,7 @@ type:
 
         ### Rendition type
         githumb2:
-
+        т Вашего обновленного резюме :)
           ### Auto create. Use in asset-rendition module.
           auto: true
 

@@ -54,5 +54,21 @@
       "controller": "DamConfig",
       "action"    : "read"
     }
+  },
+  {
+    "route" : "/DamConfig/yaml",
+    "method": "GET",
+    "params": {
+      "controller": "DamConfig",
+      "action"    : "readYaml"
+    }
+  },
+  {
+    "route" : "/DamConfig/yaml",
+    "method": "PUT",
+    "params": {
+      "controller": "DamConfig",
+      "action"    : "saveYaml"
+    }
   }
 ]

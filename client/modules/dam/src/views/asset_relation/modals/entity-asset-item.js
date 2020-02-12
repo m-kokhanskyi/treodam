@@ -24,13 +24,9 @@ Espo.define('dam:views/asset_relation/modals/entity-asset-item', ['view', "dam:c
         damConfig: null,
         
         data() {
-            let data = {
+            let data = {};
             
-            };
-            
-            if (this._showPreview()) {
-                data.preview = `?entryPoint=preview&size=small&id=${this.model.get("assetId")}`;
-            }
+            data.preview = `?entryPoint=preview&size=small&id=${this.model.get("assetId")}`;
             
             return data;
         },

@@ -86,8 +86,7 @@
     },
     "collection"     : {
       "type"    : "link",
-      "required": true,
-      "view"    : "dam:views/asset/fields/collection"
+      "required": true
     },
     "assetMetaDatas" : {
       "type"                    : "linkMultiple",

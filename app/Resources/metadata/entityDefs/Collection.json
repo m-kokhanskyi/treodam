@@ -20,10 +20,6 @@
             "required": true,
             "trim": true
         },
-        "isDefault": {
-            "type": "bool",
-            "notNull": true
-        },
         "description": {
             "type": "text"
         },

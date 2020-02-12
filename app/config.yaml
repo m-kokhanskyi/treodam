@@ -154,7 +154,6 @@ type:
 
         ### Rendition type
         githumb2:
-        т Вашего обновленного резюме :)
           ### Auto create. Use in asset-rendition module.
           auto: true
 

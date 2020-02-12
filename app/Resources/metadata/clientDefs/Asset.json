@@ -210,7 +210,8 @@
     "relatedAssets"  : {
       "selectBoolFilterList": [
         "notEntity",
-        "onlyActive"
+        "onlyActive",
+        "notSelected"
       ],
       "view"                : "dam:views/asset/record/panels/related-assets",
       "selectAction"        : "selectRelatedEntity"

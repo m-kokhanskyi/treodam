@@ -28,5 +28,5 @@ namespace Dam\Core\Preview\Icons;
  */
 class Rar extends File
 {
-    protected $type = "ppt";
+    protected $type = "rar";
 }

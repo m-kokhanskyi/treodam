@@ -53,7 +53,7 @@ Espo.define('dam:views/asset/record/panels/side/download/renditions', 'view',
                 let model        = this.collection.get(id);
                 let attachmentId = model.get("fileId") || model.get("imageId");
                 
-                return `?entryPoint=download&id=${attachmentId}`;
+                return `?entryPoint=download&showInline=false&id=${attachmentId}`;
             }
         });
     }

@@ -37,7 +37,7 @@ Espo.define('dam:views/asset/record/panels/side/download/original', 'view',
     
             buildUrl() {
                 let attachmentId = this.model.get("fileId") || this.model.get("imageId");
-                return `?entryPoint=download&id=${attachmentId}`
+                return `?entryPoint=download&showInline=false&id=${attachmentId}`
             }
         });
     }
